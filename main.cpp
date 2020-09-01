@@ -1,32 +1,42 @@
 #include <iostream>
 
-void menu();
+void runMenu();
+void menuText();
 
 int main(int argc, char** argv) {
-    bool exitLoop = false;
-    while(!exitLoop) {
-        menu();
+    runMenu();
+    return EXIT_SUCCESS;
+}
+
+void runMenu() {
+    bool exitMenu = false;
+    const std::string choice1 = "1";
+    const std::string choice2 = "2";
+    const std::string choice3 = "3";
+    const std::string choice4 = "4";
+    const std::string endOfFile = "^D";
+
+    while(!exitMenu) {
+        menuText();
         std::string choice;
         std::cin >> choice;
-        if(choice == "1") {
+        if(choice == choice1) {
 
-        } else if (choice == "2") {
+        } else if (choice == choice2) {
 
-        } else if (choice == "3") {
+        } else if (choice == choice3) {
 
         } else if (std::cin.eof() || 
-                    choice == "4" || 
-                    choice == "^D") {
-            exitLoop = true;
+                    choice == choice4 || 
+                    choice == endOfFile) {
+            exitMenu = true;
         } else {
             std::cout << "Please select a valid option" << std::endl;
         }    
     }
-    return EXIT_SUCCESS;
 }
 
-
-void menu() {
+void menuText() {
     std::cout << "Welcome to Azul!" << std::endl;
     std::cout << "-------------------" << std::endl;
     std::cout << std::endl;
