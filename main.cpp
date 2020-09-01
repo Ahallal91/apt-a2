@@ -3,27 +3,26 @@
 void menu();
 
 int main(int argc, char** argv) {
-
     bool exitLoop = false;
-   while(!exitLoop) {
-       menu();
-       std::string choice;
-       std::cin >> choice;
-       if(choice == "1") {
+    while(!exitLoop) {
+        menu();
+        std::string choice;
+        std::cin >> choice;
+        if(choice == "1") {
 
-       } else if (choice == "2") {
+        } else if (choice == "2") {
 
-       } else if (choice == "3") {
+        } else if (choice == "3") {
 
-       } else if (choice == "4") {
-           exitLoop = true;
-       } else if (choice == "^D") {
-           exitLoop = true;
-       } else {
-           std::cout << "Please select a valid option" << std::endl;
-       }    
-   }
-   return EXIT_SUCCESS;
+        } else if (std::cin.eof() || 
+                    choice == "4" || 
+                    choice == "^D") {
+            exitLoop = true;
+        } else {
+            std::cout << "Please select a valid option" << std::endl;
+        }    
+    }
+    return EXIT_SUCCESS;
 }
 
 
