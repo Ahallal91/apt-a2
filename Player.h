@@ -7,13 +7,8 @@
 
 class Player {
 public:
-
-    // Player Default Constructor
     Player();
-    
     Player(const std::string& name);
-
-    // Player Deconstructor
     ~Player();
 
     // Returns the Player's name

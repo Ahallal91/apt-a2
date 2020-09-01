@@ -2,12 +2,11 @@
 
 Player::Player() : 
     Player("Player") 
-{
-
-}
+{}
 
 Player::Player(const std::string& name) :
-    name(name)
+    name(name),
+    points(0)
 {
     this->playerBoard = new PlayerBoard();
 }

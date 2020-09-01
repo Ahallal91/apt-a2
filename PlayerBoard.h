@@ -4,7 +4,6 @@
 class PlayerBoard {
 public:
     PlayerBoard();
-
     ~PlayerBoard();
 
 private:
