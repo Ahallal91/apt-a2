@@ -1,14 +1,14 @@
 #include "Player.h"
 #include "Types.h"
+#include "PlayerBoard.h"
 
-Player::Player() {
-	Player(DEFAULT_NAME);
-}
+Player::Player():
+	Player(DEFAULT_NAME) {}
+
 
 Player::Player(std::string name) :
 	name(name),
-	points(INITIAL_POINTS) 
-{
+	points(INITIAL_POINTS) {
 	this->playerBoard = new PlayerBoard();
 }
 
