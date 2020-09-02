@@ -13,7 +13,10 @@ public:
 
 	// Returns the Player's name
 	std::string getPlayerName();
-
+	
+	// Set the Player's current points
+	void setPoints(int points);
+	
 	// Returns the Player's current points
 	int getPoints();
 

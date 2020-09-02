@@ -1,12 +1,16 @@
 #ifndef PLAYER_BOARD_H
 #define PLAYER_BOARD_H
 
+#include <vector>
+
 class PlayerBoard {
 public:
 	PlayerBoard();
 	~PlayerBoard();
 
-    // Sets the tile at wall position x, y to the corresponding pattern tile
+    // WALL METHODS
+	
+	// Sets the tile at wall position x, y to the corresponding pattern tile
     void setWallTile(int x, int y);
 
 	// Removes the tile at wall position x, y and sets it back to empty
@@ -14,6 +18,18 @@ public:
     
     // Returns the tile at wall position x, y
     char getWallTile(int x, int y);
+
+
+	// BROKEN LINE METHODS
+
+	// Adds a tile to the end of the broken line if not full or to the tile bag if full
+	void addBrokenTile(char tile);
+
+	// Clears the broken tiles and adds them back to the tile bag
+	void clearBrokenLine();
+
+	// Returns a char vector of tiles in the broken line
+	std::vector<char> getBrokenTiles();
 
 private:
 	// The Wall (2D 5x5 char array)
@@ -23,6 +39,7 @@ private:
 
 
 	// Broken Line
+	std::vector<char> brokenLine;
 
 };
 

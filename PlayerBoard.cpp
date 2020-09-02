@@ -48,3 +48,24 @@ char PlayerBoard::getWallTile(int x, int y) {
 
     return tile;
 }
+
+
+void PlayerBoard::addBrokenTile(char tile) {
+    if(brokenLine.size() < BROKEN_TILES) {
+        brokenLine.push_back(tile);
+    } else {
+        // TODO
+        // ADD TILE TO TILE BAG
+    }
+}
+
+void PlayerBoard::clearBrokenLine() {
+    // TODO
+    // MOVE TILES TO TILE BAG
+
+    brokenLine.clear();
+}
+
+std::vector<char> PlayerBoard::getBrokenTiles() {
+    return brokenLine;
+}

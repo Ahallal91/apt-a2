@@ -19,6 +19,10 @@ std::string Player::getPlayerName() {
 	return this->name;
 }
 
+void Player::setPoints(int points) {
+	this->points = points;
+}
+
 int Player::getPoints() {
 	return this->points;
 }

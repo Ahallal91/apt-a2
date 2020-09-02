@@ -37,4 +37,7 @@ constexpr char pattern[WALL_DIM][WALL_DIM] = {
 	{   YELLOW, 		RED, 			BLACK, 			LIGHT_BLUE, 	DARK_BLUE 	}
 };
 
+// Broken Line config
+#define BROKEN_TILES	7 
+
 #endif // TYPES_H
