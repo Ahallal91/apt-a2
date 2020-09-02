@@ -6,11 +6,10 @@ public:
     PlayerBoard();
     ~PlayerBoard();
 
-    char** wall;
-
 private:
     
     // The Wall (2D 5x5 char array)
+    char** wall;
 
     // Pattern Lines
 
