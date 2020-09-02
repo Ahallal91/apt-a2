@@ -2,6 +2,7 @@
 #define GAME_MANAGER_H
 
 class Player;
+class Output;
 
 class GameManager {
 public:
@@ -17,9 +18,10 @@ public:
 private:
 	Player* player1;
 	Player* player2;
+	Output* output;
 	int currentRound;
 
-	void enterPlayerName(int playerNum, Player*& player);
+	Player* enterPlayerName(int playerNum);
 };
 
 #endif // GAME_MANAGER_H
