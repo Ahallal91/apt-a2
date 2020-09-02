@@ -24,3 +24,19 @@ PlayerBoard::~PlayerBoard() {
     }
     delete[] wall;
 }
+
+void PlayerBoard::setWallTile(char tile, int x, int y) {
+    //Check that x and y are in bounds of wall
+    if(x >= 0 && x < WALL_DIM && y >= 0 && y < WALL_DIM) {
+        wall[y][x] = tile;
+    }
+}
+
+char PlayerBoard::getWallTile(int x, int y) {
+    //Check that x and y are in bounds of wall
+    if(x >= 0 && x < WALL_DIM && y >= 0 && y < WALL_DIM) {
+        return wall[y][x];
+    } else {
+        return '\0';
+    }
+}
