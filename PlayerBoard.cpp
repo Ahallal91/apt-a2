@@ -1,5 +1,5 @@
 #include "PlayerBoard.h"
-#include "Config.h"
+#include "Types.h"
 
 PlayerBoard::PlayerBoard() {
     // Create a 5x5 char array for the wall

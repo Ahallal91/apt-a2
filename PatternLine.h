@@ -1,15 +1,7 @@
+#include "Types.h"
+
 #ifndef PATTERN_H
 #define PATTERN_H
-
-// colours of the tiles
-enum Colour {
-	RED,
-	YELLOW,
-	DARK_BLUE,
-	LIGHT_BLUE,
-	BLACK,
-	NO_COLOUR
-};
 
 class PatternLine {
 public:

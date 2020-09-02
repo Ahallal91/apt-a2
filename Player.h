@@ -7,29 +7,29 @@
 
 class Player {
 public:
-    Player();
-    Player(const std::string& name);
-    ~Player();
+	Player();
+	Player(const std::string& name);
+	~Player();
 
-    // Returns the Player's name
-    std::string getPlayerName();
+	// Returns the Player's name
+	std::string getPlayerName();
 
-    // Returns the Player's current points
-    int getPoints();
+	// Returns the Player's current points
+	int getPoints();
 
-    // Returns the Player's playing board
-    PlayerBoard* getPlayerBoard();
+	// Returns the Player's playing board
+	PlayerBoard* getPlayerBoard();
 
 private:
-    
-    // The name of the Player
-    std::string name;
 
-    // The Player's points
-    int points;
+	// The name of the Player
+	std::string name;
 
-    // The Player's playing board object
-    PlayerBoard* playerBoard;
+	// The Player's points
+	int points;
+
+	// The Player's playing board object
+	PlayerBoard* playerBoard;
 };
 
 #endif

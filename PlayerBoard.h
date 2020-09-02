@@ -3,18 +3,17 @@
 
 class PlayerBoard {
 public:
-    PlayerBoard();
-    ~PlayerBoard();
+	PlayerBoard();
+	~PlayerBoard();
 
 private:
-    
-    // The Wall (2D 5x5 char array)
-    char** wall;
+	// The Wall (2D 5x5 char array)
+	char** wall;
 
-    // Pattern Lines
+	// Pattern Lines
 
 
-    // Broken Line
+	// Broken Line
 
 };
 
