@@ -1,12 +1,13 @@
 #include "Player.h"
+#include "Config.h"
 
 Player::Player() : 
-    Player("Player") 
+    Player(DEFAULT_NAME) 
 {}
 
 Player::Player(const std::string& name) :
     name(name),
-    points(0)
+    points(INITIAL_POINTS)
 {
     this->playerBoard = new PlayerBoard();
 }
