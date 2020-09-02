@@ -8,7 +8,7 @@
 class Player {
 public:
 	Player();
-	Player(const std::string& name);
+	Player(std::string name);
 	~Player();
 
 	// Returns the Player's name
