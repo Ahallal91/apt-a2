@@ -1,3 +1,6 @@
+#ifndef TYPES_H
+#define TYPES_H
+
 // Player Config
 #define DEFAULT_NAME        "Player"
 #define INITIAL_POINTS      0
@@ -13,7 +16,7 @@ enum Colour {
 };
 
 // Player Board Config
-#define WALL_DIM            5
+#define WALL_DIM             5
 
 // Tiles
 #define TILE_RED            'R'
@@ -24,3 +27,9 @@ enum Colour {
 
 #define TILE_FIRST          'F'
 #define TILE_NONE           '.'
+
+// Misc
+#define NUM_ROUNDS			 5
+#define NUM_PLAYERS			 2	
+
+#endif // TYPES_H
