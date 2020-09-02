@@ -1,6 +1,5 @@
 #include "Player.h"
 #include "Types.h"
-#include "PlayerBoard.h"
 
 Player::Player():
 	Player(DEFAULT_NAME) {}
