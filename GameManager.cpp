@@ -1,8 +1,9 @@
+#include <iostream>
 #include "GameManager.h"
 #include "Types.h"
-#include <iostream>
 #include "Player.h"
 
+// TODO store the output as an instance variable
 GameManager::GameManager():
 	currentRound(1) {
 	this->enterPlayerName(1, this->player1);
@@ -11,7 +12,13 @@ GameManager::GameManager():
 
 // main game loop
 void GameManager::playGame() {
+	while (currentRound <= NUM_ROUNDS) {
+		std::cout << "== START ROUND " << currentRound << " ==" << std::endl;
 
+
+
+		currentRound++;
+	}
 }
 
 GameManager::~GameManager() {

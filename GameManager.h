@@ -18,7 +18,7 @@ private:
 	Player* player1;
 	Player* player2;
 	int currentRound;
-	// pass pointer to player object by reference
+
 	void enterPlayerName(int playerNum, Player*& player);
 };
 
