@@ -11,10 +11,9 @@ PlayerBoard::PlayerBoard() {
     // Initialise the 5x5 wall to empty tiles
     for(int y = 0; y < WALL_DIM; y++) {
         for(int x = 0; x < WALL_DIM; x++) {
-            wall[y][x] = TILE_NONE;
+            wall[y][x] = EMPTY;
         }
     }
-
 }
 
 PlayerBoard::~PlayerBoard() {
@@ -25,18 +24,27 @@ PlayerBoard::~PlayerBoard() {
     delete[] wall;
 }
 
-void PlayerBoard::setWallTile(char tile, int x, int y) {
+void PlayerBoard::setWallTile(int x, int y) {
     //Check that x and y are in bounds of wall
     if(x >= 0 && x < WALL_DIM && y >= 0 && y < WALL_DIM) {
-        wall[y][x] = tile;
+        wall[y][x] = pattern[y][x];
+    }
+}
+
+void PlayerBoard::removeWallTile(int x, int y) {
+    //Check that x and y are in bounds of wall
+    if(x >= 0 && x < WALL_DIM && y >= 0 && y < WALL_DIM) {
+        wall[y][x] = EMPTY;
     }
 }
 
 char PlayerBoard::getWallTile(int x, int y) {
+    char tile = '\0';
+    
     //Check that x and y are in bounds of wall
     if(x >= 0 && x < WALL_DIM && y >= 0 && y < WALL_DIM) {
-        return wall[y][x];
-    } else {
-        return '\0';
+        tile = wall[y][x];
     }
+
+    return tile;
 }
