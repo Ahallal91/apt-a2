@@ -17,5 +17,3 @@ void PatternLine::setColour(Colour colour) {
 Colour PatternLine::getColour() {
 	return this->colour;
 }
-
-// TODO methods to add tiles

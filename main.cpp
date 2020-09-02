@@ -1,4 +1,5 @@
 #include <iostream>
+#include "GameManager.h"
 
 void runMenu();
 void menuText();
@@ -20,7 +21,11 @@ void runMenu() {
 		std::string choice;
 		std::cin >> choice;
 		if (choice == choice1) {
-
+			exitMenu = true;
+			// TODO may not want to declare this inside here. Will move when required later.
+			GameManager* gameManager = new GameManager();
+			gameManager->playGame();
+			delete gameManager;
 		} else if (choice == choice2) {
 
 		} else if (choice == choice3) {
