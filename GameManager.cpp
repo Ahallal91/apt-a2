@@ -35,17 +35,11 @@ Player* GameManager::getPlayer2() {
 	return this->player2;
 }
 
+// could have loop, but for now we'll assume the user will enter a single name
 Player* GameManager::enterPlayerName(int playerNum) {
-	std::cin.ignore();
 	std::string name = "";
 	std::cout << "Enter a name for player " << playerNum << std::endl;
-	std::getline(std::cin, name);
-
-	// while they haven't inputted a name, keep asking
-	while (name.size() == 0) {
-		std::cout << "Please enter a valid name for player " << playerNum << std::endl;
-		std::getline(std::cin, name);
-	}
+	std::cin >> name;
 
 	return new Player(name);
 }
