@@ -8,7 +8,7 @@ TileBag::~TileBag() {
     delete tileBag;
 }
 
-void TileBag::addToBag(Colour tile) {
+void TileBag::addToBag(char tile) {
     tileBag->addBack(tile);
 }
 
