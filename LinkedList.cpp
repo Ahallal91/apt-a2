@@ -85,6 +85,5 @@ void LinkedList::removeFront() {
             tail = nullptr;
         }
         length--;
-    } 
-    
+    }    
 }

@@ -16,10 +16,14 @@ public:
     ~LinkedList();
 
     int size();
+
+    // deletes all items in the list
     void clear();
-    char get(int i );
+    char get(int i);
     void addFront(char data);
     void addBack(char data);
+
+    // removes the first item in the list.
     void removeFront();
 
 private:
