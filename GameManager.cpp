@@ -4,7 +4,6 @@
 #include "Types.h"
 #include "Player.h"
 
-// TODO store the output class as an instance variable
 GameManager::GameManager():
 	currentRound(1) {
 	this->player1 = this->enterPlayerName(1);
