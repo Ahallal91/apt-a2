@@ -22,14 +22,17 @@ public:
 
 	// BROKEN LINE METHODS
 
-	// Adds a tile to the end of the broken line if not full or to the tile bag if full
-	void addBrokenTile(char tile);
+	// Adds a tile to the end of the broken line if not full
+	bool addBrokenTile(char tile);
 
-	// Clears the broken tiles and adds them back to the tile bag
+	// Returns the tile at an index of the broken line
+	char getBrokenTile(int index);
+
+	// Returns the amount of tiles in the broken line
+	int getBrokenSize();
+
+	// Clears the broken tiles
 	void clearBrokenLine();
-
-	// Returns a char vector of tiles in the broken line
-	std::vector<char> getBrokenTiles();
 
 private:
 	// The Wall (2D 5x5 char array)

@@ -22,6 +22,8 @@ PlayerBoard::~PlayerBoard() {
         delete wall[i];
     }
     delete[] wall;
+
+    brokenLine.clear();
 }
 
 void PlayerBoard::setWallTile(int x, int y) {
@@ -49,23 +51,31 @@ char PlayerBoard::getWallTile(int x, int y) {
     return tile;
 }
 
-
-void PlayerBoard::addBrokenTile(char tile) {
-    if(brokenLine.size() < BROKEN_TILES) {
+bool PlayerBoard::addBrokenTile(char tile) {
+    bool success = false;
+    
+    if(brokenLine.size() < NUM_BROKEN_TILES) {
         brokenLine.push_back(tile);
-    } else {
-        // TODO
-        // ADD TILE TO TILE BAG
+        success = true;
     }
+
+    return success;
+}
+
+char PlayerBoard::getBrokenTile(int index) {
+    char tile = '\0';
+    
+    if(index >= 0 && index < NUM_BROKEN_TILES && index < brokenLine.size()) {
+        tile = brokenLine[index];
+    }
+
+    return tile;
+}
+
+int PlayerBoard::getBrokenSize() {
+    return brokenLine.size();
 }
 
 void PlayerBoard::clearBrokenLine() {
-    // TODO
-    // MOVE TILES TO TILE BAG
-
     brokenLine.clear();
-}
-
-std::vector<char> PlayerBoard::getBrokenTiles() {
-    return brokenLine;
 }

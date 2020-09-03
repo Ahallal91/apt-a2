@@ -38,6 +38,7 @@ void testBrokenLine() {
 
     printBrokenTiles(player);
 
+    player->getPlayerBoard()->addBrokenTile(FIRST);
     player->getPlayerBoard()->addBrokenTile(RED);
     player->getPlayerBoard()->addBrokenTile(DARK_BLUE);
     printBrokenTiles(player);
@@ -62,8 +63,8 @@ void printWall(Player* player) {
 
 void printBrokenTiles(Player* player) {
     std::cout << "broken: ";
-    for(auto tile : player->getPlayerBoard()->getBrokenTiles()) {
-        std::cout << tile << " ";
+    for(int i = 0; i < player->getPlayerBoard()->getBrokenSize(); i++) {
+        std::cout << player->getPlayerBoard()->getBrokenTile(i) << " ";
     }
 
     std::cout << std::endl;
