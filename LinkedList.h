@@ -3,10 +3,10 @@
 
 class Node {
 public:
-    Node(int data, Node* next);
+    Node(char data, Node* next);
     Node(Node& other);
 
-    int data;
+    char data;
     Node* next;
 };
 
@@ -17,10 +17,10 @@ public:
 
     int size();
     void clear();
-    int get(int i );
-    void addFront(int data);
-    void addBack(int data);
-    void removeFront(int data);
+    char get(int i );
+    void addFront(char data);
+    void addBack(char data);
+    void removeFront();
 
 private:
     Node* head;

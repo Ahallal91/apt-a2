@@ -1,6 +1,6 @@
 #include "LinkedList.h"
 
-Node::Node(int data, Node* next) {
+Node::Node(char data, Node* next) {
     this->data = data;
     this->next = next;
 }
@@ -37,8 +37,8 @@ void LinkedList::clear() {
     length = 0;
 }
 
-int LinkedList::get(int index) {
-    int retValue = -1;
+char LinkedList::get(int index) {
+    char* retValue = nullptr;
     if(index >= 0 && index < length) {
         int count = 0;
         Node* current = head;
@@ -46,12 +46,12 @@ int LinkedList::get(int index) {
             current = current->next;
             count++;
         }
-        retValue = current->data;
+        retValue = &current->data;
     }   
-    return retValue;
+    return *retValue;
 }
 
-void LinkedList::addFront(int data) {
+void LinkedList::addFront(char data) {
     Node* tempNode = new Node(data, head);  
     if(head == nullptr) {
         tail = tempNode;
@@ -60,7 +60,7 @@ void LinkedList::addFront(int data) {
     length++;
 }
 
-void LinkedList::addBack(int data) {
+void LinkedList::addBack(char data) {
     Node* tempNode = new Node(data, nullptr);
     if(head == nullptr && tail == nullptr) {
         head = tempNode;
@@ -72,7 +72,7 @@ void LinkedList::addBack(int data) {
     length++;
 }
 
-void LinkedList::removeFront(int data) {
+void LinkedList::removeFront() {
     if(head != nullptr && tail != nullptr) {
         if (head != tail) {
             Node* tempNode = head;
