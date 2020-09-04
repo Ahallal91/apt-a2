@@ -1,9 +1,9 @@
 #include "PatternLine.h"
 
 PatternLine::PatternLine(int size):
+	colour(NO_COLOUR),
 	size(size),
-	currentSize(0),
-	colour(NO_COLOUR) {
+	currentSize(0) {
 	this->tiles = new char[size];
 }
 

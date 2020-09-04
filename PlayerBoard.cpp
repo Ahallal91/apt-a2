@@ -95,7 +95,7 @@ bool PlayerBoard::addBrokenTile(char tile) {
 char PlayerBoard::getBrokenTile(int index) {
     char tile = '\0';
     
-    if(index >= 0 && index < NUM_BROKEN_TILES && index < brokenLine->size()) {
+    if(index >= 0 && index < NUM_BROKEN_TILES && index < (int)brokenLine->size()) {
         tile = brokenLine->at(index);
     }
 
