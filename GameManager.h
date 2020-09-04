@@ -3,6 +3,8 @@
 
 class Player;
 class Output;
+class Input;
+class GameLogic;
 
 class GameManager {
 public:
@@ -19,6 +21,8 @@ private:
 	Player* player1;
 	Player* player2;
 
+	GameLogic* gameLogic;
+	Input* input;
 	Output* output;
 	int currentRound;
 

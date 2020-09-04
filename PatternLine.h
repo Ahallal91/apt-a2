@@ -1,5 +1,3 @@
-#include "Types.h"
-
 #ifndef PATTERN_H
 #define PATTERN_H
 
@@ -8,17 +6,17 @@ public:
 	PatternLine(int size);
 	~PatternLine();
 
-	void setColour(Colour colour);
-	Colour getColour();
+	void setTile(char tile);
+	char getTile();
 
 private:
-	// colour of this pattern line
-	Colour colour;
+	// the current colour of this pattern line
+	char tile;
 
 	// size of the array
 	int size;
-	
-	// current numTiles
+
+	// current number of tiles
 	int currentSize;
 
 	// 1d array of tiles

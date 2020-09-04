@@ -3,12 +3,25 @@
 #include "Output.h"
 #include "Types.h"
 #include "Player.h"
+#include "Input.h"
+#include "GameLogic.h"
 
 GameManager::GameManager():
 	currentRound(1) {
 	this->player1 = this->enterPlayerName(1);
 	this->player2 = this->enterPlayerName(2);
+	this->gameLogic = new GameLogic();
+	this->input = new Input();
 	this->output = new Output();
+}
+
+
+GameManager::~GameManager() {
+	delete this->player1;
+	delete this->player2;
+	delete this->gameLogic;
+	delete this->input;
+	delete this->output;
 }
 
 // main game loop
@@ -20,11 +33,6 @@ void GameManager::playGame() {
 	}
 }
 
-GameManager::~GameManager() {
-	delete this->player1;
-	delete this->player2;
-	delete this->output;
-}
 
 Player* GameManager::getPlayer1() {
 	return this->player1;

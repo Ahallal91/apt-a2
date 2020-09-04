@@ -5,16 +5,6 @@
 #define DEFAULT_NAME     	"Player"
 #define INITIAL_POINTS   	0
 
-// colours of the tiles
-enum Colour {
-	RED,
-	YELLOW,
-	DARK_BLUE,
-	LIGHT_BLUE,
-	BLACK,
-	NO_COLOUR
-};
-
 // Player Board Config
 #define WALL_DIM        	5
 

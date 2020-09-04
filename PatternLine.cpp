@@ -1,7 +1,8 @@
 #include "PatternLine.h"
+#include "Types.h"
 
 PatternLine::PatternLine(int size):
-	colour(NO_COLOUR),
+	tile(EMPTY),
 	size(size),
 	currentSize(0) {
 	this->tiles = new char[size];
@@ -11,10 +12,10 @@ PatternLine::~PatternLine() {
 	delete[] this->tiles;
 }
 
-void PatternLine::setColour(Colour colour) {
-	this->colour = colour;
+void PatternLine::setTile(char tile) {
+	this->tile = tile;
 }
 
-Colour PatternLine::getColour() {
-	return this->colour;
+char PatternLine::getTile() {
+	return this->tile;
 }
