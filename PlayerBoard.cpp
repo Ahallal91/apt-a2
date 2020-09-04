@@ -34,20 +34,75 @@ PlayerBoard::~PlayerBoard() {
 	}
 	delete[] wall;
 	delete[] patternLines;
+    
+    // Delete the 5x5 wall char array
+    for(int i = 0; i < WALL_DIM; i++) {
+        delete wall[i];
+    }
+    delete[] wall;
+
+    // TODO is this line needed?
+    brokenLine.clear();
 }
 
-void PlayerBoard::setWallTile(int x, int y) {
-	// Check that x and y are in bounds of wall
-	if (x >= 0 && x < WALL_DIM && y >= 0 && y < WALL_DIM) {
-		wall[y][x] = pattern[y][x];
-	}
+bool PlayerBoard::setWallTile(int x, int y) {
+    bool success = false;
+    
+    //Check that x and y are in bounds of wall
+    if(x >= 0 && x < WALL_DIM && y >= 0 && y < WALL_DIM) {
+        if(wall[y][x] == EMPTY) {
+            wall[y][x] = pattern[y][x];
+            success = true;
+        }
+    }
+
+    return success;
+}
+
+void PlayerBoard::removeWallTile(int x, int y) {
+    //Check that x and y are in bounds of wall
+    if(x >= 0 && x < WALL_DIM && y >= 0 && y < WALL_DIM) {
+        wall[y][x] = EMPTY;
+    }
 }
 
 char PlayerBoard::getWallTile(int x, int y) {
-	//Check that x and y are in bounds of wall
-	if (x >= 0 && x < WALL_DIM && y >= 0 && y < WALL_DIM) {
-		return wall[y][x];
-	} else {
-		return '\0';
-	}
+    char tile = '\0';
+    
+    //Check that x and y are in bounds of wall
+    if(x >= 0 && x < WALL_DIM && y >= 0 && y < WALL_DIM) {
+        tile = wall[y][x];
+    }
+
+    return tile;
+}
+
+bool PlayerBoard::addBrokenTile(char tile) {
+    bool success = false;
+    
+    if(brokenLine.size() < NUM_BROKEN_TILES) {
+        brokenLine.push_back(tile);
+        success = true;
+    }
+
+    return success;
+}
+
+char PlayerBoard::getBrokenTile(int index) {
+    char tile = '\0';
+    
+    if(index >= 0 && index < NUM_BROKEN_TILES && index < brokenLine.size()) {
+        tile = brokenLine[index];
+    }
+
+    return tile;
+}
+
+int PlayerBoard::getBrokenSize() {
+    return brokenLine.size();
+}
+
+void PlayerBoard::clearBrokenLine() {
+    brokenLine.clear();
+>>>>>>> s3780973
 }
