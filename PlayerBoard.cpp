@@ -3,7 +3,7 @@
 #include "PatternLine.h"
 
 PlayerBoard::PlayerBoard() {
-	// Create a 5x5 char array for the wall
+    // Create a 5x5 char array for the wall
 	wall = new char* [WALL_DIM];
 	for (int i = 0; i < WALL_DIM; i++) {
 		wall[i] = new char[WALL_DIM];
@@ -24,6 +24,8 @@ PlayerBoard::PlayerBoard() {
 		this->patternLines[i] = new PatternLine(i + 1);
 	}
 
+    brokenLine = new std::vector<char>;
+
 }
 
 PlayerBoard::~PlayerBoard() {
@@ -34,15 +36,16 @@ PlayerBoard::~PlayerBoard() {
 	}
 	delete[] wall;
 	delete[] patternLines;
-    
+
     // Delete the 5x5 wall char array
     for(int i = 0; i < WALL_DIM; i++) {
         delete wall[i];
     }
     delete[] wall;
 
-    // TODO is this line needed?
-    brokenLine.clear();
+    // Clean up broken line
+    brokenLine->clear();
+    delete brokenLine;
 }
 
 bool PlayerBoard::setWallTile(int x, int y) {
@@ -80,8 +83,8 @@ char PlayerBoard::getWallTile(int x, int y) {
 bool PlayerBoard::addBrokenTile(char tile) {
     bool success = false;
     
-    if(brokenLine.size() < NUM_BROKEN_TILES) {
-        brokenLine.push_back(tile);
+    if(brokenLine->size() < NUM_BROKEN_TILES) {
+        brokenLine->push_back(tile);
         success = true;
     }
 
@@ -91,18 +94,17 @@ bool PlayerBoard::addBrokenTile(char tile) {
 char PlayerBoard::getBrokenTile(int index) {
     char tile = '\0';
     
-    if(index >= 0 && index < NUM_BROKEN_TILES && index < brokenLine.size()) {
-        tile = brokenLine[index];
+    if(index >= 0 && index < NUM_BROKEN_TILES && index < brokenLine->size()) {
+        tile = brokenLine->at(index);
     }
 
     return tile;
 }
 
 int PlayerBoard::getBrokenSize() {
-    return brokenLine.size();
+    return brokenLine->size();
 }
 
 void PlayerBoard::clearBrokenLine() {
-    brokenLine.clear();
->>>>>>> s3780973
+    brokenLine->clear();
 }

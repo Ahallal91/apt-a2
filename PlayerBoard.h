@@ -44,7 +44,7 @@ private:
 	PatternLine** patternLines;
 
 	// Broken Line
-	std::vector<char> brokenLine;
+	std::vector<char>* brokenLine;
 
 };
 
