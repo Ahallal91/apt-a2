@@ -8,10 +8,13 @@ public:
 	PlayerBoard();
 	~PlayerBoard();
 
-	// Set the tile at wall position x, y
-	void setWallTile(char tile, int x, int y);
+	// Sets the tile at wall position x, y to the corresponding pattern tile
+	void setWallTile(int x, int y);
 
-	// Get the tile at wall position x, y
+	// Removes the tile at wall position x, y and sets it back to empty
+	void removeWallTile(int x, int y);
+
+	// Returns the tile at wall position x, y
 	char getWallTile(int x, int y);
 
 private:

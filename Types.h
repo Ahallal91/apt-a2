@@ -2,8 +2,8 @@
 #define TYPES_H
 
 // Player Config
-#define DEFAULT_NAME        "Player"
-#define INITIAL_POINTS      0
+#define DEFAULT_NAME     "Player"
+#define INITIAL_POINTS   0
 
 // colours of the tiles
 enum Colour {
@@ -16,18 +16,26 @@ enum Colour {
 };
 
 // Player Board Config
-#define WALL_DIM             5
+#define WALL_DIM        5
 
 // Tiles
-#define TILE_RED            'R'
-#define TILE_YELLOW         'Y'
-#define TILE_DARK_BLUE      'B'
-#define TILE_LIGHT_BLUE     'L'
-#define TILE_BLACK          'U'
+#define RED				'R'
+#define YELLOW         	'Y'
+#define DARK_BLUE      	'B'
+#define LIGHT_BLUE     	'L'
+#define BLACK          	'U'
 
-#define TILE_FIRST          'F'
-#define TILE_NONE           '.'
+#define FIRST          	'F'
+#define EMPTY           '.'
 
+// The default Azul Wall Pattern
+constexpr char pattern[WALL_DIM][WALL_DIM] = {
+	{   DARK_BLUE,		YELLOW, 		RED, 			BLACK, 			LIGHT_BLUE	},
+	{   LIGHT_BLUE, 	DARK_BLUE, 		YELLOW, 		RED, 			BLACK		},
+	{   BLACK,			LIGHT_BLUE, 	DARK_BLUE, 		YELLOW, 		RED			},
+	{   RED, 			BLACK, 			LIGHT_BLUE, 	DARK_BLUE,		YELLOW		},
+	{   YELLOW, 		RED, 			BLACK, 			LIGHT_BLUE, 	DARK_BLUE 	}
+};
 // Misc
 #define NUM_ROUNDS			 5
 #define NUM_PLAYERS			 2	
