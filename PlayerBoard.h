@@ -2,8 +2,9 @@
 #define PLAYER_BOARD_H
 
 #include <vector>
+#include "PatternLine.h"
 
-class PatternLine;
+//class PatternLine;
 
 class PlayerBoard {
 public:
