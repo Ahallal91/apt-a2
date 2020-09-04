@@ -2,6 +2,7 @@
 
 PatternLine::PatternLine(int size):
 	size(size),
+	currentSize(0),
 	colour(NO_COLOUR) {
 	this->tiles = new char[size];
 }

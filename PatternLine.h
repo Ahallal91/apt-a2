@@ -17,6 +17,9 @@ private:
 
 	// size of the array
 	int size;
+	
+	// current numTiles
+	int currentSize;
 
 	// 1d array of tiles
 	char* tiles;
