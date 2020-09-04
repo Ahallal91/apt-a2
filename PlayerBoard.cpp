@@ -38,12 +38,6 @@ PlayerBoard::~PlayerBoard() {
 	delete[] wall;
 	delete[] patternLines;
 
-    // Delete the 5x5 wall char array
-    for(int i = 0; i < WALL_DIM; i++) {
-        delete wall[i];
-    }
-    delete[] wall;
-
     // Clean up broken line
     brokenLine->clear();
     delete brokenLine;
