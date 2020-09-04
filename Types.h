@@ -40,4 +40,7 @@ constexpr char pattern[WALL_DIM][WALL_DIM] = {
 // Broken Line config
 #define NUM_BROKEN_TILES	7 
 
+// Factory Config
+#define NUM_FACTORIES 		5
+
 #endif // TYPES_H

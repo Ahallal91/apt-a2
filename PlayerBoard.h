@@ -11,7 +11,7 @@ public:
     // WALL METHODS
 	
 	// Sets the tile at wall position x, y to the corresponding pattern tile
-    void setWallTile(int x, int y);
+    bool setWallTile(int x, int y);
 
 	// Removes the tile at wall position x, y and sets it back to empty
 	void removeWallTile(int x, int y);

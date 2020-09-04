@@ -23,14 +23,22 @@ PlayerBoard::~PlayerBoard() {
     }
     delete[] wall;
 
+    // TODO is this line needed?
     brokenLine.clear();
 }
 
-void PlayerBoard::setWallTile(int x, int y) {
+bool PlayerBoard::setWallTile(int x, int y) {
+    bool success = false;
+    
     //Check that x and y are in bounds of wall
     if(x >= 0 && x < WALL_DIM && y >= 0 && y < WALL_DIM) {
-        wall[y][x] = pattern[y][x];
+        if(wall[y][x] == EMPTY) {
+            wall[y][x] = pattern[y][x];
+            success = true;
+        }
     }
+
+    return success;
 }
 
 void PlayerBoard::removeWallTile(int x, int y) {
