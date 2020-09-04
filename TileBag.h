@@ -2,7 +2,7 @@
 #define TILE_BAG_H
 
 #include "LinkedList.h"
-#include "Types.h"
+class Types;
 
 class TileBag {
 public:

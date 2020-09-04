@@ -1,4 +1,5 @@
 #include "TileBag.h"
+#include "Types.h"
 
 TileBag::TileBag() {
     this->tileBag = new LinkedList();
