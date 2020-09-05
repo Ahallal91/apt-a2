@@ -32,7 +32,7 @@ void runMenu() {
 		} else if (choice == choice2) {
 
 		} else if (choice == choice3) {
-
+			credits();
 		} else if (std::cin.eof() || choice == choice4) {
 			exitMenu = true;
 		} else {

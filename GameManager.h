@@ -6,6 +6,7 @@ class Output;
 class Input;
 class GameLogic;
 class Factories;
+class TileBag;
 
 class GameManager {
 public:
@@ -25,11 +26,14 @@ private:
 	GameLogic* gameLogic;
 	Input* input;
 	Output* output;
+	Factories* factories;
+	TileBag* tileBag;
+
 	int currentRound;
 
 	Player* enterPlayerName(int playerNum);
 
-	Factories* factories;
+	
 };
 
 #endif // GAME_MANAGER_H

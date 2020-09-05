@@ -6,7 +6,9 @@
 #include "Input.h"
 #include "GameLogic.h"
 #include "Factories.h"
+#include "TileBag.h"
 
+// TODO overload this constructor to take in a file; that is a save file.
 GameManager::GameManager():
 	currentRound(1) {
 	this->player1 = this->enterPlayerName(1);
@@ -15,6 +17,7 @@ GameManager::GameManager():
 	this->input = new Input();
 	this->output = new Output();
 	this->factories = new Factories();
+	this->tileBag = new TileBag();
 }
 
 
@@ -28,7 +31,7 @@ GameManager::~GameManager() {
 
 // main game loop
 void GameManager::playGame() {
-	for (; currentRound <= NUM_ROUNDS; currentRound++) {
+	for (; currentRound <= NUM_ROUNDS && !std::cin.eof(); currentRound++) {
 		this->output->outputRound(currentRound);
 
 
