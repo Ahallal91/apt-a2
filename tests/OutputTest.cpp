@@ -28,7 +28,7 @@ void testBoardOutput() {
     // pattern lines output
     player->getPlayerBoard()->getPatternLine(1)->addTile(RED);
     player->getPlayerBoard()->getPatternLine(3)->addTile(DARK_BLUE);
-    player->getPlayerBoard()->getPatternLine(3)->addTile(BLACK);
+    player->getPlayerBoard()->getPatternLine(3)->addTile(DARK_BLUE);
 
     // broken line output
     player->getPlayerBoard()->addBrokenTile(FIRST);
