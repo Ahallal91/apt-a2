@@ -6,8 +6,8 @@ public:
 	PatternLine(int size);
 	~PatternLine();
 
-	void setTile(char tile);
-	char getTile();
+	void setTileType(char tile);
+	char getTileType();
 
 	// Adds a tile to the end of the pattern line if not full
 	bool addTile(char tile);
