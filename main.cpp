@@ -40,7 +40,7 @@ void runMenu() {
 		} else if (std::cin.eof() || choice == choice4) {
 			exitMenu = true;
 		} else {
-			std::cout << "Please select a valid option" << std::endl;
+			printLine("Please select a valid option");
 		}
 	}
 }
@@ -52,6 +52,7 @@ void menuText() {
 	printLine("2. Load Game");
 	printLine("3. Credits (Show student information)");
 	printLine("4. Quit");
+	std::cout << "> ";
 }
 
 void credits() {

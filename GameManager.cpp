@@ -27,12 +27,16 @@ GameManager::~GameManager() {
 	delete this->gameLogic;
 	delete this->input;
 	delete this->output;
+	delete this->factories;
+	delete this->tileBag;
 }
 
 // main game loop
+// remember to end the loop if player enter ends of line character
 void GameManager::playGame() {
-	for (; currentRound <= NUM_ROUNDS && !std::cin.eof(); currentRound++) {
+	for (; currentRound <= NUM_ROUNDS; currentRound++) {
 		this->output->outputRound(currentRound);
+		this->gameLogic->addFactoryTiles(this->factories, this->tileBag);
 
 
 	}
@@ -50,7 +54,7 @@ Player* GameManager::getPlayer2() {
 // could have loop, but for now we'll assume the user will enter a single name
 Player* GameManager::enterPlayerName(int playerNum) {
 	std::string name = "";
-	std::cout << "Enter a name for player " << playerNum << std::endl;
+	std::cout << "Enter a name for player " << playerNum << std::endl << "> ";
 	std::cin >> name;
 
 	return new Player(name);

@@ -28,7 +28,6 @@ constexpr char pattern[WALL_DIM][WALL_DIM] = {
 };
 // Misc
 #define NUM_ROUNDS			 5
-#define NUM_PLAYERS			 2
 #define FACTORY_SIZE		 4	
 
 // Broken Line config

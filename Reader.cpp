@@ -6,6 +6,7 @@ Reader::Reader() {}
 
 Reader::~Reader() {}
 
+// reads tiles from a text file and adds to the list
 bool Reader::readTileBag(LinkedList& list, std::string fileName) {
 	bool success = false;
 	std::ifstream file;
@@ -17,11 +18,8 @@ bool Reader::readTileBag(LinkedList& list, std::string fileName) {
 		// ensures last character isn't read twice
 		while (file >> c) {
 			list.addFront(c);
-			std::cout << "Character read: " << c << std::endl;
 		}
-
 		file.close();
-
 	}
 	return success;
 }
