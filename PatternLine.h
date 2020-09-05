@@ -9,6 +9,18 @@ public:
 	void setTile(char tile);
 	char getTile();
 
+	// Adds a tile to the end of the pattern line if not full
+	bool addTile(char tile);
+	
+	// Removes a tile at specific index
+	void removeTile(int index);
+
+	// Returns the tile at specific index
+	char getTile(int index);
+
+	int getSize();
+	int getCurrentSize();
+
 private:
 	// the current colour of this pattern line
 	char tile;
