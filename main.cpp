@@ -19,6 +19,10 @@ void runMenu() {
 	const std::string choice3 = "3";
 	const std::string choice4 = "4";
 
+	printLine("Welcome to Azul!");
+	printLine("-------------------");
+	printLine("");
+
 	while (!exitMenu) {
 		menuText();
 		std::string choice;
@@ -42,9 +46,6 @@ void runMenu() {
 }
 
 void menuText() {
-	printLine("Welcome to Azul!");
-	printLine("-------------------");
-	printLine("");
 	printLine("Menu");
 	printLine("----");
 	printLine("1. New Game");
@@ -56,8 +57,8 @@ void menuText() {
 void credits() {
 	printLine("----------CREDITS----------");
 	printLine("Joshua Cervenjak (S3783156)");
-	printLine("John Patrikios (S3780973)");
-	printLine("Alicia Hallal (S3811836)");
+	printLine("John   Patrikios (S3780973)");
+	printLine("Alicia Hallal    (S3811836)");
 	printLine("---------------------------");
 }
 

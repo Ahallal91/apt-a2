@@ -8,20 +8,20 @@ Reader::~Reader() {}
 
 bool Reader::readTileBag(LinkedList& list, std::string fileName) {
 	bool success = false;
-	std::ifstream inFile;
-	inFile.open(fileName);
+	std::ifstream file;
+	file.open(fileName);
+	char c = ' ';
 
-	// TODO could make it one line or multiple lines the file
-	if (inFile.good()) {
+	if (file.is_open()) {
 		success = true;
-		while (!inFile.eof()) {
-			std::string line;
-			std::getline(inFile, line);
-			list.addFront(line.at(0));
-			std::cout << "Read: " << line << std::endl;
+		// ensures last character isn't read twice
+		while (file >> c) {
+			list.addFront(c);
+			std::cout << "Character read: " << c << std::endl;
 		}
-	}
 
-	inFile.close();
+		file.close();
+
+	}
 	return success;
 }
