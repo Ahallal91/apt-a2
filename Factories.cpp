@@ -6,6 +6,9 @@ Factories::Factories() {
     this->factories = new char*[NUM_FACTORIES];
     for(int i = 0; i < NUM_FACTORIES; ++i) {
         factories[i] = new char[FACTORY_SIZE];
+        for(int j = 0; j < FACTORY_SIZE; ++j) {
+            factories[i][j] = '\0';
+        }
     }
 
     // creates centre factory
@@ -20,7 +23,7 @@ bool Factories::addToFactory(int factoryNumber, char tile) {
     bool retValue = false;
     if (factoryNumber >= 0 && factoryNumber < NUM_FACTORIES) {
         for(int i = 0; i < FACTORY_SIZE; ++i) {
-            if(factories[factoryNumber][i] == '\0') {
+            if(factories[factoryNumber][i] == '\0' && !retValue) {
                 factories[factoryNumber][i] = tile;
                 retValue = true;
             }
@@ -83,6 +86,9 @@ void Factories::resetFactories() {
     factories = new char*[NUM_FACTORIES];
     for(int i = 0; i < NUM_FACTORIES; ++i) {
         factories[i] = new char[FACTORY_SIZE];
+        for(int j = 0; j < FACTORY_SIZE; ++j) {
+            factories[i][j] = '\0';
+        }
     }
 
     // creates centre factory
