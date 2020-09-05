@@ -1,6 +1,7 @@
 #include <iostream>
 #include "GameManager.h"
 
+void printLine(std::string message);
 void runMenu();
 void credits();
 void menuText();
@@ -41,21 +42,25 @@ void runMenu() {
 }
 
 void menuText() {
-	std::cout << "Welcome to Azul!" << std::endl;
-	std::cout << "-------------------" << std::endl;
-	std::cout << std::endl;
-	std::cout << "Menu" << std::endl;
-	std::cout << "----" << std::endl;
-	std::cout << "1. New Game" << std::endl;
-	std::cout << "2. Load Game" << std::endl;
-	std::cout << "3. Credits (Show student information)" << std::endl;
-	std::cout << "4. Quit" << std::endl;
+	printLine("Welcome to Azul!");
+	printLine("-------------------");
+	printLine("");
+	printLine("Menu");
+	printLine("----");
+	printLine("1. New Game");
+	printLine("2. Load Game");
+	printLine("3. Credits (Show student information)");
+	printLine("4. Quit");
 }
 
 void credits() {
-	std::cout << "----------CREDITS----------" << std::endl;
-	std::cout << "Joshua Cervenjak (S3783156)" << std::endl;
-	std::cout << "John Patrikios (S3780973)" << std::endl;
-	std::cout << "Alicia Hallal (S3811836)" << std::endl;
-	std::cout << "---------------------------" << std::endl;
+	printLine("----------CREDITS----------");
+	printLine("Joshua Cervenjak (S3783156)");
+	printLine("John Patrikios (S3780973)");
+	printLine("Alicia Hallal (S3811836)");
+	printLine("---------------------------");
+}
+
+void printLine(std::string message) {
+	std::cout << message << std::endl;
 }
