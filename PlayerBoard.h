@@ -22,6 +22,10 @@ public:
 	// Returns the tile at wall position x, y
 	char getWallTile(int x, int y);
 
+	// PATTERN LINE METHODS
+
+	// Returns the Pattern Line of a specific row
+	PatternLine* getPatternLine(int row);
 
 	// BROKEN LINE METHODS
 

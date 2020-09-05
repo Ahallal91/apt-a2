@@ -38,12 +38,6 @@ PlayerBoard::~PlayerBoard() {
 	delete[] wall;
 	delete[] patternLines;
 
-    // Delete the 5x5 wall char array
-    for(int i = 0; i < WALL_DIM; i++) {
-        delete wall[i];
-    }
-    delete[] wall;
-
     // Clean up broken line
     brokenLine->clear();
     delete brokenLine;
@@ -80,6 +74,20 @@ char PlayerBoard::getWallTile(int x, int y) {
 
     return tile;
 }
+
+// PATTERN LINE METHODS
+
+PatternLine* PlayerBoard::getPatternLine(int row) {
+    PatternLine* patternLine = nullptr;
+    
+    if(row >= 0 && row < WALL_DIM) {
+        patternLine = patternLines[row];
+    }
+
+    return patternLine;
+}
+
+// BROKEN LINE METHODS
 
 bool PlayerBoard::addBrokenTile(char tile) {
     bool success = false;
