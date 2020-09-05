@@ -2,7 +2,9 @@
 #include "GameManager.h"
 
 void runMenu();
+void credits();
 void menuText();
+
 
 int main(int argc, char** argv) {
 	runMenu();
@@ -48,4 +50,12 @@ void menuText() {
 	std::cout << "2. Load Game" << std::endl;
 	std::cout << "3. Credits (Show student information)" << std::endl;
 	std::cout << "4. Quit" << std::endl;
+}
+
+void credits() {
+	std::cout << "----------CREDITS----------" << std::endl;
+	std::cout << "Joshua Cervenjak (S3783156)" << std::endl;
+	std::cout << "John Patrikios (S3780973)" << std::endl;
+	std::cout << "Alicia Hallal (S3811836)" << std::endl;
+	std::cout << "---------------------------" << std::endl;
 }
