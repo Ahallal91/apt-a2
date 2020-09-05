@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Input.h"
 #include "GameLogic.h"
+#include "Factories.h"
 
 GameManager::GameManager():
 	currentRound(1) {
@@ -13,6 +14,7 @@ GameManager::GameManager():
 	this->gameLogic = new GameLogic();
 	this->input = new Input();
 	this->output = new Output();
+	this->factories = new Factories();
 }
 
 
