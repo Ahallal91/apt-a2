@@ -37,17 +37,17 @@ void LinkedList::clear() {
 }
 
 char LinkedList::get(int index) {
-	char* retValue = nullptr;
-	if (index >= 0 && index < length) {
-		int count = 0;
-		Node* current = head;
-		while (count < index) {
-			current = current->next;
-			count++;
-		}
-		retValue = &current->data;
-	}
-	return *retValue;
+    char retValue = '\0';
+    if(index >= 0 && index < length) {
+        int count = 0;
+        Node* current = head;
+        while(count < index) {
+            current = current->next;
+            count++;
+        }
+        retValue = current->data;
+    }   
+    return retValue;
 }
 
 void LinkedList::addFront(char data) {
