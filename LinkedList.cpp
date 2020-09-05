@@ -38,7 +38,7 @@ void LinkedList::clear() {
 }
 
 char LinkedList::get(int index) {
-    char* retValue = nullptr;
+    char retValue = '\0';
     if(index >= 0 && index < length) {
         int count = 0;
         Node* current = head;
@@ -46,9 +46,9 @@ char LinkedList::get(int index) {
             current = current->next;
             count++;
         }
-        retValue = &current->data;
+        retValue = current->data;
     }   
-    return *retValue;
+    return retValue;
 }
 
 void LinkedList::addFront(char data) {

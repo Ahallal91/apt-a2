@@ -3,12 +3,14 @@
 #include "Output.h"
 #include "Types.h"
 #include "Player.h"
+#include "Factories.h"
 
 GameManager::GameManager():
 	currentRound(1) {
 	this->player1 = this->enterPlayerName(1);
 	this->player2 = this->enterPlayerName(2);
 	this->output = new Output();
+	this->factories = new Factories();
 }
 
 // main game loop

@@ -3,6 +3,7 @@
 
 class Player;
 class Output;
+class Factories;
 
 class GameManager {
 public:
@@ -23,6 +24,8 @@ private:
 	int currentRound;
 
 	Player* enterPlayerName(int playerNum);
+
+	Factories* factories;
 };
 
 #endif // GAME_MANAGER_H
