@@ -11,8 +11,9 @@ bool Reader::readTileBag(LinkedList& list, std::string fileName) {
 	std::ifstream inFile;
 	inFile.open(fileName);
 
-
+	// TODO could make it one line or multiple lines the file
 	if (inFile.good()) {
+		success = true;
 		while (!inFile.eof()) {
 			std::string line;
 			std::getline(inFile, line);
@@ -22,5 +23,5 @@ bool Reader::readTileBag(LinkedList& list, std::string fileName) {
 	}
 
 	inFile.close();
-
+	return success;
 }
