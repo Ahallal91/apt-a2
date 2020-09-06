@@ -17,3 +17,17 @@ void GameLogic::initFactoryTiles(Factories* factories, TileBag* tileBag) {
 		}
 	}
 }
+
+char* GameLogic::takeTilesFromFactory(Factories* factories, int factoryNumber, 
+									char tile) {
+	char* retValue = nullptr;
+	if (factoryNumber >= 1 && factoryNumber <= NUM_FACTORIES) {
+		retValue = factories->takeTilesFactory(factoryNumber, tile);
+	} else if (factoryNumber == 0) {
+		retValue = factories->takeTilesCenterFactory(tile);	
+	}
+	if (retValue == nullptr) {
+		retValue[0] = '\0';
+	}
+	return retValue;
+}
