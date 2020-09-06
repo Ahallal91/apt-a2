@@ -37,4 +37,8 @@ constexpr char pattern[WALL_DIM][WALL_DIM] = {
 // Factory Config
 #define NUM_FACTORIES 		5
 
+// User input Commands config
+#define TURN_ARGUMENTS 		4
+#define SAVE_ARGUMENTS		2
+
 #endif // TYPES_H
