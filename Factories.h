@@ -26,7 +26,6 @@ private:
 
 	// set of 5 factories of size 4
 	char** factories;
-
 	std::vector<char>* centerFactory;
 
 };
