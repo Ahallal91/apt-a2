@@ -37,7 +37,11 @@ void Output::outputBoard(Player* player) {
 		}
 		// Tiles
 		for(int i = player->getPlayerBoard()->getPatternLine(y)->getSize() - 1; i >= 0 ; i--) {
-			std::cout << " " << player->getPlayerBoard()->getPatternLine(y)->getTileType();
+			if(i > player->getPlayerBoard()->getPatternLine(y)->getCurrentSize() - 1) {
+				std::cout << " " << EMPTY;
+			} else {
+				std::cout << " " << player->getPlayerBoard()->getPatternLine(y)->getTileType();
+			}
 		}
 
 		// Seperator
