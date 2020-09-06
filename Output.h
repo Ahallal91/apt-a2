@@ -2,7 +2,7 @@
 #define OUTPUT_H
 
 class Player;
-class Factory;
+class Factories;
 
 // used for outputting the game to the console; does not modify any state
 class Output {
@@ -11,7 +11,7 @@ public:
 	~Output();
 
 	void outputRound(int roundNum);
-	void outputFactory(Factory* factory);
+	void outputFactory(Factories* factory);
 	void outputBoard(Player* player);
 };
 

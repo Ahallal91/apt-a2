@@ -7,6 +7,9 @@ public:
 	Input();
 	~Input();
 
+	void getTurn();
+
+
 private:
 	// TODO use bool to check whether input was valid or not
 };

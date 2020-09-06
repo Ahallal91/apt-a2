@@ -37,7 +37,10 @@ void GameManager::playGame() {
 	for (; currentRound <= NUM_ROUNDS; currentRound++) {
 		this->output->outputRound(currentRound);
 		this->gameLogic->addFactoryTiles(this->factories, this->tileBag);
+		this->output->outputFactory(this->factories);
 
+		// take input from input class, validate it in GameLogic class	
+		this->input->getTurn();
 
 	}
 }

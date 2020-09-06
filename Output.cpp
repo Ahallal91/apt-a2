@@ -14,7 +14,7 @@ void Output::outputRound(int roundNum) {
 }
 
 // output the current factory
-void Output::outputFactory(Factory* factory) {
+void Output::outputFactory(Factories* factory) {
 
 }
 
