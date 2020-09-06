@@ -11,8 +11,8 @@
 // TODO overload this constructor to take in a file; that is a save file.
 GameManager::GameManager():
 	currentRound(1) {
-	this->player1 = this->enterPlayerName(1);
-	this->player2 = this->enterPlayerName(2);
+	this->player1 = this->input->enterPlayerName(1);
+	this->player2 = this->input->enterPlayerName(2);
 	this->gameLogic = new GameLogic();
 	this->input = new Input();
 	this->output = new Output();
@@ -35,9 +35,11 @@ GameManager::~GameManager() {
 // remember to end the loop if player enter ends of line character
 void GameManager::playGame() {
 	for (; currentRound <= NUM_ROUNDS; currentRound++) {
+		this->gameLogic->initFactoryTiles(this->factories, this->tileBag);
+
 		this->output->outputRound(currentRound);
-		this->gameLogic->addFactoryTiles(this->factories, this->tileBag);
 		this->output->outputFactory(this->factories);
+		this->output->requestInput();
 
 		// take input from input class, validate it in GameLogic class	
 		this->input->getTurn();
@@ -52,13 +54,4 @@ Player* GameManager::getPlayer1() {
 
 Player* GameManager::getPlayer2() {
 	return this->player2;
-}
-
-// could have loop, but for now we'll assume the user will enter a single name
-Player* GameManager::enterPlayerName(int playerNum) {
-	std::string name = "";
-	std::cout << "Enter a name for player " << playerNum << std::endl << "> ";
-	std::cin >> name;
-
-	return new Player(name);
 }

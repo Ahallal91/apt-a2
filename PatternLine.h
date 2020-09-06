@@ -15,9 +15,6 @@ public:
 	// Removes a tile at specific index
 	void removeTile(int index);
 
-	// Returns the tile at specific index
-	char getTile(int index);
-
 	int getSize();
 	int getCurrentSize();
 

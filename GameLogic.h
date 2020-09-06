@@ -8,7 +8,7 @@ class GameLogic {
 public:
 	GameLogic();
 	~GameLogic();
-	void addFactoryTiles(Factories* factories, TileBag* tileBag);
+	void initFactoryTiles(Factories* factories, TileBag* tileBag);
 
 private:
 

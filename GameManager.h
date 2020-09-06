@@ -30,10 +30,6 @@ private:
 	TileBag* tileBag;
 
 	int currentRound;
-
-	Player* enterPlayerName(int playerNum);
-
-	
 };
 
 #endif // GAME_MANAGER_H

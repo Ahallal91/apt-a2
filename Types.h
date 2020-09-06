@@ -29,6 +29,7 @@ constexpr char pattern[WALL_DIM][WALL_DIM] = {
 // Misc
 #define NUM_ROUNDS			 5
 #define FACTORY_SIZE		 4	
+#define NUM_COMMANDS		 4
 
 // Broken Line config
 #define NUM_BROKEN_TILES	7 

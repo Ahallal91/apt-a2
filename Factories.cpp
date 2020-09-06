@@ -6,13 +6,10 @@ Factories::Factories() {
 	this->factories = new char* [NUM_FACTORIES];
 	for (int i = 0; i < NUM_FACTORIES; ++i) {
 		factories[i] = new char[FACTORY_SIZE];
-		for (int j = 0; j < FACTORY_SIZE; ++j) {
-			factories[i][j] = '\0';
-		}
 	}
-
 	// creates centre factory
 	this->centerFactory = new std::vector<char>;
+	this->resetFactories();
 }
 
 Factories::~Factories() {
@@ -105,6 +102,7 @@ void Factories::resetFactories() {
 		}
 	}
 
-	// clears center factory
+	// clears center factory and adds first
 	centerFactory->clear();
+	centerFactory->push_back(FIRST);
 }

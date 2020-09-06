@@ -18,6 +18,10 @@ void Output::outputFactory(Factories* factory) {
 
 }
 
+void Output::requestInput() {
+	std::cout << "> ";
+}
+
 // outputs the players board
 void Output::outputBoard(Player* player) {
 	std::cout << "Mosaic for " << player->getPlayerName() << ":" << std::endl;
@@ -33,7 +37,7 @@ void Output::outputBoard(Player* player) {
 		}
 		// Tiles
 		for(int i = player->getPlayerBoard()->getPatternLine(y)->getSize() - 1; i >= 0 ; i--) {
-			std::cout << " " << player->getPlayerBoard()->getPatternLine(y)->getTile(i);
+			std::cout << " " << player->getPlayerBoard()->getPatternLine(y)->getTileType();
 		}
 
 		// Seperator

@@ -1,17 +1,19 @@
 #ifndef INPUT_H
 #define INPUT_H
 
+class Player;
 // used for getting and validating input.
 class Input {
 public:
 	Input();
 	~Input();
 
+	Player* enterPlayerName(int playerNum);
 	void getTurn();
 
 
 private:
-	// TODO use bool to check whether input was valid or not
+
 };
 
 

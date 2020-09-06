@@ -29,6 +29,9 @@ bool PatternLine::addTile(char tile) {
 	bool success = false;
 
 	if (currentSize < size) {
+		if (currentSize == 0) {
+			this->tile = tile;
+		}
 		tiles[currentSize] = tile;
 		currentSize++;
 		success = true;
@@ -42,16 +45,6 @@ void PatternLine::removeTile(int index) {
 		tiles[index] = EMPTY;
 		currentSize--;
 	}
-}
-
-char PatternLine::getTile(int index) {
-	char tile = '\0';
-
-	if (index >= 0 && index < size) {
-		tile = tiles[index];
-	}
-
-	return tile;
 }
 
 int PatternLine::getSize() {
