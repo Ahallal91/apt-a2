@@ -11,8 +11,8 @@ public:
 	// Adds tiles to back of the queue
 	void addToBag(char tile);
 
-	// removes the tile at the front of the queue
-	void removeFrontTile();
+	// removes the tile at the front of the queue and returns the tile removed
+	char removeFrontTile();
 
 private:
 	// Where the tiles are stored
