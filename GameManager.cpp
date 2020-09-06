@@ -47,7 +47,6 @@ void GameManager::playGame() {
 	}
 }
 
-
 Player* GameManager::getPlayer1() {
 	return this->player1;
 }
