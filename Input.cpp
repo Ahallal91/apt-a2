@@ -91,7 +91,7 @@ bool Input::validateTurnCommand(std::vector<std::string> arguments) {
 	try {
 		int factory = std::stoi(factoryStr);
 		factoryValid = (factory >= 0 && factory <= WALL_DIM);
-	} catch(std::exception e) {}
+	} catch(const std::exception& e) {}
 	
 	// Validate that the tile (3rd parameter) is a tile char
 	if(tileStr.length() == 1) {
@@ -103,7 +103,7 @@ bool Input::validateTurnCommand(std::vector<std::string> arguments) {
 	try {
 		int row = std::stoi(rowStr);
 		rowValid = (row > 0 && row <= WALL_DIM);
-	} catch(std::exception e) {}
+	} catch(const std::exception& e) {}
 
 	return (factoryValid && tileValid && rowValid);
 }
