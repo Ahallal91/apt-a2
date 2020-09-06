@@ -15,7 +15,7 @@ public:
 	char* takeTilesFactory(int factoryNumber, char tile);
 
 	bool addToCenterFactory(char* tiles, int numTiles);
-	std::vector<char> takeTilesCenterFactory(char tile);
+	char* takeTilesCenterFactory(char tile);
 
 	// clears all factories then re-initialises them 
 	void resetFactories();

@@ -9,6 +9,7 @@ public:
 	GameLogic();
 	~GameLogic();
 	void initFactoryTiles(Factories* factories, TileBag* tileBag);
+	char* takeTilesFromFactory(Factories* factories, int factoryNumber, char tile);
 
 private:
 
