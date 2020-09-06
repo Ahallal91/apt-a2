@@ -57,13 +57,18 @@ char* Factories::takeTilesFactory(int factoryNumber, char tile) {
 				count++;
 			}
 		}
+<<<<<<< HEAD
 		// adds left over tiles to center factory
         for (int i = 0; i < FACTORY_SIZE; ++i) {
             if (factories[factoryNumber][i] != '\0') {
+=======
+		for (int i = 0; i < FACTORY_SIZE; ++i) {
+			if (factories[factoryNumber][i] != '\0') {
+>>>>>>> 9428849b20f5c40db0e8fdf1b86a40322245f47d
 				centerFactory->push_back(factories[factoryNumber][i]);
-                factories[factoryNumber][i] = '\0';
+				factories[factoryNumber][i] = '\0';
 			}
-        }
+		}
 	}
 	return retValue;
 }
@@ -79,10 +84,10 @@ bool Factories::addToCenterFactory(char* tiles, int numTiles) {
 
 char* Factories::takeTilesCenterFactory(char tile) {
 	std::vector<char> tempTiles;
-    if (centerFactory->at(0) == FIRST) {
-        tempTiles.push_back(FIRST);
-        centerFactory->erase(centerFactory->begin());
-    }
+	if (centerFactory->at(0) == FIRST) {
+		tempTiles.push_back(FIRST);
+		centerFactory->erase(centerFactory->begin());
+	}
 	for (int i = 0; i < (int) centerFactory->size(); ++i) {
 		if (centerFactory->at(i) == tile) {
 			tempTiles.push_back(centerFactory->at(i));
@@ -90,10 +95,10 @@ char* Factories::takeTilesCenterFactory(char tile) {
 		}
 	}
 
-    char* retValue = new char[tempTiles.size()];
-    for(int i = 0; i < (int)tempTiles.size(); ++i) {
-        retValue[i] = tempTiles.at(i);
-    }
+	char* retValue = new char[tempTiles.size()];
+	for (int i = 0; i < (int) tempTiles.size(); ++i) {
+		retValue[i] = tempTiles.at(i);
+	}
 	return retValue;
 }
 
