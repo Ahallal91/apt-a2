@@ -1,6 +1,6 @@
 #include "Factories.h"
 #include "Types.h"
-
+#include <iostream>
 Factories::Factories() {
     // creates 5 factories of size 4
     this->factories = new char*[NUM_FACTORIES];
@@ -27,8 +27,8 @@ char* Factories::getFactory(int factoryNumber) {
     return retValue;
 }
 
-std::vector<char> Factories::getCenterFactory() {
-    return *centerFactory;
+std::vector<char>* Factories::getCenterFactory() {
+    return centerFactory;
 }
 
 bool Factories::addToFactory(int factoryNumber, char tile) {
@@ -45,7 +45,11 @@ bool Factories::addToFactory(int factoryNumber, char tile) {
 }
 
 char* Factories::takeTilesFactory(int factoryNumber, char tile) {
-    char retValue[FACTORY_SIZE] = {};
+    char* retValue = new char[FACTORY_SIZE];
+    for(int i = 0; i < FACTORY_SIZE; ++i) {
+        retValue[i] = '\0';
+    }
+    
     int count = 0;
     if (factoryNumber >= 0 && factoryNumber < NUM_FACTORIES) {
         for(int i = 0; i < FACTORY_SIZE; ++i) {
@@ -59,10 +63,10 @@ char* Factories::takeTilesFactory(int factoryNumber, char tile) {
     return retValue;
 }
 
-bool Factories::addToCenterFactory(char* tile, int numTiles) {
+bool Factories::addToCenterFactory(char* tiles, int numTiles) {
     bool retValue = false;
     for(int i = 0; i < numTiles; ++i) {
-        centerFactory->push_back(tile[i]);
+        centerFactory->push_back(tiles[i]);
         retValue = true;
     }
     return retValue;
@@ -73,6 +77,7 @@ std::vector<char> Factories::takeTilesCenterFactory(char tile) {
     for(int i = 0; i < (int) centerFactory->size(); ++i) {
         if (centerFactory->at(i) == tile) {
             retValue.push_back(centerFactory->at(i));
+            centerFactory->erase(centerFactory->begin() + i);
         }
     }
     return retValue;
@@ -100,6 +105,6 @@ void Factories::resetFactories() {
         }
     }
 
-    // creates centre factory
+    // clears center factory
     centerFactory->clear();
 }
