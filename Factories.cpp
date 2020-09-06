@@ -48,6 +48,7 @@ char* Factories::takeTilesFactory(int factoryNumber, char tile) {
 	}
 
 	int count = 0;
+	// takes matching tiles from selected factory
 	if (factoryNumber >= 0 && factoryNumber < NUM_FACTORIES) {
 		for (int i = 0; i < FACTORY_SIZE; ++i) {
 			if (factories[factoryNumber][i] == tile) {
@@ -56,6 +57,7 @@ char* Factories::takeTilesFactory(int factoryNumber, char tile) {
 				count++;
 			}
 		}
+		// adds left over tiles to center factory
         for (int i = 0; i < FACTORY_SIZE; ++i) {
             if (factories[factoryNumber][i] != '\0') {
 				centerFactory->push_back(factories[factoryNumber][i]);

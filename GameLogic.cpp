@@ -19,6 +19,11 @@ void GameLogic::initFactoryTiles(Factories* factories, TileBag* tileBag) {
 	}
 }
 
+/* Allows the player to select tiles from a specified factory and place those
+ * tiles into their patternLine/brokenLine. Players can only place tiles in
+ * PatternLines that match the tile colour or are empty. 
+ * Returns true if the tiles are placed in the players patternLine/brokenLine
+ */
 bool GameLogic::takeTiles(Factories* factories, Player* player, 
 							int factoryNumber, char tile, int destPatternLine) {
 	bool retValue = false;
@@ -37,10 +42,16 @@ bool GameLogic::takeTiles(Factories* factories, Player* player,
 	return retValue;
 }
 
+/*  Takes tiles from specified factories numbered 0 to 5. Center Factory
+ *  is accessed by factoryNumber 0.
+ *	returns a char array of tiles that match the tile passed in from
+ *  the specified factory.
+ */
 char* GameLogic::takeTilesFromFactory(Factories* factories, int factoryNumber, 
 									char tile) {
-	char* retValue = nullptr;
+	char* retValue = nullptr;	
 	if (factoryNumber >= 1 && factoryNumber <= NUM_FACTORIES) {
+		// factory number reduced to reflect actual factory numbers.
 		retValue = factories->takeTilesFactory(factoryNumber - 1, tile);
 	} else if (factoryNumber == 0) {
 		retValue = factories->takeTilesCenterFactory(tile);	
@@ -51,6 +62,9 @@ char* GameLogic::takeTilesFromFactory(Factories* factories, int factoryNumber,
 	return retValue;
 }
 
+/* Checks if the tile passed in matches the type of tile in the players 
+ * patternLine. If the patternLine is empty or matching it will return true
+ */ 
 bool GameLogic::playerTileCheck(Player* player, char tile, int destPatternLine) {
 	bool retValue = false;
 	char tileType = player->
