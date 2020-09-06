@@ -12,11 +12,23 @@ Factories::Factories() {
     }
 
     // creates centre factory
-    this->centreFactory = new std::vector<char>;
+    this->centerFactory = new std::vector<char>;
 }
 
 Factories::~Factories() {
     clearFactories();
+}
+
+char* Factories::getFactory(int factoryNumber) {
+    char* retValue = nullptr;
+    if (factoryNumber >= 0 && factoryNumber < NUM_FACTORIES) {
+        retValue = factories[factoryNumber];
+    }
+    return retValue;
+}
+
+std::vector<char> Factories::getCenterFactory() {
+    return *centerFactory;
 }
 
 bool Factories::addToFactory(int factoryNumber, char tile) {
@@ -50,7 +62,7 @@ char* Factories::takeTilesFactory(int factoryNumber, char tile) {
 bool Factories::addToCenterFactory(char* tile, int numTiles) {
     bool retValue = false;
     for(int i = 0; i < numTiles; ++i) {
-        centreFactory->push_back(tile[i]);
+        centerFactory->push_back(tile[i]);
         retValue = true;
     }
     return retValue;
@@ -58,9 +70,9 @@ bool Factories::addToCenterFactory(char* tile, int numTiles) {
 
 std::vector<char> Factories::takeTilesCenterFactory(char tile) {
     std::vector<char> retValue;
-    for(int i = 0; i < (int) centreFactory->size(); ++i) {
-        if (centreFactory->at(i) == tile) {
-            retValue.push_back(centreFactory->at(i));
+    for(int i = 0; i < (int) centerFactory->size(); ++i) {
+        if (centerFactory->at(i) == tile) {
+            retValue.push_back(centerFactory->at(i));
         }
     }
     return retValue;
@@ -75,22 +87,19 @@ void Factories::clearFactories() {
     factories = nullptr;
 
     // Cleans up centre factory
-    centreFactory->clear();
-    delete centreFactory;
-    centreFactory = nullptr;
+    centerFactory->clear();
+    delete centerFactory;
+    centerFactory = nullptr;
 }
 
 void Factories::resetFactories() {
-    clearFactories();
-    // creates 5 factories of size 4
-    factories = new char*[NUM_FACTORIES];
+    // re-initialises factories
     for(int i = 0; i < NUM_FACTORIES; ++i) {
-        factories[i] = new char[FACTORY_SIZE];
         for(int j = 0; j < FACTORY_SIZE; ++j) {
             factories[i][j] = '\0';
         }
     }
 
     // creates centre factory
-    centreFactory = new std::vector<char>;
+    centerFactory->clear();
 }

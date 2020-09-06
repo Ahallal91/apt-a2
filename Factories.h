@@ -8,6 +8,9 @@ public:
 	Factories();
 	~Factories();
 
+    char* getFactory(int factoryNumber);
+    std::vector<char> getCenterFactory();
+
     bool addToFactory(int factoryNumber, char tile);
     char* takeTilesFactory(int factoryNumber, char tile);
 
@@ -24,7 +27,7 @@ private:
 	// set of 5 factories of size 4
 	char** factories;
 	
-	std::vector<char>* centreFactory;
+	std::vector<char>* centerFactory;
 	
 };
 
