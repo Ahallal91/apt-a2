@@ -7,7 +7,8 @@ GameLogic::GameLogic() {}
 
 GameLogic::~GameLogic() {}
 
-void GameLogic::addFactoryTiles(Factories*& factories, TileBag*& tileBag) {
+// Do I need to pass by refernece
+void GameLogic::addFactoryTiles(Factories* factories, TileBag* tileBag) {
 	// may not even need this method call but will leave for now
 	factories->resetFactories();
 
