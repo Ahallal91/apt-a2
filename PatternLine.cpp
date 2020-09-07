@@ -54,3 +54,8 @@ int PatternLine::getSize() {
 int PatternLine::getCurrentSize() {
 	return this->currentSize;
 }
+
+bool PatternLine::isFull() {
+	return (currentSize == size);
+}
+

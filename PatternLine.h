@@ -18,6 +18,9 @@ public:
 	int getSize();
 	int getCurrentSize();
 
+	// Checks if the pattern line is full
+	bool isFull();
+
 private:
 	// the current colour of this pattern line
 	char tile;
