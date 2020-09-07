@@ -57,14 +57,10 @@ char* Factories::takeTilesFactory(int factoryNumber, char tile) {
 				count++;
 			}
 		}
-<<<<<<< HEAD
+
 		// adds left over tiles to center factory
-        for (int i = 0; i < FACTORY_SIZE; ++i) {
-            if (factories[factoryNumber][i] != '\0') {
-=======
 		for (int i = 0; i < FACTORY_SIZE; ++i) {
 			if (factories[factoryNumber][i] != '\0') {
->>>>>>> 9428849b20f5c40db0e8fdf1b86a40322245f47d
 				centerFactory->push_back(factories[factoryNumber][i]);
 				factories[factoryNumber][i] = '\0';
 			}

@@ -14,6 +14,7 @@ public:
 	void outputFactory(Factories* factory);
 	void outputBoard(Player* player);
 	void requestInput();
+	void invalidInput();
 };
 
 #endif // OUTPUT_H

@@ -41,8 +41,14 @@ void GameManager::playGame() {
 		this->output->outputFactory(this->factories);
 		this->output->requestInput();
 
-		// take input from input class, validate it in GameLogic class	
-		this->input->getTurn();
+		// keep asking until valid input 
+		std::vector<std::string> commands = {};
+		commands = this->input->getGameplayInput();
+
+		while (commands.at(0) != "quit" || commands.empty()) {
+			this->output->invalidInput();
+			this->output->requestInput();
+		}
 
 	}
 }

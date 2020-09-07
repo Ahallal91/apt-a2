@@ -42,6 +42,12 @@ void Output::requestInput() {
 	std::cout << "> ";
 }
 
+// TODO could maybe tell the user what the valid commands are, 
+// but for now, just say invalid
+void Output::invalidInput() {
+	std::cout << "Invalid input. Please enter a valid move" << std::endl;
+}
+
 // outputs the players board
 void Output::outputBoard(Player* player) {
 	std::cout << "Mosaic for " << player->getPlayerName() << ":" << std::endl;
