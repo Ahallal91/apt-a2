@@ -38,16 +38,20 @@ void GameManager::playGame() {
 		this->gameLogic->initFactoryTiles(this->factories, this->tileBag);
 
 		this->output->outputRound(currentRound);
+		this->output->outputTurn(this->player1);
 		this->output->outputFactory(this->factories);
+		this->output->outputBoard(this->player1);
 		this->output->requestInput();
 
 		// keep asking until valid input 
 		std::vector<std::string> commands = {};
 		commands = this->input->getGameplayInput();
 
-		while (commands.at(0) != "quit" || commands.empty()) {
+		// calling at on an empty
+		while (commands.empty()) {
 			this->output->invalidInput();
 			this->output->requestInput();
+			commands = this->input->getGameplayInput();
 		}
 
 	}

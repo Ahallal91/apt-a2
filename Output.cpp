@@ -35,7 +35,11 @@ void Output::outputFactory(Factories* factory) {
 			}
 		}
 	}
-	std::cout << std::endl;
+	std::cout << std::endl << std::endl;
+}
+
+void Output::outputTurn(Player* player) {
+	std::cout << "TURN FOR PLAYER: " << player->getPlayerName() << std::endl;
 }
 
 void Output::requestInput() {
