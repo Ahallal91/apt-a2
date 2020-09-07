@@ -4,15 +4,28 @@
 #include "../Types.h"
 #include "../Input.h"
 
+void testPlayerNameInput();
 void testGameplayInput();
 
 // Helper function to print the string vector returned after gameplay input
 void printGameplayVector(std::vector<std::string> arguments);
 
 int main() {
+    //testPlayerNameInput();
     testGameplayInput();
     
     return EXIT_SUCCESS;
+}
+
+void testPlayerNameInput() {
+    Input* input = new Input();
+
+    Player* player = input->enterPlayerName(0);
+
+    std::cout << player->getPlayerName() << std::endl;
+
+    delete player;
+    delete input;
 }
 
 void testGameplayInput() {
@@ -30,6 +43,8 @@ void testGameplayInput() {
             done = true;
         }
     }
+
+    delete input;
 }
 
 void printGameplayVector(std::vector<std::string> arguments) {

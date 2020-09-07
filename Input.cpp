@@ -9,26 +9,35 @@ Input::Input() {}
 
 Input::~Input() {}
 
-
 // Allows any name excluding entirely whitespace.
-// TODO remove trailing and leading whitespace
+// TODO eof check? (will cause infinite loop)
 Player* Input::enterPlayerName(int playerNum) {
-	bool valid = false;
 	std::string name = "";
-	std::cout << "Enter a name for player " << playerNum << std::endl << "> ";
+	
+	while(name.empty()) {
+		std::string input = "";
+		std::cout << "Enter a name for Player " << playerNum << std::endl << "> ";
+		std::getline(std::cin, input);
 
-	do {
-		std::cin.ignore();
-		std::getline(std::cin, name);
-		for (int i = 0; i < name.size() && !valid; i++) {
-			if (name.at(i) != ' ') {
-				valid = true;
+		// A vector that contains the name seperated by white spaces
+		std::vector<std::string> nameVec = explode(input);
+
+		// Append each vector index to the name if not empty
+		if(!nameVec.empty()) {
+			for(int i = 0; i < nameVec.size(); i++) {
+				name.append(nameVec[i]);
+				
+				// Dont append a space if its the last string in vector
+				if(i != nameVec.size() - 1) {
+					name.append(" ");
+				}
 			}
 		}
-		if (!valid) {
-			std::cout << "Please enter a valid name" << std::endl << "> ";
+
+		if(name.empty()) {
+			std::cout << "Please enter a valid name!" << std::endl;
 		}
-	} while (!valid);
+	}
 	return new Player(name);
 }
 
@@ -149,13 +158,17 @@ std::vector<std::string> Input::explode(std::string str) {
 
 	for (char c : str) {
 		if (c == ' ') {
-			arguments.push_back(word);
+			if(word.find_first_not_of(' ') != std::string::npos) {
+				arguments.push_back(word);
+			}
 			word = "";
 		} else {
 			word = word + c;
 		}
 	}
-	arguments.push_back(word);
+	if(word.find_first_not_of(' ') != std::string::npos) {
+		arguments.push_back(word);
+	}
 
 	return arguments;
 }
