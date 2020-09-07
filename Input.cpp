@@ -24,7 +24,7 @@ Player* Input::enterPlayerName(int playerNum) {
 
 		// Append each vector index to the name if not empty
 		if(!nameVec.empty()) {
-			for(int i = 0; i < nameVec.size(); i++) {
+			for(unsigned int i = 0; i < nameVec.size(); i++) {
 				name.append(nameVec[i]);
 				
 				// Dont append a space if its the last string in vector

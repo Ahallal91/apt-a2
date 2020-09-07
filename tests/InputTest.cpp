@@ -52,7 +52,7 @@ void printGameplayVector(std::vector<std::string> arguments) {
     std::cout << "=== Vector Output ===" << std::endl;
     std::cout << "Arguments: " << arguments.size() << std::endl;
     std::cout << std::endl;
-    for(int i = 0; i < (int)arguments.size(); i++) {
+    for(unsigned int i = 0; i < arguments.size(); i++) {
         std::cout << i << ": " << arguments[i] << std::endl;
     }
     std::cout << std::endl;
