@@ -13,6 +13,7 @@ public:
 	void outputRound(int roundNum);
 	void outputFactory(Factories* factory);
 	void outputBoard(Player* player);
+	void outputTurn(Player* player);
 	void requestInput();
 	void invalidInput();
 };

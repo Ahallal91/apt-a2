@@ -27,7 +27,7 @@ void Output::outputFactory(Factories* factory) {
 
 	// output the factories
 	for (int i = 0; i < NUM_FACTORIES; i++) {
-		std::cout << std::endl << i << ": ";
+		std::cout << std::endl << (i + 1) << ": ";
 		char* tiles = factory->getFactory(i);
 		for (int j = 0; j < FACTORY_SIZE; j++) {
 			if (tiles[j] != '\0') {
@@ -35,7 +35,11 @@ void Output::outputFactory(Factories* factory) {
 			}
 		}
 	}
-	std::cout << std::endl;
+	std::cout << std::endl << std::endl;
+}
+
+void Output::outputTurn(Player* player) {
+	std::cout << "TURN FOR PLAYER: " << player->getPlayerName() << std::endl;
 }
 
 void Output::requestInput() {

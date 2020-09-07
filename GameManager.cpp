@@ -34,22 +34,52 @@ GameManager::~GameManager() {
 // main game loop
 // remember to end the loop if player enter ends of line character
 void GameManager::playGame() {
+	this->gameLogic->initFactoryTiles(this->factories, this->tileBag);
+	Player* currentPlayer = this->player1;
+
 	for (; currentRound <= NUM_ROUNDS; currentRound++) {
-		this->gameLogic->initFactoryTiles(this->factories, this->tileBag);
 
 		this->output->outputRound(currentRound);
-		this->output->outputFactory(this->factories);
-		this->output->requestInput();
 
-		// keep asking until valid input 
-		std::vector<std::string> commands = {};
-		commands = this->input->getGameplayInput();
-
-		while (commands.at(0) != "quit" || commands.empty()) {
-			this->output->invalidInput();
+		while (!this->gameLogic->roundOver(this->factories)) {
+			// this could all be in one method in output, then these methods could become private
+			this->output->outputTurn(currentPlayer);
+			this->output->outputFactory(this->factories);
+			this->output->outputBoard(currentPlayer);
 			this->output->requestInput();
-		}
 
+			// keep asking until valid input 
+			// TODO will need to clean up
+			std::vector<std::string> commands = {};
+			bool validMove = true;
+			do {
+				validMove = true;
+
+				commands = this->input->getGameplayInput();
+
+				if (commands.empty()) {
+					validMove = false;
+				}
+
+				if (validMove) {
+					validMove = this->gameLogic->takeTiles
+					(this->factories, currentPlayer, stoi(commands.at(1)), commands.at(2).at(0), stoi(commands.at(3)));
+				}
+
+				if (!validMove) {
+					this->output->invalidInput();
+					this->output->requestInput();
+				}
+			} while (!validMove);
+			// end of asking for valid input
+
+			// DEBUGGING
+			std::cout << "Player board is now:" << std::endl;
+			this->output->outputBoard(currentPlayer);
+
+			currentPlayer = currentPlayer == this->player1 ? this->player2 : this->player1;
+		}
+		std::cout << "ROUND OVERR" << std::endl;
 	}
 }
 
