@@ -27,6 +27,8 @@ void GameLogic::initFactoryTiles(Factories* factories, TileBag* tileBag) {
 bool GameLogic::takeTiles(Factories* factories, Player* player, 
 							int factoryNumber, char tile, int destPatternLine) {
 	bool retValue = false;
+	// reduces input patternLine by 1 to fit array
+	destPatternLine--;
 	// checks if tile can be placed in patternLine
 	if (playerTileCheck(player, tile, destPatternLine) && 
 		playerPatternLineSpace(player, destPatternLine)) {
