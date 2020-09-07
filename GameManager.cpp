@@ -40,28 +40,29 @@ void GameManager::playGame() {
 
 		this->output->outputRound(currentRound);
 
-		// start loop for taking turn here ------------
-		// this could all be in one method in output, then these methods could become private
-		this->output->outputTurn(currentPlayer);
-		this->output->outputFactory(this->factories);
-		this->output->outputBoard(currentPlayer);
-		this->output->requestInput();
-
-		// keep asking until valid input 
-		std::vector<std::string> commands = {};
-		commands = this->input->getGameplayInput();
-
-		//TODO just testing to see if it works, will obviously clean up
-		while (commands.empty()) {
-			this->output->invalidInput();
+		while (!this->gameLogic->roundOver(this->factories)) {
+			// this could all be in one method in output, then these methods could become private
+			this->output->outputTurn(currentPlayer);
+			this->output->outputFactory(this->factories);
+			this->output->outputBoard(currentPlayer);
 			this->output->requestInput();
-			commands = this->input->getGameplayInput();
-		}
 
-		this->gameLogic->takeTiles(this->factories, currentPlayer, stoi(commands.at(1)), commands.at(2).at(0), stoi(commands.at(3)));
-		currentPlayer = currentPlayer == this->player1 ? this->player2 : this->player1;
+			// keep asking until valid input 
+			std::vector<std::string> commands = {};
+			commands = this->input->getGameplayInput();
+
+			//TODO just testing to see if it works, will obviously clean up
+			while (commands.empty()) {
+				this->output->invalidInput();
+				this->output->requestInput();
+				commands = this->input->getGameplayInput();
+			}
+
+			this->gameLogic->takeTiles(this->factories, currentPlayer, stoi(commands.at(1)), commands.at(2).at(0), stoi(commands.at(3)));
+			currentPlayer = currentPlayer == this->player1 ? this->player2 : this->player1;
+		}
+		std::cout << "ROUND OVERR" << std::endl;
 	}
-	// end loop for taking turns -----------
 }
 
 Player* GameManager::getPlayer1() {

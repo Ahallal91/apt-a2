@@ -17,7 +17,7 @@ bool Reader::readTileBag(LinkedList& list, std::string fileName) {
 		success = true;
 		// ensures last character isn't read twice
 		while (file >> c) {
-			list.addFront(c);
+			list.addBack(c);
 		}
 		file.close();
 	}

@@ -19,6 +19,30 @@ void GameLogic::initFactoryTiles(Factories* factories, TileBag* tileBag) {
 	}
 }
 
+// returns true if all factories and center are empty, false otherwise
+// used for checking if a round is over
+
+bool GameLogic::roundOver(Factories* factories) {
+	bool roundOver = true;
+
+	// if center factory isn't empty, then the round isn't over
+	if (!factories->getCenterFactory()->empty()) {
+		roundOver = false;
+	}
+
+	// check all factory tiles. If there exists a tile, the round isn't over
+	for (int i = 0; i < NUM_FACTORIES && roundOver; i++) {
+		char* tiles = factories->getFactory(i);
+		for (int j = 0; j < FACTORY_SIZE && roundOver; j++) {
+			if (tiles[j] != '\0') {
+				roundOver = false;
+			}
+		}
+	}
+
+	return roundOver;
+}
+
 /* Allows the player to select tiles from a specified factory and place those
  * tiles into their patternLine/brokenLine. Players can only place tiles in
  * PatternLines that match the tile colour or are empty.
