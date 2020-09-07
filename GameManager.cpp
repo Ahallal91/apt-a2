@@ -11,13 +11,14 @@
 // TODO overload this constructor to take in a file; that is a save file.
 GameManager::GameManager():
 	currentRound(1) {
-	this->player1 = this->input->enterPlayerName(1);
-	this->player2 = this->input->enterPlayerName(2);
 	this->gameLogic = new GameLogic();
 	this->input = new Input();
 	this->output = new Output();
 	this->factories = new Factories();
 	this->tileBag = new TileBag();
+
+	this->player1 = this->input->enterPlayerName(1);
+	this->player2 = this->input->enterPlayerName(2);
 }
 
 
