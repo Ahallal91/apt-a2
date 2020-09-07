@@ -21,7 +21,6 @@ void GameLogic::initFactoryTiles(Factories* factories, TileBag* tileBag) {
 
 // returns true if all factories and center are empty, false otherwise
 // used for checking if a round is over
-
 bool GameLogic::roundOver(Factories* factories) {
 	bool roundOver = true;
 
