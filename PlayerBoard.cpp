@@ -11,15 +11,11 @@ PlayerBoard::PlayerBoard() {
 		this->wall[i] = new char[WALL_DIM];
 	}
 
-	// Initialise the 5x5 wall to empty tiles
-	for (int y = 0; y < WALL_DIM; y++) {
-		for (int x = 0; x < WALL_DIM; x++) {
-			wall[y][x] = EMPTY;
-		}
-	}
 	// Initialise broken line
 	brokenLine = new std::vector<char>;
 
+	// Initialise the 5x5 wall to empty tiles
+	clearPlayerWall();
 }
 
 PlayerBoard::~PlayerBoard() {
@@ -109,4 +105,12 @@ int PlayerBoard::getBrokenSize() {
 
 void PlayerBoard::clearBrokenLine() {
 	brokenLine->clear();
+}
+
+void PlayerBoard::clearPlayerWall() {
+	for (int y = 0; y < WALL_DIM; y++) {
+		for (int x = 0; x < WALL_DIM; x++) {
+			wall[y][x] = EMPTY;
+		}
+	}
 }

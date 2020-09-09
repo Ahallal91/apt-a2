@@ -41,6 +41,9 @@ public:
 	// Clears the broken tiles
 	void clearBrokenLine();
 
+	// clears the playerWall
+	void clearPlayerWall();
+
 private:
 	// The Wall (2D 5x5 char array)
 	char** wall;
