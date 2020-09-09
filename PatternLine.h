@@ -21,6 +21,8 @@ public:
 	// Checks if the pattern line is full
 	bool isFull();
 
+	void clear();
+
 private:
 	// the current colour of this pattern line
 	char tile;
