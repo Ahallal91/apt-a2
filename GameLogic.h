@@ -18,7 +18,7 @@ public:
 	bool takeTiles(Factories* factories, Player* player, int factoryNumber,
 				   char tile, int destPatternLine);
 	bool roundOver(Factories* factories);
-	void resetBoard(PlayerBoard* playerBoard, TileBag* tileBag);
+	void resetBoard(Player* player, TileBag* tileBag);
 
 private:
 	// takes tiles that match tile passed in from factory, return true if tiles

@@ -37,6 +37,7 @@ void GameManager::playGame() {
 	Player* currentPlayer = this->player1;
 
 	for (; currentRound <= NUM_ROUNDS; currentRound++) {
+		// start of round
 		this->gameLogic->initFactoryTiles(this->factories, this->tileBag);
 		this->output->outputRound(currentRound);
 
@@ -59,13 +60,15 @@ void GameManager::playGame() {
 			currentPlayer = currentPlayer == this->player1 ? this->player2 : this->player1;
 		}
 		// round has ended
-		
 		// reset the board
-		this->gameLogic->resetBoard(this->player1->getPlayerBoard(), this->tileBag);
-		this->gameLogic->resetBoard(this->player2->getPlayerBoard(), this->tileBag);
-
+		// could break this into seperate game logic methods
+		// calculatePoints() - add and detuct points
+		// resetBoard()
+		this->gameLogic->resetBoard(this->player1, this->tileBag);
+		this->gameLogic->resetBoard(this->player2, this->tileBag);
+		std::cout << "Player 1 score is: " << this->player1->getPoints() << std::endl;
+		std::cout << "Player 2 score is: " << this->player2->getPoints() << std::endl;
 	}
-
 }
 
 bool GameManager::validateMove(Player* currentPlayer) {
