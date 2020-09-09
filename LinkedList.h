@@ -15,11 +15,11 @@ public:
     LinkedList();
     ~LinkedList();
 
-    int size();
+    unsigned int size();
 
     // deletes all items in the list
     void clear();
-    char get(int i);
+    char get(unsigned int i);
     void addFront(char data);
     void addBack(char data);
 

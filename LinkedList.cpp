@@ -19,8 +19,8 @@ LinkedList::~LinkedList() {
 	delete head;
 }
 
-int LinkedList::size() {
-	int count = 0;
+unsigned int LinkedList::size() {
+	unsigned int count = 0;
     Node* current = head;
     while(current != nullptr) {
         current = current->next;
@@ -31,7 +31,7 @@ int LinkedList::size() {
 
 void LinkedList::clear() {
 	Node* current = head;
-    for(int i = 0; i < size(); ++i) {
+    for(unsigned int i = 0; i < size(); ++i) {
         Node* temp = current->next;
         delete current;
         current = nullptr;
@@ -40,17 +40,19 @@ void LinkedList::clear() {
     head = nullptr;
 }
 
-char LinkedList::get(int index) {
+char LinkedList::get(unsigned int index) {
 	char retValue = '\0';
-	if(index >= 0 && index < size()) {
-        int count = 0;
+	if(index < size()) {
+        unsigned int count = 0;
         Node* current = head;
         while(count < index) {
             current = current->next;
             count++;
         }
         retValue = current->data;
-    }
+    } else {
+		throw std::out_of_range("LinkedList::get - index out of range.");
+	}
 	return retValue;
 }
 

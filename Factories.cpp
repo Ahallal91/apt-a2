@@ -84,7 +84,7 @@ std::vector<char>* Factories::takeTilesCenterFactory(char tile) {
 		retValue->push_back(FIRST);
 		centerFactory->erase(centerFactory->begin());
 	}
-	for (int i = 0; i < (int) centerFactory->size(); ++i) {
+	for (unsigned int i = 0; i < centerFactory->size(); ++i) {
 		if (centerFactory->at(i) == tile) {
 			retValue->push_back(centerFactory->at(i));
 			centerFactory->erase(centerFactory->begin() + i);

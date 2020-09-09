@@ -82,7 +82,7 @@ bool GameLogic::addTilesFromCenterFact(Factories* factories, Player* player,
 	int factoryNumber, char tile, int destPatternLine) {
 	bool retValue = false;
 	std::vector<char>* tempTiles = factories->takeTilesCenterFactory(tile);
-	for (int i = 0; i < (int) tempTiles->size(); ++i) {
+	for (unsigned int i = 0; i < tempTiles->size(); ++i) {
 		if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
 			addTile(tempTiles->at(i)))) {
 			player->getPlayerBoard()->addBrokenTile(tempTiles->at(i));
