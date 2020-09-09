@@ -78,22 +78,17 @@ bool Factories::addToCenterFactory(char* tiles, int numTiles) {
 	return retValue;
 }
 
-char* Factories::takeTilesCenterFactory(char tile) {
-	std::vector<char> tempTiles;
+std::vector<char>* Factories::takeTilesCenterFactory(char tile) {
+	std::vector<char>* retValue = new std::vector<char>;
 	if (centerFactory->at(0) == FIRST) {
-		tempTiles.push_back(FIRST);
+		retValue->push_back(FIRST);
 		centerFactory->erase(centerFactory->begin());
 	}
 	for (int i = 0; i < (int) centerFactory->size(); ++i) {
 		if (centerFactory->at(i) == tile) {
-			tempTiles.push_back(centerFactory->at(i));
+			retValue->push_back(centerFactory->at(i));
 			centerFactory->erase(centerFactory->begin() + i);
 		}
-	}
-
-	char* retValue = new char[tempTiles.size()];
-	for (int i = 0; i < (int) tempTiles.size(); ++i) {
-		retValue[i] = tempTiles.at(i);
 	}
 	return retValue;
 }

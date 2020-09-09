@@ -28,8 +28,6 @@ public:
 
 private:
     Node* head;
-    Node* tail;
-    int length;
 };
 
 #endif // LINKED_LIST_H

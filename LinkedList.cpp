@@ -1,4 +1,5 @@
 #include "LinkedList.h"
+#include <stdexcept>
 
 Node::Node(char data, Node* next) {
 	this->data = data;
@@ -11,78 +12,73 @@ Node::Node(Node& other):
 
 LinkedList::LinkedList() {
 	this->head = nullptr;
-	this->tail = nullptr;
-	length = 0;
 }
 
 LinkedList::~LinkedList() {
 	clear();
+	delete head;
 }
 
 int LinkedList::size() {
-	return length;
+	int count = 0;
+    Node* current = head;
+    while(current != nullptr) {
+        current = current->next;
+        count++;
+    }
+    return count;
 }
 
 void LinkedList::clear() {
 	Node* current = head;
-	for (int i = 0; i < length; ++i) {
-		Node* temp = current->next;
-		delete current;
-		current = nullptr;
-		current = temp;
-	}
-	tail = nullptr;
-	head = nullptr;
-	length = 0;
+    for(int i = 0; i < size(); ++i) {
+        Node* temp = current->next;
+        delete current;
+        current = nullptr;
+        current = temp;
+    }
+    head = nullptr;
 }
 
 char LinkedList::get(int index) {
 	char retValue = '\0';
-	if (index >= 0 && index < length) {
-		int count = 0;
-		Node* current = head;
-		while (count < index) {
-			current = current->next;
-			count++;
-		}
-		retValue = current->data;
+	if(index >= 0 && index < size()) {
+        int count = 0;
+        Node* current = head;
+        while(count < index) {
+            current = current->next;
+            count++;
+        }
+        retValue = current->data;
+    } else {
+		throw std::out_of_range("LinkedList::get - index out of range.");
 	}
 	return retValue;
 }
 
 void LinkedList::addFront(char data) {
-	Node* tempNode = new Node(data, head);
-	if (head == nullptr) {
-		tail = tempNode;
-	}
-	head = tempNode;
-	length++;
+	Node* tempNode = new Node(data, head);  
+    head = tempNode;
 }
 
 void LinkedList::addBack(char data) {
 	Node* tempNode = new Node(data, nullptr);
-	if (head == nullptr && tail == nullptr) {
-		head = tempNode;
-		tail = tempNode;
-	} else {
-		tail->next = tempNode;
-		tail = tempNode;
-	}
-	length++;
+    if(head == nullptr) {
+        head = tempNode;
+    } else {  
+        Node* current = head;
+        while(current->next != nullptr) {
+            current = current->next;
+        } 
+        current->next = tempNode;
+    }
 }
 
 void LinkedList::removeFront() {
-	if (head != nullptr && tail != nullptr) {
-		if (head != tail) {
-			Node* tempNode = head;
-			head = head->next;
-			delete tempNode;
-			tempNode = nullptr;
-		} else {
-			delete head;
-			head = nullptr;
-			tail = nullptr;
-		}
-		length--;
-	}
+	if (head != nullptr) {
+        Node* tempNode = head;
+        head = head->next;
+        delete tempNode;
+        tempNode = nullptr;
+    }
 }
