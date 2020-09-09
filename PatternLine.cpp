@@ -60,3 +60,9 @@ bool PatternLine::isFull() {
 	return (currentSize == size);
 }
 
+void PatternLine::clear() {
+	for (int i = 0; i < currentSize; ++i) {
+		tiles[i] = EMPTY;
+	}
+	currentSize = 0;
+}
