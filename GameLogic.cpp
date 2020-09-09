@@ -53,39 +53,46 @@ bool GameLogic::takeTiles(Factories* factories, Player* player,
 	// reduces input patternLine by 1 to fit array
 	destPatternLine--;
 	// checks if tile can be placed in patternLine
-	if (playerTileCheck(player, tile, destPatternLine) &&
-		playerPatternLineSpace(player, destPatternLine)) {
-		char* tempTiles = takeTilesFromFactory(factories, factoryNumber, tile);
-		for (int i = 0; i < FACTORY_SIZE; ++i) {
-			if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
-				  addTile(tempTiles[i]))) {
-				player->getPlayerBoard()->addBrokenTile(tempTiles[i]);
+	if (playerTileCheck(player, tile, destPatternLine)) {
+		if (factoryNumber >= 1 && factoryNumber <= NUM_FACTORIES) {
+			char* tempTiles = factories->takeTilesFactory(factoryNumber - 1, tile);
+			for (int i = 0; i < FACTORY_SIZE; ++i) {
+				if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
+					  addTile(tempTiles[i]))) {
+					player->getPlayerBoard()->addBrokenTile(tempTiles[i]);
+				}
 			}
+			delete tempTiles;
+			tempTiles = nullptr;
+			retValue = true;
+		} else if (factoryNumber == 0) {
+			// adds tiles from center factory to playerboard
+			retValue = addTilesFromCenterFact(factories, player, factoryNumber,
+											  tile, destPatternLine);
 		}
-		delete tempTiles;
-		tempTiles = nullptr;
-		retValue = true;
 	}
 	return retValue;
 }
 
-/*  Takes tiles from specified factories numbered 0 to 5. Center Factory
- *  is accessed by factoryNumber 0.
- *	returns a char array of tiles that match the tile passed in from
- *  the specified factory.
+/* Takes tiles from the center factory and places them in the players
+ * patternLine or brokenLine, returns true if the amount of tiles added is greater
+ * than zero.
  */
-char* GameLogic::takeTilesFromFactory(Factories* factories, int factoryNumber,
-									  char tile) {
-	char* retValue = nullptr;
-	if (factoryNumber >= 1 && factoryNumber <= NUM_FACTORIES) {
-		// factory number reduced to reflect actual factory numbers.
-		retValue = factories->takeTilesFactory(factoryNumber - 1, tile);
-	} else if (factoryNumber == 0) {
-		retValue = factories->takeTilesCenterFactory(tile);
+bool GameLogic::addTilesFromCenterFact(Factories* factories, Player* player,
+									   int factoryNumber, char tile, int destPatternLine) {
+	bool retValue = false;
+	std::vector<char>* tempTiles = factories->takeTilesCenterFactory(tile);
+	for (unsigned int i = 0; i < tempTiles->size(); ++i) {
+		if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
+			  addTile(tempTiles->at(i)))) {
+			player->getPlayerBoard()->addBrokenTile(tempTiles->at(i));
+		}
 	}
-	if (retValue == nullptr) {
-		retValue[0] = '\0';
+	if (tempTiles->size() > 0) {
+		retValue = true;
 	}
+	delete tempTiles;
+	tempTiles = nullptr;
 	return retValue;
 }
 
@@ -99,23 +106,6 @@ bool GameLogic::playerTileCheck(Player* player, char tile, int destPatternLine) 
 		getPatternLine(destPatternLine)->
 		getTileType();
 	if (tileType == EMPTY || tileType == tile) {
-		retValue = true;
-	}
-	return retValue;
-}
-
-/* Checks if the patternLine is currently full.
- * returns true if it has space to add an item.
- */
-bool GameLogic::playerPatternLineSpace(Player* player, int destPatternLine) {
-	bool retValue = false;
-	int patternLineSize = player->
-		getPlayerBoard()->
-		getPatternLine(destPatternLine)->getCurrentSize();
-	int maximumSize = player->
-		getPlayerBoard()->
-		getPatternLine(destPatternLine)->getSize();
-	if (patternLineSize < maximumSize - 1) {
 		retValue = true;
 	}
 	return retValue;
