@@ -1,12 +1,16 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
 
+#include <vector>
+
 class Player;
 class Output;
 class Input;
 class GameLogic;
 class Factories;
 class TileBag;
+
+class GameState;
 
 class GameManager {
 public:
@@ -19,7 +23,13 @@ public:
 	// main game loop
 	void playGame();
 
+	GameState* importGame(std::string fileName);
+	void exportGame(GameState* gameState, std::string fileName);
+
 private:
+
+	// THESE WILL MOVE TO GAME STATE, HERE FOR NOW THOUGH
+
 	Player* player1;
 	Player* player2;
 
@@ -30,6 +40,8 @@ private:
 	TileBag* tileBag;
 
 	int currentRound;
+
+	std::vector<std::string> turns;
 };
 
 #endif // GAME_MANAGER_H

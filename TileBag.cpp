@@ -23,3 +23,11 @@ char TileBag::removeFrontTile() {
 	tileBag->removeFront();
 	return retValue;
 }
+
+int TileBag::size() {
+	return tileBag->size();
+}
+
+char TileBag::at(int index) {
+	return tileBag->get(index);
+}
