@@ -12,11 +12,13 @@ class GameLogic {
 public:
 	GameLogic();
 	~GameLogic();
+	
+
 	void initFactoryTiles(Factories* factories, TileBag* tileBag);
 	bool takeTiles(Factories* factories, Player* player, int factoryNumber,
 				   char tile, int destPatternLine);
 	bool roundOver(Factories* factories);
-	void fillWall(PlayerBoard* playerBoard);
+	void resetBoard(PlayerBoard* playerBoard, TileBag* tileBag);
 
 private:
 	// takes tiles that match tile passed in from factory, return true if tiles

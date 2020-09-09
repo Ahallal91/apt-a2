@@ -7,10 +7,7 @@ PatternLine::PatternLine(int size):
 	currentSize(0) {
 	this->tiles = new char[size];
 
-	// Initialise all tiles to empty tiles
-	for (int i = 0; i < size; i++) {
-		tiles[i] = EMPTY;
-	}
+	this->clear();
 }
 
 PatternLine::~PatternLine() {
@@ -32,7 +29,7 @@ bool PatternLine::addTile(char tile) {
 		if (currentSize == 0 && tile != FIRST) {
 			this->tile = tile;
 		}
-		if(this->tile == tile) {
+		if (this->tile == tile) {
 			tiles[currentSize] = tile;
 			currentSize++;
 			success = true;
@@ -41,12 +38,12 @@ bool PatternLine::addTile(char tile) {
 	return success;
 }
 
-void PatternLine::removeTile(int index) {
-	if (index >= 0 && index < currentSize) {
-		tiles[index] = EMPTY;
-		currentSize--;
-	}
-}
+//void PatternLine::removeTile(int index) {
+//	if (index >= 0 && index < currentSize) {
+//		tiles[index] = EMPTY;
+//		currentSize--;
+//	}
+//}
 
 int PatternLine::getSize() {
 	return this->size;
@@ -60,3 +57,10 @@ bool PatternLine::isFull() {
 	return (currentSize == size);
 }
 
+void PatternLine::clear() {
+	for (int i = 0; i < size; i++) {
+		tiles[i] = EMPTY;
+	}
+	this->currentSize = 0;
+	this->tile = EMPTY;
+}

@@ -19,13 +19,40 @@ void GameLogic::initFactoryTiles(Factories* factories, TileBag* tileBag) {
 	}
 }
 
-void GameLogic::fillWall(PlayerBoard* playerBoard) {
+/*
+This method resets a players board and adds remaing tiles back to the tile bag.
+This also moves all complete patternlines to the wall.
+The order of traversal is the top pattern line to the bottom, then the broken line
+At each pattern line, takes the tiles starting from index 0, which would be visually
+right-to-left on the console. The broken line is also removed the same way
+*/
+void GameLogic::resetBoard(PlayerBoard* playerBoard, TileBag* tileBag) {
+	// traverse all pattern lines
 	for (int i = 0; i < WALL_DIM; i++) {
-		if (playerBoard->getPatternLine(i)->isFull()) {
-
+		PatternLine* patternLine = playerBoard->getPatternLine(i);
+		// if pattern line is full, set the wall tile
+		if (patternLine->isFull()) {
+			playerBoard->setWallTile(i, patternLine->getTileType());
 		}
+
+		// if the current pattern line isn't empty, add them back to the bag
+		// -1 if patternline is full as it will be moved to the wall
+		int numToAdd = patternLine->isFull() ? patternLine->getCurrentSize() - 1 : patternLine->getCurrentSize();
+		for (int i = 0; i < numToAdd; i++) {
+			tileBag->addToBag(patternLine->getTileType());
+		}
+		patternLine->clear();
 	}
 
+	// add the broken line tiles to back of the tile bag and clear
+	// traverses the tiles from right-to-left
+	for (int i = playerBoard->getBrokenSize() - 1; i >= 0; i--) {
+		// don't add the tile of type FIRST back to the bag
+		if (playerBoard->getBrokenTile(i) != FIRST) {
+			tileBag->addToBag(playerBoard->getBrokenTile(i));
+		}
+	}
+	playerBoard->clearBrokenLine();
 }
 
 

@@ -59,8 +59,13 @@ void GameManager::playGame() {
 			currentPlayer = currentPlayer == this->player1 ? this->player2 : this->player1;
 		}
 		// round has ended
-		this->gameLogic->fillWall(this->player1->getPlayerBoard());
+		
+		// reset the board
+		this->gameLogic->resetBoard(this->player1->getPlayerBoard(), this->tileBag);
+		this->gameLogic->resetBoard(this->player2->getPlayerBoard(), this->tileBag);
+
 	}
+
 }
 
 bool GameManager::validateMove(Player* currentPlayer) {
