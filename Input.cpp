@@ -13,28 +13,29 @@ Input::~Input() {}
 // TODO eof check? (will cause infinite loop)
 Player* Input::enterPlayerName(int playerNum) {
 	std::string name = "";
-	
-	while(name.empty()) {
+
+	while (name.empty()) {
 		std::string input = "";
 		std::cout << "Enter a name for Player " << playerNum << std::endl << "> ";
+		std::cin.ignore();
 		std::getline(std::cin, input);
 
 		// A vector that contains the name seperated by white spaces
 		std::vector<std::string> nameVec = explode(input);
 
 		// Append each vector index to the name if not empty
-		if(!nameVec.empty()) {
-			for(unsigned int i = 0; i < nameVec.size(); i++) {
+		if (!nameVec.empty()) {
+			for (unsigned int i = 0; i < nameVec.size(); i++) {
 				name.append(nameVec[i]);
-				
+
 				// Dont append a space if its the last string in vector
-				if(i != nameVec.size() - 1) {
+				if (i != nameVec.size() - 1) {
 					name.append(" ");
 				}
 			}
 		}
 
-		if(name.empty()) {
+		if (name.empty()) {
 			std::cout << "Please enter a valid name!" << std::endl;
 		}
 	}
@@ -158,7 +159,7 @@ std::vector<std::string> Input::explode(std::string str) {
 
 	for (char c : str) {
 		if (c == ' ') {
-			if(word.find_first_not_of(' ') != std::string::npos) {
+			if (word.find_first_not_of(' ') != std::string::npos) {
 				arguments.push_back(word);
 			}
 			word = "";
@@ -166,7 +167,7 @@ std::vector<std::string> Input::explode(std::string str) {
 			word = word + c;
 		}
 	}
-	if(word.find_first_not_of(' ') != std::string::npos) {
+	if (word.find_first_not_of(' ') != std::string::npos) {
 		arguments.push_back(word);
 	}
 

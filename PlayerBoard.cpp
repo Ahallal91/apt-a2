@@ -10,16 +10,17 @@ PlayerBoard::PlayerBoard() {
 		this->patternLines[i] = new PatternLine(i + 1);
 		this->wall[i] = new char[WALL_DIM];
 	}
+	// Initialise broken line
+	brokenLine = new std::vector<char>;
 
+
+	// PUT THIS IN A SEPERATE METHOD
 	// Initialise the 5x5 wall to empty tiles
 	for (int y = 0; y < WALL_DIM; y++) {
 		for (int x = 0; x < WALL_DIM; x++) {
 			wall[y][x] = EMPTY;
 		}
 	}
-	// Initialise broken line
-	brokenLine = new std::vector<char>;
-
 }
 
 PlayerBoard::~PlayerBoard() {
@@ -36,7 +37,7 @@ PlayerBoard::~PlayerBoard() {
 	delete brokenLine;
 }
 
-bool PlayerBoard::setWallTile(int x, int y) {
+bool PlayerBoard::setWallTile(int y, char tile) {
 	bool success = false;
 
 	//Check that x and y are in bounds of wall
@@ -50,12 +51,12 @@ bool PlayerBoard::setWallTile(int x, int y) {
 	return success;
 }
 
-void PlayerBoard::removeWallTile(int x, int y) {
-	//Check that x and y are in bounds of wall
-	if (x >= 0 && x < WALL_DIM && y >= 0 && y < WALL_DIM) {
-		wall[y][x] = EMPTY;
-	}
-}
+//void PlayerBoard::removeWallTile(int x, int y) {
+//	//Check that x and y are in bounds of wall
+//	if (x >= 0 && x < WALL_DIM && y >= 0 && y < WALL_DIM) {
+//		wall[y][x] = EMPTY;
+//	}
+//}
 
 char PlayerBoard::getWallTile(int x, int y) {
 	char tile = '\0';
@@ -71,13 +72,13 @@ char PlayerBoard::getWallTile(int x, int y) {
 // PATTERN LINE METHODS
 
 PatternLine* PlayerBoard::getPatternLine(int row) {
-    PatternLine* patternLine = nullptr;
-    
-    if(row >= 0 && row < WALL_DIM) {
-        patternLine = patternLines[row];
-    }
+	PatternLine* patternLine = nullptr;
 
-    return patternLine;
+	if (row >= 0 && row < WALL_DIM) {
+		patternLine = patternLines[row];
+	}
+
+	return patternLine;
 }
 
 // BROKEN LINE METHODS

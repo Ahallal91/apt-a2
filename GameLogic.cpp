@@ -19,6 +19,16 @@ void GameLogic::initFactoryTiles(Factories* factories, TileBag* tileBag) {
 	}
 }
 
+void GameLogic::fillWall(PlayerBoard* playerBoard) {
+	for (int i = 0; i < WALL_DIM; i++) {
+		if (playerBoard->getPatternLine(i)->isFull()) {
+
+		}
+	}
+
+}
+
+
 // returns true if all factories and center are empty, false otherwise
 // used for checking if a round is over
 bool GameLogic::roundOver(Factories* factories) {
