@@ -18,7 +18,8 @@ void TileBag::addToBag(char tile) {
 }
 
 char TileBag::removeFrontTile() {
-	char retValue = tileBag->get(0);
+	unsigned int start = 0;
+	char retValue = tileBag->get(start);
 	tileBag->removeFront();
 	return retValue;
 }

@@ -85,7 +85,7 @@ PatternLine* PlayerBoard::getPatternLine(int row) {
 bool PlayerBoard::addBrokenTile(char tile) {
 	bool success = false;
 
-	if (brokenLine->size() < NUM_BROKEN_TILES) {
+	if (brokenLine->size() < NUM_BROKEN_TILES && tile != '\0') {
 		brokenLine->push_back(tile);
 		success = true;
 	}

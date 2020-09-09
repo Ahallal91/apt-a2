@@ -29,14 +29,15 @@ bool PatternLine::addTile(char tile) {
 	bool success = false;
 
 	if (currentSize < size) {
-		if (currentSize == 0) {
+		if (currentSize == 0 && tile != FIRST) {
 			this->tile = tile;
 		}
-		tiles[currentSize] = tile;
-		currentSize++;
-		success = true;
+		if(this->tile == tile) {
+			tiles[currentSize] = tile;
+			currentSize++;
+			success = true;
+		}
 	}
-
 	return success;
 }
 
