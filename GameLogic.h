@@ -23,6 +23,8 @@ private:
 	// checks if tile matches patternLine or doesn't have tiles yet.
 	bool playerTileCheck(Player* player, char tile, int destPatternLine);
 
+	// checks if patternLine is has space for tiles.
+	bool playerPatternLineSpace(Player* player, int destPatternLine);
 };
 
 #endif // GAME_LOGIC_H
