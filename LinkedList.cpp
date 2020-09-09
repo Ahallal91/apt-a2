@@ -50,9 +50,7 @@ char LinkedList::get(int index) {
             count++;
         }
         retValue = current->data;
-    } else {
-		throw std::out_of_range("LinkedList::get - index out of range.");
-	}
+    }
 	return retValue;
 }
 
