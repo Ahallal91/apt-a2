@@ -32,6 +32,12 @@ GameManager::~GameManager() {
 	delete this->output;
 	delete this->factories;
 	delete this->tileBag;
+
+	delete gameState;
+}
+
+GameState* GameManager::getGameState() {
+	return gameState;
 }
 
 // main game loop
@@ -105,7 +111,7 @@ GameState* GameManager::importGame(std::string fileName) {
 	// check file exists
 	if(file.good()) {
 
-		// prepare the gameState fields
+		// prepare the bag
 		TileBag bag;
 
 		// Import the Tile Bag
@@ -125,12 +131,15 @@ GameState* GameManager::importGame(std::string fileName) {
 			validGame = false;
 		}
 
-		// Import Player Names
+		// Import Players
 		std::string name1;
 		std::string name2;
 
 		std::getline(file, name1);
 		std::getline(file, name2);
+
+		Player player1(name1);
+		Player player2(name2);
 
 		// Import Moves
 		//TODO
@@ -158,6 +167,7 @@ GameState* GameManager::importGame(std::string fileName) {
 }
 
 // TODO might be outputting the updated tile bag when it should stick to initial order!!!
+// TODO currently doing from GameManager rather than GameState (for testing)
 void GameManager::exportGame(GameState* gameState, std::string fileName) {
 	std::ofstream file(fileName.c_str());
 

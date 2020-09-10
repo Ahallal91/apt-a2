@@ -20,6 +20,8 @@ public:
 	Player* getPlayer1();
 	Player* getPlayer2();
 
+	GameState* getGameState();
+
 	// main game loop
 	void playGame();
 
@@ -27,6 +29,9 @@ public:
 	void exportGame(GameState* gameState, std::string fileName);
 
 private:
+
+	// The current Game State of the game
+	GameState* gameState;
 
 	// THESE WILL MOVE TO GAME STATE, HERE FOR NOW THOUGH
 
