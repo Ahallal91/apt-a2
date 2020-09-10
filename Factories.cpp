@@ -1,5 +1,6 @@
 #include "Factories.h"
 #include "Types.h"
+#include <iostream>
 
 Factories::Factories() {
 	// creates 5 factories of size 4
@@ -80,14 +81,14 @@ bool Factories::addToCenterFactory(char* tiles, int numTiles) {
 
 std::vector<char>* Factories::takeTilesCenterFactory(char tile) {
 	std::vector<char>* retValue = new std::vector<char>;
-	if (centerFactory->at(0) == FIRST) {
-		retValue->push_back(FIRST);
-		centerFactory->erase(centerFactory->begin());
+	for (unsigned int i = 0; i < centerFactory->size(); ++i) {
+		if (centerFactory->at(i) == tile || FIRST) {
+			retValue->push_back(centerFactory->at(i));
+		}
 	}
 	for (unsigned int i = 0; i < centerFactory->size(); ++i) {
-		if (centerFactory->at(i) == tile) {
-			retValue->push_back(centerFactory->at(i));
-			centerFactory->erase(centerFactory->begin() + i);
+		if (centerFactory->at(i) == tile || FIRST) {
+			centerFactory->erase(centerFactory->begin() + (i));
 		}
 	}
 	return retValue;

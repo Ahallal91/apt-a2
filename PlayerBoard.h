@@ -11,13 +11,13 @@ public:
 	PlayerBoard();
 	~PlayerBoard();
 
-    // WALL METHODS
-	
-	// Sets the tile at row position and colour of the tile (no need for x)
-    bool setWallTile(int y, char tile);
+	// WALL METHODS
+
+	// Sets the tile at wall position x, y to the corresponding pattern tile
+	bool setWallTile(int x, int y);
 
 	// Removes the tile at wall position x, y and sets it back to empty
-	// void removeWallTile(int x, int y);
+	void removeWallTile(int x, int y);
 
 	// Returns the tile at wall position x, y
 	char getWallTile(int x, int y);
@@ -40,6 +40,9 @@ public:
 
 	// Clears the broken tiles
 	void clearBrokenLine();
+
+	// clears the playerWall
+	void clearPlayerWall();
 
 private:
 	// The Wall (2D 5x5 char array)
