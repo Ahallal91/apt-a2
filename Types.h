@@ -28,7 +28,7 @@ constexpr char pattern[WALL_DIM][WALL_DIM] = {
 };
 
 // amount of points lost where the index is the amount of broken line tiles
-constexpr int brokenLineScores[] = {0, -1, -2, -4, -6, -8, -11, -14};
+constexpr int brokenLinePoints[] = {0, -1, -2, -4, -6, -8, -11, -14};
 
 // Misc
 #define NUM_ROUNDS			 5

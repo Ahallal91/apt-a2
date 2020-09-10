@@ -54,13 +54,14 @@ int PatternLine::getCurrentSize() {
 }
 
 bool PatternLine::isFull() {
-	return (currentSize == size);
+	return currentSize == size;
 }
 
+// clears the pattern line
 void PatternLine::clear() {
 	for (int i = 0; i < size; i++) {
 		tiles[i] = EMPTY;
 	}
 	this->currentSize = 0;
-	this->tile = EMPTY;
+	this->setTileType(EMPTY);
 }

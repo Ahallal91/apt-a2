@@ -10,12 +10,17 @@ public:
 	Output();
 	~Output();
 
+	// TODO too many methods
 	void outputRound(int roundNum);
 	void outputFactory(Factories* factory);
 	void outputBoard(Player* player);
 	void outputTurn(Player* player);
 	void requestInput();
 	void invalidInput();
+	void turnSuccess();
+	void outputScore(Player* player);
+	void outputWinner(Player* player1, Player* player2);
+
 };
 
 #endif // OUTPUT_H

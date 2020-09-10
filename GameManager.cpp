@@ -54,21 +54,28 @@ void GameManager::playGame() {
 				output->requestInput();
 			}
 
-			std::cout << "Turn successful. Player board is now:" << std::endl;
+			this->output->turnSuccess();
 			this->output->outputBoard(currentPlayer);
 
 			currentPlayer = currentPlayer == this->player1 ? this->player2 : this->player1;
 		}
 		// round has ended
-		// reset the board
-		// could break this into seperate game logic methods
-		// calculatePoints() - add and detuct points
-		// resetBoard()
+
+		// calculate player points and move to wall
+		this->gameLogic->calculatePoints(this->player1);
+		this->gameLogic->calculatePoints(this->player2);
+
+		// reset board and add back to tile bag
 		this->gameLogic->resetBoard(this->player1, this->tileBag);
 		this->gameLogic->resetBoard(this->player2, this->tileBag);
-		std::cout << "Player 1 score is: " << this->player1->getPoints() << std::endl;
-		std::cout << "Player 2 score is: " << this->player2->getPoints() << std::endl;
+
+		// output score
+		this->output->outputScore(this->player1);
+		this->output->outputScore(this->player2);
 	}
+
+	// game finished
+	 this->output->outputWinner(this->player1, this->player2);
 }
 
 bool GameManager::validateMove(Player* currentPlayer) {
