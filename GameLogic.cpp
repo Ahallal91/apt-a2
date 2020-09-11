@@ -108,7 +108,8 @@ bool GameLogic::takeTiles(Factories* factories, Player* player,
 	destPatternLine--;
 	// checks if tile can be placed in patternLine
 	if (playerTileCheck(player, tile, destPatternLine) &&
-	factories->isTileInFactories(factoryNumber, tile)) {
+	factories->isTileInFactories(factoryNumber, tile) &&
+	playerWallCheck(player, tile, destPatternLine)) {
 		if(factoryNumber >= 1 && factoryNumber <= NUM_FACTORIES) {
 			retValue = addTilesFromFact(factories, player, factoryNumber, tile,
 										destPatternLine);
