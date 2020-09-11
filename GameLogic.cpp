@@ -180,7 +180,7 @@ bool GameLogic::playerTileCheck(Player* player, char tile, int destPatternLine) 
 	return retValue;
 }
 
-bool playerWallCheck(Player* player, char tile, int destPatternLine) {
+bool GameLogic::playerWallCheck(Player* player, char tile, int destPatternLine) {
 	bool retValue = true;
 	for(int i = 0; i < WALL_DIM; ++i) {
 		if (player->getPlayerBoard()->getWallTile(i, destPatternLine) == tile) {
