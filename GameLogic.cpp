@@ -143,6 +143,9 @@ bool GameLogic::addTilesFromCenterFact(Factories* factories, Player* player,
 	return retValue;
 }
 
+/* Takes tiles from factory and places them in the players
+ * patternLine or brokenLine, returns true if any tile added was not empty.
+ */
 bool GameLogic::addTilesFromFact(Factories* factories, Player* player,
 int factoryNumber, char tile, int destPatternLine) {
 	bool retValue = false;
@@ -172,6 +175,16 @@ bool GameLogic::playerTileCheck(Player* player, char tile, int destPatternLine) 
 		getTileType();
 	if (tileType == EMPTY || tileType == tile) {
 		retValue = true;
+	}
+	return retValue;
+}
+
+bool playerWallCheck(Player* player, char tile, int destPatternLine) {
+	bool retValue = true;
+	for(int i = 0; i < WALL_DIM; ++i) {
+		if (player->getPlayerBoard()->getWallTile(i, destPatternLine) == tile) {
+			retValue = false;
+		}
 	}
 	return retValue;
 }
