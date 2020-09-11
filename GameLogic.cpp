@@ -4,6 +4,9 @@
 #include "Player.h"
 #include "Types.h"
 
+// REMEMBER TO DELET AFTER; used for debugging
+#include <iostream>
+
 GameLogic::GameLogic() {}
 
 GameLogic::~GameLogic() {}
@@ -20,19 +23,93 @@ void GameLogic::initFactoryTiles(Factories* factories, TileBag* tileBag) {
 }
 
 /*
-* Adds 1 point for each wall tile complete
+* Moves wall tiles and calculates points
 * Also subtracts points based on number of broken tiles
 */
-void GameLogic::calculatePoints(Player* player) {
+void GameLogic::addToWall(Player* player) {
 	PlayerBoard* playerBoard = player->getPlayerBoard();
+
+	// for all patterns
 	for (int row = 0; row < WALL_DIM; row++) {
 		if (playerBoard->getPatternLine(row)->isFull()) {
-			playerBoard->setWallTile(row, playerBoard->getPatternLine(row)->getTileType());
-			player->setPoints(player->getPoints() + 1);
+			bool found = false;
+			// find where to place on the wall
+			for (int col = 0; col < WALL_DIM && !found; col++) {
+				if (playerBoard->getPatternLine(row)->getTileType() == pattern[row][col]) {
+					playerBoard->setWallTile(col, row);
+					calculatePoints(player, col, row);
+					found = true;
+				}
+			}
 		}
 	}
-	// subtract points
-	player->setPoints(player->getPoints() + brokenLinePoints[playerBoard->getBrokenSize()]);
+}
+
+void GameLogic::calculatePoints(Player* player, int x, int y) {
+	PlayerBoard* playerBoard = player->getPlayerBoard();
+
+	int newPoints = player->getPoints();
+	int pointsToAdd = 1; // 1 point for adding a new tile
+	bool comboCol = false;
+	bool comboRow = false;
+
+	// counts tiles above
+	bool finished = false;
+	for (int row = y - 1; row >= 0 && !finished; row--) {
+		if (playerBoard->getWallTile(x, row) != EMPTY) {
+			comboCol = true;
+			pointsToAdd++;
+		} else {
+			finished = true;
+		}
+	}
+
+	// count tiles below
+	finished = false;
+	for (int row = y + 1; row < WALL_DIM && !finished; row++) {
+		if (playerBoard->getWallTile(x, row) != EMPTY) {
+			comboCol = true;
+			pointsToAdd++;
+		} else {
+			finished = true;
+		}
+	}
+
+
+	// count tiles left
+	finished = false;
+	for (int col = x - 1; col >= 0 && !finished; col--) {
+		if (playerBoard->getWallTile(col, y) != EMPTY) {
+			comboRow = true;
+			pointsToAdd++;
+		} else {
+			finished = true;
+		}
+	}
+
+	// count tiles right
+	finished = false;
+	for (int col = x + 1; col < WALL_DIM && !finished; col++) {
+		if (playerBoard->getWallTile(col, y) != EMPTY) {
+			comboRow = true;
+			pointsToAdd++;
+		} else {
+			finished = true;
+		}
+	}
+
+	// additional point for connecting both row and col
+	if (comboCol && comboRow) {
+		newPoints++;
+	}
+
+	std::cout << player->getPlayerName() << " has been awared "
+		<< pointsToAdd << " for placing tile at (" << x << ", " << y << ")" << std::endl;
+
+	// calculate final scoring
+	newPoints += pointsToAdd;
+	newPoints += brokenLinePoints[playerBoard->getBrokenSize()];
+	player->setPoints(newPoints);
 }
 
 /*
@@ -53,7 +130,11 @@ void GameLogic::resetBoard(Player* player, TileBag* tileBag) {
 		for (int i = 0; i < numToAdd; i++) {
 			tileBag->addToBag(patternLine->getTileType());
 		}
-		patternLine->clear();
+
+		// clear the pattern line if it's full, else keep remaining tiles
+		if (patternLine->isFull()) {
+			patternLine->clear();
+		}
 	}
 
 	// add the broken line tiles to back of the tile bag and clear
@@ -108,9 +189,9 @@ bool GameLogic::takeTiles(Factories* factories, Player* player,
 	destPatternLine--;
 	// checks if tile can be placed in patternLine
 	if (playerTileCheck(player, tile, destPatternLine) &&
-	factories->isTileInFactories(factoryNumber, tile) &&
-	playerWallCheck(player, tile, destPatternLine)) {
-		if(factoryNumber >= 1 && factoryNumber <= NUM_FACTORIES) {
+		factories->isTileInFactories(factoryNumber, tile) &&
+		playerWallCheck(player, tile, destPatternLine)) {
+		if (factoryNumber >= 1 && factoryNumber <= NUM_FACTORIES) {
 			retValue = addTilesFromFact(factories, player, factoryNumber, tile,
 										destPatternLine);
 		} else if (factoryNumber == 0) {
@@ -148,12 +229,12 @@ bool GameLogic::addTilesFromCenterFact(Factories* factories, Player* player,
  * patternLine or brokenLine, returns true if any tile added was not empty.
  */
 bool GameLogic::addTilesFromFact(Factories* factories, Player* player,
-int factoryNumber, char tile, int destPatternLine) {
+								 int factoryNumber, char tile, int destPatternLine) {
 	bool retValue = false;
 	char* tempTiles = factories->takeTilesFactory(factoryNumber - 1, tile);
 	for (unsigned int i = 0; i < FACTORY_SIZE; ++i) {
 		if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
-			addTile(tempTiles[i]))) {
+			  addTile(tempTiles[i]))) {
 			player->getPlayerBoard()->addBrokenTile(tempTiles[i]);
 		}
 		if (tempTiles[i] != '\0') {
@@ -182,7 +263,7 @@ bool GameLogic::playerTileCheck(Player* player, char tile, int destPatternLine) 
 
 bool GameLogic::playerWallCheck(Player* player, char tile, int destPatternLine) {
 	bool retValue = true;
-	for(int i = 0; i < WALL_DIM; ++i) {
+	for (int i = 0; i < WALL_DIM; ++i) {
 		if (player->getPlayerBoard()->getWallTile(i, destPatternLine) == tile) {
 			retValue = false;
 		}
