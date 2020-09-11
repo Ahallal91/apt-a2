@@ -56,11 +56,11 @@ void menuText() {
 }
 
 void credits() {
-	printLine("----------CREDITS----------");
-	printLine("Joshua Cervenjak (S3783156)");
-	printLine("John   Patrikios (S3780973)");
-	printLine("Alicia Hallal    (S3811836)");
-	printLine("---------------------------");
+	printLine("-------------------------CREDITS-------------------------");
+	printLine("Joshua Cervenjak (S3783156)  S3783156@student.rmit.edu.au");
+	printLine("John   Patrikios (S3780973)  S3780973@student.rmit.edu.au");
+	printLine("Alicia Hallal    (S3811836)  S3811836@student.rmit.edu.au");
+	printLine("---------------------------------------------------------");
 }
 
 void printLine(std::string message) {

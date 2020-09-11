@@ -13,9 +13,6 @@ public:
 	GameManager();
 	~GameManager();
 
-	Player* getPlayer1();
-	Player* getPlayer2();
-
 	// main game loop
 	void playGame();
 
@@ -28,6 +25,8 @@ private:
 	Output* output;
 	Factories* factories;
 	TileBag* tileBag;
+
+	bool validateMove(Player* currentPlayer);
 
 	int currentRound;
 };

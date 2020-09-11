@@ -13,13 +13,15 @@ public:
 	bool addTile(char tile);
 	
 	// Removes a tile at specific index
-	void removeTile(int index);
+	// void removeTile(int index);
 
 	int getSize();
 	int getCurrentSize();
 
 	// Checks if the pattern line is full
 	bool isFull();
+	// clears the patternline
+	void clear();
 
 	void clear();
 

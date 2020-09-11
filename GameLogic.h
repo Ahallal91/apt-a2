@@ -4,21 +4,27 @@
 class Factories;
 class TileBag;
 class Player;
+class Input;
+class Output;
+class PlayerBoard;
 
 class GameLogic {
 public:
 	GameLogic();
 	~GameLogic();
+
 	void initFactoryTiles(Factories* factories, TileBag* tileBag);
 	bool takeTiles(Factories* factories, Player* player, int factoryNumber,
 				   char tile, int destPatternLine);
 	bool roundOver(Factories* factories);
+	void resetBoard(Player* player, TileBag* tileBag);
+	void calculatePoints(Player* player);
 
 private:
 	// takes tiles that match tile passed in from factory, return true if tiles
 	// were added to player board.
 	bool addTilesFromCenterFact(Factories* factories, Player* player,
-						  		int factoryNumber, char tile, int destPatternLine);
+								int factoryNumber, char tile, int destPatternLine);
 
 	bool addTilesFromFact(Factories* factories, Player* player,
 	int factoryNumber, char tile, int destPatternLine);

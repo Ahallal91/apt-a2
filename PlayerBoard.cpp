@@ -67,13 +67,13 @@ char PlayerBoard::getWallTile(int x, int y) {
 // PATTERN LINE METHODS
 
 PatternLine* PlayerBoard::getPatternLine(int row) {
-    PatternLine* patternLine = nullptr;
-    
-    if(row >= 0 && row < WALL_DIM) {
-        patternLine = patternLines[row];
-    }
+	PatternLine* patternLine = nullptr;
 
-    return patternLine;
+	if (row >= 0 && row < WALL_DIM) {
+		patternLine = patternLines[row];
+	}
+
+	return patternLine;
 }
 
 // BROKEN LINE METHODS

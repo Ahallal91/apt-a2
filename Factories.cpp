@@ -104,6 +104,10 @@ bool Factories::addToCenterFactory(char* tiles, int numTiles) {
 
 std::vector<char>* Factories::takeTilesCenterFactory(char tile) {
 	std::vector<char>* retValue = new std::vector<char>;
+	// checks if the first tile is in the center factory and adds it.
+	if (centerFactory->front() == FIRST) {
+		retValue->push_back(centerFactory->front());
+	}
 	// adds all other matching tiles to return.
 	for (unsigned int i = 0; i < centerFactory->size(); ++i) {
 		if (centerFactory->at(i) == tile ||

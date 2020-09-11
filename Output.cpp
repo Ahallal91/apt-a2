@@ -14,6 +14,33 @@ void Output::outputRound(int roundNum) {
 	std::cout << "== START ROUND " << roundNum << " ==" << std::endl;
 }
 
+void Output::outputTurn(Player* player) {
+	std::cout << "TURN FOR PLAYER: " << player->getPlayerName() << std::endl;
+}
+
+void Output::turnSuccess() {
+	std::cout << "Turn successful" << std::endl;
+}
+
+void Output::requestInput() {
+	std::cout << "> ";
+}
+
+void Output::outputScore(Player* player) {
+	std::cout << "Score for " << player->getPlayerName() << ": " << player->getPoints() << std::endl;
+}
+
+void Output::outputWinner(Player* player1, Player* player2) {
+	this->outputScore(player1);
+	this->outputScore(player2);
+	if (player1->getPoints() == player2->getPoints()) {
+		std::cout << "Tie!" << std::endl;
+	} else {
+		Player* winner = player1->getPoints() > player2->getPoints() ? player1 : player2;
+		std::cout << winner << " wins!" << std::endl;
+	}
+}
+
 // output the current factory
 void Output::outputFactory(Factories* factory) {
 
@@ -38,13 +65,7 @@ void Output::outputFactory(Factories* factory) {
 	std::cout << std::endl << std::endl;
 }
 
-void Output::outputTurn(Player* player) {
-	std::cout << "TURN FOR PLAYER: " << player->getPlayerName() << std::endl;
-}
 
-void Output::requestInput() {
-	std::cout << "> ";
-}
 
 // TODO could maybe tell the user what the valid commands are, 
 // but for now, just say invalid

@@ -19,6 +19,54 @@ void GameLogic::initFactoryTiles(Factories* factories, TileBag* tileBag) {
 	}
 }
 
+/*
+* Adds 1 point for each wall tile complete
+* Also subtracts points based on number of broken tiles
+*/
+void GameLogic::calculatePoints(Player* player) {
+	PlayerBoard* playerBoard = player->getPlayerBoard();
+	for (int row = 0; row < WALL_DIM; row++) {
+		if (playerBoard->getPatternLine(row)->isFull()) {
+			playerBoard->setWallTile(row, playerBoard->getPatternLine(row)->getTileType());
+			player->setPoints(player->getPoints() + 1);
+		}
+	}
+	// subtract points
+	player->setPoints(player->getPoints() + brokenLinePoints[playerBoard->getBrokenSize()]);
+}
+
+/*
+This method resets a players board and adds remaing tiles back to the tile bag.
+
+The order of traversal is the top pattern line to the bottom, then the broken line.
+At each pattern line, takes the tiles starting from index 0, which would be visually
+right-to-left on the console. The broken line is also removed the same way, right-to-left
+(starting at largest index for broken line though)
+*/
+void GameLogic::resetBoard(Player* player, TileBag* tileBag) {
+	// traverse all pattern lines
+	for (int i = 0; i < WALL_DIM; i++) {
+		PatternLine* patternLine = player->getPlayerBoard()->getPatternLine(i);
+
+		// add tiles back to bag. -1 if it's full since it will be moved to the wall
+		int numToAdd = patternLine->isFull() ? patternLine->getCurrentSize() - 1 : patternLine->getCurrentSize();
+		for (int i = 0; i < numToAdd; i++) {
+			tileBag->addToBag(patternLine->getTileType());
+		}
+		patternLine->clear();
+	}
+
+	// add the broken line tiles to back of the tile bag and clear
+	for (int i = player->getPlayerBoard()->getBrokenSize() - 1; i >= 0; i--) {
+		// don't add the tile of type FIRST back to the bag
+		if (player->getPlayerBoard()->getBrokenTile(i) != FIRST) {
+			tileBag->addToBag(player->getPlayerBoard()->getBrokenTile(i));
+		}
+	}
+	player->getPlayerBoard()->clearBrokenLine();
+}
+
+
 // returns true if all factories and center are empty, false otherwise
 // used for checking if a round is over
 bool GameLogic::roundOver(Factories* factories) {
@@ -42,13 +90,19 @@ bool GameLogic::roundOver(Factories* factories) {
 	return roundOver;
 }
 
-/* Allows the player to select tiles from a specified factory and place those
+/*
+ * Allows the player to select tiles from a specified factory and place those
  * tiles into their patternLine/brokenLine. Players can only place tiles in
  * PatternLines that match the tile colour or are empty.
  * Returns true if the tiles are placed in the players patternLine/brokenLine
  */
+ /* Allows the player to select tiles from a specified factory and place those
+  * tiles into their patternLine/brokenLine. Players can only place tiles in
+  * PatternLines that match the tile colour or are empty.
+  * Returns true if the tiles are placed in the players patternLine/brokenLine
+  */
 bool GameLogic::takeTiles(Factories* factories, Player* player,
-	int factoryNumber, char tile, int destPatternLine) {
+						  int factoryNumber, char tile, int destPatternLine) {
 	bool retValue = false;
 	// reduces input patternLine by 1 to fit array
 	destPatternLine--;
@@ -60,24 +114,24 @@ bool GameLogic::takeTiles(Factories* factories, Player* player,
 										destPatternLine);
 		} else if (factoryNumber == 0) {
 			// adds tiles from center factory to playerboard
-			retValue = addTilesFromCenterFact(factories, player, factoryNumber, 
-												tile, destPatternLine);
+			retValue = addTilesFromCenterFact(factories, player, factoryNumber,
+											  tile, destPatternLine);
 		}
 	}
 	return retValue;
 }
 
-/* Takes tiles from the center factory and places them in the players 
+/* Takes tiles from the center factory and places them in the players
  * patternLine or brokenLine, returns true if the amount of tiles added is greater
  * than zero.
  */
 bool GameLogic::addTilesFromCenterFact(Factories* factories, Player* player,
-	int factoryNumber, char tile, int destPatternLine) {
+									   int factoryNumber, char tile, int destPatternLine) {
 	bool retValue = false;
 	std::vector<char>* tempTiles = factories->takeTilesCenterFactory(tile);
 	for (unsigned int i = 0; i < tempTiles->size(); ++i) {
 		if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
-			addTile(tempTiles->at(i)))) {
+			  addTile(tempTiles->at(i)))) {
 			player->getPlayerBoard()->addBrokenTile(tempTiles->at(i));
 		}
 	}
