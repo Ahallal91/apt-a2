@@ -19,7 +19,7 @@ LinkedList::~LinkedList() {
 	delete head;
 }
 
-unsigned int LinkedList::size() {
+unsigned int LinkedList::size() const {
 	unsigned int count = 0;
     Node* current = head;
     while(current != nullptr) {
@@ -40,7 +40,7 @@ void LinkedList::clear() {
     head = nullptr;
 }
 
-char LinkedList::get(unsigned int index) {
+char LinkedList::get(const unsigned int index) const {
 	char retValue = '\0';
 	if(index < size()) {
         unsigned int count = 0;

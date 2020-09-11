@@ -1,11 +1,11 @@
 #include "TileBag.h"
 #include "Types.h"
-#include "Reader.h"
+#include "FileHandler.h"
 
 //TODO overload constructor to take in a file (save file)
 TileBag::TileBag() {
 	this->tileBag = new LinkedList();
-	Reader reader;
+	FileHandler reader;
 	reader.readTileBag(*this->tileBag, "TileBag.txt");
 }
 
@@ -18,7 +18,7 @@ void TileBag::addToBag(char tile) {
 }
 
 char TileBag::removeFrontTile() {
-	unsigned int start = 0;
+	const unsigned int start = 0;
 	char retValue = tileBag->get(start);
 	tileBag->removeFront();
 	return retValue;

@@ -23,6 +23,8 @@ public:
 	// clears the patternline
 	void clear();
 
+	void clear();
+
 private:
 	// the current colour of this pattern line
 	char tile;
