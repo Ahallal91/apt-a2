@@ -20,6 +20,9 @@ private:
 	bool addTilesFromCenterFact(Factories* factories, Player* player,
 						  		int factoryNumber, char tile, int destPatternLine);
 
+	bool addTilesFromFact(Factories* factories, Player* player,
+	int factoryNumber, char tile, int destPatternLine);
+
 	// checks if tile matches patternLine or doesn't have tiles yet.
 	bool playerTileCheck(Player* player, char tile, int destPatternLine);
 };

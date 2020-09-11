@@ -53,18 +53,11 @@ bool GameLogic::takeTiles(Factories* factories, Player* player,
 	// reduces input patternLine by 1 to fit array
 	destPatternLine--;
 	// checks if tile can be placed in patternLine
-	if (playerTileCheck(player, tile, destPatternLine)) {
+	if (playerTileCheck(player, tile, destPatternLine) &&
+	factories->isTileInFactories(factoryNumber, tile)) {
 		if(factoryNumber >= 1 && factoryNumber <= NUM_FACTORIES) {
-			char* tempTiles = factories->takeTilesFactory(factoryNumber - 1, tile);
-			for (int i = 0; i < FACTORY_SIZE; ++i) {
-				if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
-					addTile(tempTiles[i]))) {
-					player->getPlayerBoard()->addBrokenTile(tempTiles[i]);
-				}
-			}
-			delete tempTiles;
-			tempTiles = nullptr;
-			retValue = true;
+			retValue = addTilesFromFact(factories, player, factoryNumber, tile,
+										destPatternLine);
 		} else if (factoryNumber == 0) {
 			// adds tiles from center factory to playerboard
 			retValue = addTilesFromCenterFact(factories, player, factoryNumber, 
@@ -90,6 +83,24 @@ bool GameLogic::addTilesFromCenterFact(Factories* factories, Player* player,
 	}
 	if (tempTiles->size() > 0) {
 		retValue = true;
+	}
+	delete tempTiles;
+	tempTiles = nullptr;
+	return retValue;
+}
+
+bool GameLogic::addTilesFromFact(Factories* factories, Player* player,
+int factoryNumber, char tile, int destPatternLine) {
+	bool retValue = false;
+	char* tempTiles = factories->takeTilesFactory(factoryNumber - 1, tile);
+	for (unsigned int i = 0; i < FACTORY_SIZE; ++i) {
+		if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
+			addTile(tempTiles[i]))) {
+			player->getPlayerBoard()->addBrokenTile(tempTiles[i]);
+		}
+		if (tempTiles[i] != '\0') {
+			retValue = true;
+		}
 	}
 	delete tempTiles;
 	tempTiles = nullptr;

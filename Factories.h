@@ -14,6 +14,9 @@ public:
 	bool addToFactory(int factoryNumber, char tile);
 	char* takeTilesFactory(int factoryNumber, char tile);
 
+	// returns true if the tile is in any of the factories chosen.
+	bool isTileInFactories(int factoryNumber, char tile);
+
 	bool addToCenterFactory(char* tiles, int numTiles);
 	std::vector<char>* takeTilesCenterFactory(char tile);
 
