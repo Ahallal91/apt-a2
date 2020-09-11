@@ -107,18 +107,12 @@ bool GameLogic::takeTiles(Factories* factories, Player* player,
 	// reduces input patternLine by 1 to fit array
 	destPatternLine--;
 	// checks if tile can be placed in patternLine
-	if (playerTileCheck(player, tile, destPatternLine)) {
-		if (factoryNumber >= 1 && factoryNumber <= NUM_FACTORIES) {
-			char* tempTiles = factories->takeTilesFactory(factoryNumber - 1, tile);
-			for (int i = 0; i < FACTORY_SIZE; ++i) {
-				if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
-					  addTile(tempTiles[i]))) {
-					player->getPlayerBoard()->addBrokenTile(tempTiles[i]);
-				}
-			}
-			delete tempTiles;
-			tempTiles = nullptr;
-			retValue = true;
+	if (playerTileCheck(player, tile, destPatternLine) &&
+	factories->isTileInFactories(factoryNumber, tile) &&
+	playerWallCheck(player, tile, destPatternLine)) {
+		if(factoryNumber >= 1 && factoryNumber <= NUM_FACTORIES) {
+			retValue = addTilesFromFact(factories, player, factoryNumber, tile,
+										destPatternLine);
 		} else if (factoryNumber == 0) {
 			// adds tiles from center factory to playerboard
 			retValue = addTilesFromCenterFact(factories, player, factoryNumber,
@@ -150,6 +144,27 @@ bool GameLogic::addTilesFromCenterFact(Factories* factories, Player* player,
 	return retValue;
 }
 
+/* Takes tiles from factory and places them in the players
+ * patternLine or brokenLine, returns true if any tile added was not empty.
+ */
+bool GameLogic::addTilesFromFact(Factories* factories, Player* player,
+int factoryNumber, char tile, int destPatternLine) {
+	bool retValue = false;
+	char* tempTiles = factories->takeTilesFactory(factoryNumber - 1, tile);
+	for (unsigned int i = 0; i < FACTORY_SIZE; ++i) {
+		if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
+			addTile(tempTiles[i]))) {
+			player->getPlayerBoard()->addBrokenTile(tempTiles[i]);
+		}
+		if (tempTiles[i] != '\0') {
+			retValue = true;
+		}
+	}
+	delete tempTiles;
+	tempTiles = nullptr;
+	return retValue;
+}
+
 /* Checks if the tile passed in matches the type of tile in the players
  * patternLine. If the patternLine is empty or matching it will return true
  */
@@ -161,6 +176,16 @@ bool GameLogic::playerTileCheck(Player* player, char tile, int destPatternLine) 
 		getTileType();
 	if (tileType == EMPTY || tileType == tile) {
 		retValue = true;
+	}
+	return retValue;
+}
+
+bool GameLogic::playerWallCheck(Player* player, char tile, int destPatternLine) {
+	bool retValue = true;
+	for(int i = 0; i < WALL_DIM; ++i) {
+		if (player->getPlayerBoard()->getWallTile(i, destPatternLine) == tile) {
+			retValue = false;
+		}
 	}
 	return retValue;
 }
