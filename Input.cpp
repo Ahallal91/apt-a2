@@ -123,10 +123,10 @@ bool Input::validateTurnCommand(std::vector<std::string> arguments) {
 		tileValid = (tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK);
 	}
 
-	// Validate the row / pattern line (4th parameter) is a number 1 - 5
+	// Validate the row / pattern line (4th parameter) is a number 1 - 6
 	try {
 		int row = std::stoi(rowStr);
-		rowValid = (row > 0 && row <= WALL_DIM);
+		rowValid = (row > 0 && row <= WALL_DIM + 1);
 	} catch (const std::exception& e) {
 	}
 
