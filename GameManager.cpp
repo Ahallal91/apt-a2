@@ -90,7 +90,8 @@ bool GameManager::validateMove(Player* currentPlayer) {
 
 	if (validMove) {
 		validMove = this->gameLogic->takeTiles
-		(factories, currentPlayer, stoi(commands.at(1)), commands.at(2).at(0), stoi(commands.at(3)));
+		(factories, currentPlayer, stoi(commands.at(1)), commands.at(2).at(0), stoi(commands.at(3))
+		,tileBag);
 	}
 
 	return validMove;

@@ -102,7 +102,7 @@ bool GameLogic::roundOver(Factories* factories) {
   * Returns true if the tiles are placed in the players patternLine/brokenLine
   */
 bool GameLogic::takeTiles(Factories* factories, Player* player,
-						  int factoryNumber, char tile, int destPatternLine) {
+int factoryNumber, char tile, int destPatternLine, TileBag* tileBag) {
 	bool retValue = false;
 	// reduces input patternLine by 1 to fit array
 	destPatternLine--;
@@ -112,11 +112,11 @@ bool GameLogic::takeTiles(Factories* factories, Player* player,
 	playerWallCheck(player, tile, destPatternLine)) {
 		if(factoryNumber >= 1 && factoryNumber <= NUM_FACTORIES) {
 			retValue = addTilesFromFact(factories, player, factoryNumber, tile,
-										destPatternLine);
+										destPatternLine, tileBag);
 		} else if (factoryNumber == 0) {
 			// adds tiles from center factory to playerboard
 			retValue = addTilesFromCenterFact(factories, player, factoryNumber,
-											  tile, destPatternLine);
+											  tile, destPatternLine, tileBag);
 		}
 	}
 	return retValue;
@@ -127,13 +127,16 @@ bool GameLogic::takeTiles(Factories* factories, Player* player,
  * than zero.
  */
 bool GameLogic::addTilesFromCenterFact(Factories* factories, Player* player,
-									   int factoryNumber, char tile, int destPatternLine) {
+									   int factoryNumber, char tile, 
+									   int destPatternLine, TileBag* tileBag) {
 	bool retValue = false;
 	std::vector<char>* tempTiles = factories->takeTilesCenterFactory(tile);
 	for (unsigned int i = 0; i < tempTiles->size(); ++i) {
 		if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
 			  addTile(tempTiles->at(i)))) {
-			player->getPlayerBoard()->addBrokenTile(tempTiles->at(i));
+			if(!(player->getPlayerBoard()->addBrokenTile(tempTiles->at(i)))) {
+				tileBag->addToBag(tempTiles->at(i));
+			}
 		}
 	}
 	if (tempTiles->size() > 0) {
@@ -148,13 +151,15 @@ bool GameLogic::addTilesFromCenterFact(Factories* factories, Player* player,
  * patternLine or brokenLine, returns true if any tile added was not empty.
  */
 bool GameLogic::addTilesFromFact(Factories* factories, Player* player,
-int factoryNumber, char tile, int destPatternLine) {
+int factoryNumber, char tile, int destPatternLine, TileBag* tileBag) {
 	bool retValue = false;
 	char* tempTiles = factories->takeTilesFactory(factoryNumber - 1, tile);
 	for (unsigned int i = 0; i < FACTORY_SIZE; ++i) {
 		if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
 			addTile(tempTiles[i]))) {
-			player->getPlayerBoard()->addBrokenTile(tempTiles[i]);
+			if(!(player->getPlayerBoard()->addBrokenTile(tempTiles[i]))) {
+				tileBag->addToBag(tempTiles[i]);
+			}
 		}
 		if (tempTiles[i] != '\0') {
 			retValue = true;
