@@ -45,8 +45,6 @@ private:
 	TileBag* tileBag;
 
 	int currentRound;
-
-	std::vector<std::string> turns;
 };
 
 #endif // GAME_MANAGER_H

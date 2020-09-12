@@ -73,16 +73,6 @@ void GameManager::playGame() {
 				if (validMove) {
 					validMove = this->gameLogic->takeTiles
 					(this->factories, currentPlayer, stoi(commands.at(1)), commands.at(2).at(0), stoi(commands.at(3)));
-
-					// START JOHN CODE
-					std::string com = commands.at(0) + " " + commands.at(1) + " " + commands.at(2) + " " + commands.at(3);
-					this->turns.push_back(com);
-
-					std::cout << "OUT!" << std::endl;
-
-					exportGame(nullptr, "export.txt");
-
-					// END JOHN CODE
 				}
 
 				if (!validMove) {
@@ -102,6 +92,7 @@ void GameManager::playGame() {
 	}
 }
 
+// TODO need copy constructors before dealing with this to copy the stack GameState to a heap allocated one (if the import is valid)
 GameState* GameManager::importGame(std::string fileName) {
 	bool validGame = true;
 	GameState* gameState = nullptr;
@@ -159,6 +150,7 @@ GameState* GameManager::importGame(std::string fileName) {
 
 		
 		if(validGame) {
+			// need copy constructor
 			gameState = new GameState();
 		}
 
@@ -181,9 +173,11 @@ void GameManager::exportGame(GameState* gameState, std::string fileName) {
 	file << player1->getPlayerName() << std::endl;
 	file << player2->getPlayerName() << std::endl;
 
+	/* COMMENTED OUT UNTIL MOVE TO GAMESTATE
 	for(std::string turn : turns) {
 		file << turn << std::endl;
 	}
+	*/ 
 }
 
 Player* GameManager::getPlayer1() {
