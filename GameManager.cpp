@@ -90,11 +90,11 @@ void GameManager::playGame() {
 GameState* GameManager::importGame(std::string fileName) {
 	bool validGame = true;
 	GameState* gameState = nullptr;
-	
+
 	std::ifstream file(fileName);
-	
+
 	// check file exists
-	if(file.good()) {
+	if (file.good()) {
 
 		// prepare the bag
 		TileBag bag;
@@ -104,9 +104,9 @@ GameState* GameManager::importGame(std::string fileName) {
 		std::getline(file, tileString);
 
 		std::vector<char> tiles;
-		if(tileString.length() == 100) {
-			for(char tile : tileString) {
-				if(tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK) {
+		if (tileString.length() == 100) {
+			for (char tile : tileString) {
+				if (tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK) {
 					bag.addToBag(tile);
 				} else {
 					validGame = false;
@@ -130,7 +130,7 @@ GameState* GameManager::importGame(std::string fileName) {
 		//TODO
 
 		// Create a new GameState
-		
+
 		//testing
 		/*
 		std::cout << "TILES: " << std::endl;
@@ -142,8 +142,8 @@ GameState* GameManager::importGame(std::string fileName) {
 		std::cout << name2 << std::endl;
 		*/
 
-		
-		if(validGame) {
+
+		if (validGame) {
 			// need copy constructor
 			gameState = new GameState();
 		}
@@ -158,7 +158,7 @@ void GameManager::exportGame(GameState* gameState, std::string fileName) {
 	std::ofstream file(fileName.c_str());
 
 	// Output Tile Bag
-	for(int i = 0; i < tileBag->size(); i++) {
+	for (int i = 0; i < tileBag->size(); i++) {
 		file << tileBag->at(i);
 	}
 	file << std::endl;
@@ -171,7 +171,7 @@ void GameManager::exportGame(GameState* gameState, std::string fileName) {
 	for(std::string turn : turns) {
 		file << turn << std::endl;
 	}
-	*/ 
+	*/
 }
 
 bool GameManager::validateMove(Player* currentPlayer) {
@@ -187,7 +187,7 @@ bool GameManager::validateMove(Player* currentPlayer) {
 	if (validMove) {
 		validMove = this->gameLogic->takeTiles
 		(factories, currentPlayer, stoi(commands.at(1)), commands.at(2).at(0), stoi(commands.at(3))
-		,tileBag);
+		 , tileBag);
 	}
 
 	return validMove;
