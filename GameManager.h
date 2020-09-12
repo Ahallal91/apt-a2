@@ -1,6 +1,8 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
 
+#include <vector>
+
 class Player;
 class Output;
 class Input;
@@ -8,15 +10,31 @@ class GameLogic;
 class Factories;
 class TileBag;
 
+class GameState;
+
 class GameManager {
 public:
 	GameManager();
 	~GameManager();
 
+	Player* getPlayer1();
+	Player* getPlayer2();
+
+	GameState* getGameState();
+	
 	// main game loop
 	void playGame();
 
+	GameState* importGame(std::string fileName);
+	void exportGame(GameState* gameState, std::string fileName);
+
 private:
+
+	// The current Game State of the game
+	GameState* gameState;
+
+	// THESE WILL MOVE TO GAME STATE, HERE FOR NOW THOUGH
+
 	Player* player1;
 	Player* player2;
 
