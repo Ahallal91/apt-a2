@@ -18,7 +18,7 @@ public:
 				   char tile, int destPatternLine, TileBag* tileBag);
 	bool roundOver(Factories* factories);
 	void resetBoard(Player* player, TileBag* tileBag);
-	void calculatePoints(Player* player);
+	void addToWall(Player* player);
 
 private:
 	// takes tiles that match tile passed in from factory, return true if tiles
@@ -32,6 +32,9 @@ private:
 
 	// checks if tile matches patternLine or doesn't have tiles yet.
 	bool playerTileCheck(Player* player, char tile, int destPatternLine);
+
+	// calculate the points of the player
+	void calculatePoints(Player* player, int x, int y);
 
 	// checks if tile being placed on line is already in wall
 	bool playerWallCheck(Player* player, char tile, int destPatternLine);

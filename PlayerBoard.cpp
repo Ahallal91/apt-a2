@@ -54,7 +54,7 @@ void PlayerBoard::removeWallTile(int x, int y) {
 }
 
 char PlayerBoard::getWallTile(int x, int y) {
-	char tile = '\0';
+	char tile = EMPTY;
 
 	//Check that x and y are in bounds of wall
 	if (x >= 0 && x < WALL_DIM && y >= 0 && y < WALL_DIM) {
@@ -77,7 +77,6 @@ PatternLine* PlayerBoard::getPatternLine(int row) {
 }
 
 // BROKEN LINE METHODS
-
 bool PlayerBoard::addBrokenTile(char tile) {
 	bool success = false;
 
@@ -90,7 +89,7 @@ bool PlayerBoard::addBrokenTile(char tile) {
 }
 
 char PlayerBoard::getBrokenTile(int index) {
-	char tile = '\0';
+	char tile = EMPTY;
 
 	if (index >= 0 && index < NUM_BROKEN_TILES && index < (int) brokenLine->size()) {
 		tile = brokenLine->at(index);

@@ -106,7 +106,7 @@ void Output::outputBoard(Player* player) {
 	}
 
 	// Output broken tiles
-	std::cout << "broken:";
+	std::cout << "6: broken |";
 	for (int i = 0; i < player->getPlayerBoard()->getBrokenSize(); i++) {
 		std::cout << " " << player->getPlayerBoard()->getBrokenTile(i);
 	}

@@ -70,8 +70,8 @@ void GameManager::playGame() {
 		// round has ended
 
 		// calculate player points and move to wall
-		this->gameLogic->calculatePoints(this->player1);
-		this->gameLogic->calculatePoints(this->player2);
+		this->gameLogic->addToWall(this->player1);
+		this->gameLogic->addToWall(this->player2);
 
 		// reset board and add back to tile bag
 		this->gameLogic->resetBoard(this->player1, this->tileBag);
@@ -83,7 +83,7 @@ void GameManager::playGame() {
 	}
 
 	// game finished
-	 this->output->outputWinner(this->player1, this->player2);
+	this->output->outputWinner(this->player1, this->player2);
 }
 
 // TODO need copy constructors before dealing with this to copy the stack GameState to a heap allocated one (if the import is valid)
