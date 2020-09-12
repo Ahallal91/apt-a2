@@ -77,7 +77,6 @@ PatternLine* PlayerBoard::getPatternLine(int row) {
 }
 
 // BROKEN LINE METHODS
-
 bool PlayerBoard::addBrokenTile(char tile) {
 	bool success = false;
 

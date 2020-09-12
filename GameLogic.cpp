@@ -48,7 +48,7 @@ void GameLogic::addToWall(Player* player) {
 void GameLogic::calculatePoints(Player* player, int x, int y) {
 	PlayerBoard* playerBoard = player->getPlayerBoard();
 
-	int newPoints = player->getPoints();
+	int playerPoints = player->getPoints();
 	int pointsToAdd = 1; // 1 point for adding a new tile
 	bool comboCol = false;
 	bool comboRow = false;
@@ -100,16 +100,18 @@ void GameLogic::calculatePoints(Player* player, int x, int y) {
 
 	// additional point for connecting both row and col
 	if (comboCol && comboRow) {
-		newPoints++;
+		pointsToAdd++;
 	}
 
+	/*
 	std::cout << player->getPlayerName() << " has been awared "
 		<< pointsToAdd << " for placing tile at (" << x << ", " << y << ")" << std::endl;
+	*/
 
 	// calculate final scoring
-	newPoints += pointsToAdd;
-	newPoints += brokenLinePoints[playerBoard->getBrokenSize()];
-	player->setPoints(newPoints);
+	playerPoints += pointsToAdd;
+	playerPoints += brokenLinePoints[playerBoard->getBrokenSize()];
+	player->setPoints(playerPoints);
 }
 
 /*

@@ -104,20 +104,15 @@ bool Factories::addToCenterFactory(char* tiles, int numTiles) {
 
 std::vector<char>* Factories::takeTilesCenterFactory(char tile) {
 	std::vector<char>* retValue = new std::vector<char>;
-	// adds all other matching tiles to return.
-	for (unsigned int i = 0; i < centerFactory->size(); ++i) {
-		if (centerFactory->at(i) == tile ||
-			centerFactory->at(i) == FIRST) {
-			retValue->push_back(centerFactory->at(i));
-		}
-	}
+
 	// removes all tiles that matched.
 	std::vector<char>::iterator iter = centerFactory->begin();
 	int tileAt = 0;
 	while (iter != centerFactory->end()) {
 		if (centerFactory->at(tileAt) == tile ||
 			centerFactory->at(tileAt) == FIRST) {
-			centerFactory->erase(iter);
+			retValue->push_back(centerFactory->at(tileAt));
+			iter = centerFactory->erase(iter);
 		} else {
 			iter++;
 			tileAt++;
