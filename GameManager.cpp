@@ -158,10 +158,9 @@ GameState* GameManager::importGame(std::string fileName) {
 		if(validGame) {
 			// need copy constructor
 			gameState = new GameState();
-		}
-
-		return gameState;
+		}		
 	}
+	return gameState;
 }
 
 // TODO might be outputting the updated tile bag when it should stick to initial order!!!

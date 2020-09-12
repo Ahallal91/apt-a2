@@ -6,10 +6,10 @@ GameState::GameState() {
 
 GameState::GameState(int round, Player* player1, Player* player2, TileBag* tileBag, Factories* factories) :
     round(round),
-    player1(player1),
-    player2(player2),
     tileBag(tileBag),
-    factories(factories) 
+    factories(factories),
+    player1(player1),
+    player2(player2)
 {
     turns = new std::vector<std::string>;
     

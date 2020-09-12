@@ -215,14 +215,13 @@ bool GameLogic::addTilesFromCenterFact(Factories* factories, Player* player,
 	bool retValue = false;
 	std::vector<char>* tempTiles = factories->takeTilesCenterFactory(tile);
 	for (unsigned int i = 0; i < tempTiles->size(); ++i) {
-		if(destPatternLine != 6) {
-			if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
-			  addTile(tempTiles->at(i)))) {
+		if(destPatternLine != BROKEN_LINE) {
+			if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->addTile(tempTiles->at(i)))) {
 				if (!(player->getPlayerBoard()->addBrokenTile(tempTiles->at(i)))) {
 					tileBag->addToBag(tempTiles->at(i));
 				}
 			}
-		} else if (destPatternLine == 6) {
+		} else if (destPatternLine == BROKEN_LINE) {
 			if (!(player->getPlayerBoard()->addBrokenTile(tempTiles->at(i)))) {
 				tileBag->addToBag(tempTiles->at(i));
 			}
@@ -245,14 +244,14 @@ bool GameLogic::addTilesFromFact(Factories* factories, Player* player,
 	bool retValue = false;
 	char* tempTiles = factories->takeTilesFactory(factoryNumber - 1, tile);
 	for (unsigned int i = 0; i < FACTORY_SIZE; ++i) {
-		if (destPatternLine != 5) {
+		if (destPatternLine != BROKEN_LINE) {
 			if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
 			  addTile(tempTiles[i]))) {
 				if (!(player->getPlayerBoard()->addBrokenTile(tempTiles[i]))) {
 					tileBag->addToBag(tempTiles[i]);
 				}
 			}
-		} else if (destPatternLine == 5) {
+		} else if (destPatternLine == BROKEN_LINE) {
 			if (!(player->getPlayerBoard()->addBrokenTile(tempTiles[i]))) {
 				tileBag->addToBag(tempTiles[i]);
 			}
@@ -268,14 +267,19 @@ bool GameLogic::addTilesFromFact(Factories* factories, Player* player,
 
 /* Checks if the tile passed in matches the type of tile in the players
  * patternLine. If the patternLine is empty or matching it will return true
+ * if the destination is the brokenLine it will also return true.
  */
 bool GameLogic::playerTileCheck(Player* player, char tile, int destPatternLine) {
 	bool retValue = false;
-	char tileType = player->
-		getPlayerBoard()->
-		getPatternLine(destPatternLine)->
-		getTileType();
-	if (tileType == EMPTY || tileType == tile) {
+	if (destPatternLine != BROKEN_LINE) {
+		char tileType = player->
+			getPlayerBoard()->
+			getPatternLine(destPatternLine)->
+			getTileType();
+		if (tileType == EMPTY || tileType == tile) {
+			retValue = true;
+		}
+	} else if (destPatternLine == BROKEN_LINE) {
 		retValue = true;
 	}
 	return retValue;
@@ -283,10 +287,14 @@ bool GameLogic::playerTileCheck(Player* player, char tile, int destPatternLine) 
 
 bool GameLogic::playerWallCheck(Player* player, char tile, int destPatternLine) {
 	bool retValue = true;
-	for (int i = 0; i < WALL_DIM; ++i) {
-		if (player->getPlayerBoard()->getWallTile(i, destPatternLine) == tile) {
-			retValue = false;
+	if (destPatternLine != BROKEN_LINE) {
+		for (int i = 0; i < WALL_DIM; ++i) {
+			if (player->getPlayerBoard()->getWallTile(i, destPatternLine) == tile) {
+				retValue = false;
+			}
 		}
+	} else if (destPatternLine == BROKEN_LINE) {
+		retValue = true;
 	}
 	return retValue;
 }
