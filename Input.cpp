@@ -17,7 +17,6 @@ Player* Input::enterPlayerName(int playerNum) {
 	while (name.empty()) {
 		std::string input = "";
 		std::cout << "Enter a name for Player " << playerNum << std::endl << "> ";
-		std::cin.ignore();
 		std::getline(std::cin, input);
 
 		// A vector that contains the name seperated by white spaces
