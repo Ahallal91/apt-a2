@@ -45,15 +45,15 @@ bool Factories::addToFactory(int factoryNumber, char tile) {
 bool Factories::isTileInFactories(int factoryNumber, char tile) {
 	bool retValue = false;
 	if (factoryNumber > 0 && factoryNumber <= NUM_FACTORIES) {
-		for(int i = 0; i < FACTORY_SIZE; ++i) {
+		for (int i = 0; i < FACTORY_SIZE; ++i) {
 			if (factories[factoryNumber - 1][i] == tile) {
 				retValue = true;
-			}	
+			}
 		}
 	} else if (factoryNumber == 0) {
 		std::vector<char>::iterator iter = centerFactory->begin();
 		int tileAt = 0;
-		while(iter != centerFactory->end() && !retValue) {
+		while (iter != centerFactory->end() && !retValue) {
 			if (centerFactory->at(tileAt) == tile) {
 				retValue = true;
 			} else {
@@ -107,16 +107,16 @@ std::vector<char>* Factories::takeTilesCenterFactory(char tile) {
 	// adds all other matching tiles to return.
 	for (unsigned int i = 0; i < centerFactory->size(); ++i) {
 		if (centerFactory->at(i) == tile ||
-		centerFactory->at(i) == FIRST) {
+			centerFactory->at(i) == FIRST) {
 			retValue->push_back(centerFactory->at(i));
 		}
 	}
 	// removes all tiles that matched.
 	std::vector<char>::iterator iter = centerFactory->begin();
 	int tileAt = 0;
-	while(iter != centerFactory->end()) {
-		if (centerFactory->at(tileAt) == tile || 
-		centerFactory->at(tileAt) == FIRST) {
+	while (iter != centerFactory->end()) {
+		if (centerFactory->at(tileAt) == tile ||
+			centerFactory->at(tileAt) == FIRST) {
 			centerFactory->erase(iter);
 		} else {
 			iter++;
