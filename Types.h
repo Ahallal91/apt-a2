@@ -34,6 +34,7 @@ constexpr int brokenLinePoints[] = {0, -1, -2, -4, -6, -8, -11, -14};
 #define NUM_ROUNDS			 5
 #define FACTORY_SIZE		 4	
 #define NUM_COMMANDS		 4
+#define BROKEN_LINE			 5
 
 // Broken Line config
 #define NUM_BROKEN_TILES	7 

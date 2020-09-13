@@ -1,16 +1,16 @@
 #include "GameState.h"
 
-GameState::GameState() {
+GameState::GameState() {}
 
-}
 
-GameState::GameState(int round, Player* player1, Player* player2, TileBag* tileBag, Factories* factories):
-	round(round),
-	player1(player1),
-	player2(player2),
-	tileBag(tileBag),
-	factories(factories) {
-	turns = new std::vector<std::string>;
+GameState::GameState(int round, Player* player1, Player* player2, TileBag* tileBag, Factories* factories) :
+    round(round),
+    tileBag(tileBag),
+    factories(factories),
+    player1(player1),
+    player2(player2)
+{
+    turns = new std::vector<std::string>;
 }
 
 GameState::~GameState() {

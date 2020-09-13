@@ -39,6 +39,18 @@ GameState* GameManager::getGameState() {
 	return gameState;
 }
 
+// TODO this will create a new GameState and ask for player names in here (rather than constructor)
+// The current constructor should be moved to this method (apart from GameLogic, Input and Output fields)
+void GameManager::newGame() {
+
+}
+
+// TODO this will loop user input and calling importGame() until a valid game is found, then create a GameState from that
+// After a valid game file is detected, should call playGame(GameState* gameState) to play the game from the GameState
+void GameManager::loadGame() {
+
+}
+
 // main game loop
 // remember to end the loop if player enter ends of line character
 void GameManager::playGame() {
@@ -146,10 +158,9 @@ GameState* GameManager::importGame(std::string fileName) {
 		if (validGame) {
 			// need copy constructor
 			gameState = new GameState();
-		}
-
-		return gameState;
+		}		
 	}
+	return gameState;
 }
 
 // TODO might be outputting the updated tile bag when it should stick to initial order!!!

@@ -1,11 +1,12 @@
 #include <iostream>
 #include "GameManager.h"
 
+#include <limits>
+
 void printLine(std::string message);
 void runMenu();
 void credits();
 void menuText();
-
 
 int main(int argc, char** argv) {
 	runMenu();
@@ -27,6 +28,10 @@ void runMenu() {
 		menuText();
 		std::string choice;
 		std::cin >> choice;
+		
+		//ignore any characters after whitespace until \n to not intefere with input later in the program
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		
 		if (choice == choice1) {
 			exitMenu = true;
 			// TODO may not want to declare this inside here. Will move when required later.

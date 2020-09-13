@@ -21,6 +21,9 @@ public:
 	Player* getPlayer2();
 
 	GameState* getGameState();
+
+	void newGame();
+	void loadGame();
 	
 	// main game loop
 	void playGame();
