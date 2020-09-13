@@ -37,7 +37,7 @@ void Output::outputWinner(Player* player1, Player* player2) {
 		std::cout << "Tie!" << std::endl;
 	} else {
 		Player* winner = player1->getPoints() > player2->getPoints() ? player1 : player2;
-		std::cout << winner << " wins!" << std::endl;
+		std::cout << winner->getPlayerName() << " wins!" << std::endl;
 	}
 }
 
