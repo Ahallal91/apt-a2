@@ -2,12 +2,22 @@
 #include "Types.h"
 #include "FileHandler.h"
 
-//TODO overload constructor to take in a file (save file)
+// TODO this constructor should make an empty tileBag after GameState implemented (ie. dont read from TileBag.txt)
+// Left like this for now once we are ready to use importGame() method
 TileBag::TileBag() {
 	this->tileBag = new LinkedList();
 	FileHandler reader;
 	reader.readTileBag(*this->tileBag, "TileBag.txt");
 }
+
+// new constructor for file input. will use later when ready
+/*
+TileBag::TileBag(std::string fileName) {
+	this->tileBag = new LinkedList();
+	FileHandler reader;
+	reader.readTileBag(*this->tileBag, fileName);
+}
+*/
 
 TileBag::~TileBag() {
 	delete tileBag;

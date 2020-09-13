@@ -6,6 +6,7 @@
 class TileBag {
 public:
 	TileBag();
+	//TileBag(std::string fileName);
 	~TileBag();
 
 	// Adds tiles to back of the queue
