@@ -291,8 +291,8 @@ int GameLogic::tileLocation(int destPatternLine, char tile) {
 	}
 
 	tileCount = tileCount + destPatternLine;
-	if (tileCount > WALL_DIM) {
-		tileCount = 0 + destPatternLine;
+	if (tileCount >= WALL_DIM) {
+		tileCount = -1 + destPatternLine;
 	}
 	return tileCount;
 }
