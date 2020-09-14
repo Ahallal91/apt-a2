@@ -185,8 +185,8 @@ void GameManager::validateMove(GameState* gameState, Player* currentPlayer) {
 		std::cout << commands.size() << std::endl;
 
 		if (!commands.empty()) {
-			if (commands.at(0) == "turn") {
-				moveSuccess = this->gameLogic->takeTiles(gameState->getFactories(), currentPlayer, stoi(commands.at(1)), commands.at(2).at(0), stoi(commands.at(3)), gameState->getTileBag());
+			if (commands[0] == "turn") {
+				moveSuccess = this->gameLogic->takeTiles(gameState->getFactories(), currentPlayer, stoi(commands[1]), commands[2].at(0), stoi(commands[3]), gameState->getTileBag());
 
 				// add the valid turn to turn history
 				std::string turn;
@@ -197,14 +197,16 @@ void GameManager::validateMove(GameState* gameState, Player* currentPlayer) {
 					}
 				}
 				gameState->addTurn(turn);
-			} else if (commands.at(0) == "save") {
+			} else if (commands[0] == "save") {
 				this->exportGame(gameState, commands.at(1));
 				this->output->saveSuccess(commands.at(1));
 			}
 		}
 
+
 		// display invalid input if they entered nothing or they entered invalid turn
-		if (commands.empty() || (commands.at(0) == "turn" && !moveSuccess)) {
+		// (lazy operator avoids exception)
+		if (commands.empty() || (commands[0] == "turn" && !moveSuccess)) {
 			this->output->invalidInput();
 		}
 	}
