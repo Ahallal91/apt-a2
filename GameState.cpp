@@ -12,6 +12,11 @@ GameState::GameState(int round, Player* player1, Player* player2, TileBag* tileB
     player2(player2)
 {
     turns = new std::vector<std::string>;
+
+    // Initialise initial tile bag order
+    for(int i = 0; i < tileBag->size(); i++) {
+        initialTileBag += tileBag->at(i);
+    }
     
 }
 
@@ -33,6 +38,10 @@ void GameState::incrementRound() {
     round++;
 }
 
+std::string GameState::getInitialTileBag() {
+    return initialTileBag;
+}
+
 TileBag* GameState::getTileBag() {
     return tileBag;
 }
@@ -51,4 +60,8 @@ Player* GameState::getPlayer2() {
 
 void GameState::addTurn(std::string turn) {
     turns->push_back(turn);
+}
+
+std::vector<std::string>* GameState::getTurns() {
+    return turns;
 }
