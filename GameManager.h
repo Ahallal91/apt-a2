@@ -19,11 +19,8 @@ public:
 
 	void newGame();
 	void loadGame();
-	
-	// main game loop
-	void playGame();
 
-	// TODO the new play method (will be used once the old on is no longer needed when moved to GameState)
+	// main game loop
 	void playGame(GameState* gameState);
 
 	GameState* importGame(std::string fileName);
@@ -35,19 +32,6 @@ private:
 	Output* output;
 
 	bool validateMove(GameState* gameState, Player* currentPlayer);
-
-	// old fields (can delete when ready)
-	// THESE WILL MOVE TO GAME STATE, HERE FOR NOW THOUGH
-
-	//Player* player1;
-	//Player* player2;
-
-	//Factories* factories;
-	//TileBag* tileBag;
-
-	//bool validateMove(Player* currentPlayer);
-
-	//int currentRound;
 };
 
 #endif // GAME_MANAGER_H
