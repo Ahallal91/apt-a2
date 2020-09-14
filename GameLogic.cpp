@@ -266,10 +266,9 @@ bool GameLogic::playerTileCheck(Player* player, char tile, int destPatternLine) 
 bool GameLogic::playerWallCheck(Player* player, char tile, int destPatternLine) {
 	bool retValue = true;
 	if (destPatternLine != BROKEN_LINE) {
-		for (int i = 0; i < WALL_DIM; ++i) {
-			if (player->getPlayerBoard()->getWallTile(i, destPatternLine) == tile) {
-				retValue = false;
-			}
+		if (player->getPlayerBoard()->getWallTile(
+			tileLocation(destPatternLine, tile), destPatternLine) == tile) {
+			retValue = false;
 		}
 	} else if (destPatternLine == BROKEN_LINE) {
 		retValue = true;
