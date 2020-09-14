@@ -44,6 +44,6 @@ int TileBag::size() {
 	return tileBag->size();
 }
 
-LinkedList* TileBag::getTileBag() {
-	return tileBag;
+char TileBag::at(const unsigned int index) const {
+	return tileBag->get(index);
 }

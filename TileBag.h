@@ -28,7 +28,7 @@ public:
 
 	int size();
 
-	LinkedList* getTileBag();
+	char at(const unsigned int index) const;
 
 private:
 	// Where the tiles are stored
