@@ -67,7 +67,14 @@ std::vector<std::string> Input::getGameplayInput() {
 
 	// The arguments entered in the users command
 	std::vector<std::string> arguments = explode(input);
-	std::string command = arguments[0];
+	
+	std::string command;
+	if(!arguments.empty()) {
+		// convert the command to lowercase to accept non case sensitive inputs
+		toLower(arguments[0]);
+		
+		command = arguments[0];
+	}
 
 	// Checks whether an input is valid
 	bool valid = false;
@@ -100,10 +107,13 @@ std::vector<std::string> Input::getGameplayInput() {
 	return arguments;
 }
 
-bool Input::validateTurnCommand(std::vector<std::string> arguments) {
+bool Input::validateTurnCommand(std::vector<std::string>& arguments) {
 	bool factoryValid = false;
 	bool tileValid = false;
 	bool rowValid = false;
+
+	// Convert the tile input to uppercase to allow non case sensitive input
+	toUpper(arguments[2]);
 
 	std::string factoryStr = arguments[1];
 	std::string tileStr = arguments[2];
@@ -113,8 +123,7 @@ bool Input::validateTurnCommand(std::vector<std::string> arguments) {
 	try {
 		int factory = std::stoi(factoryStr);
 		factoryValid = (factory >= 0 && factory <= WALL_DIM);
-	} catch (const std::exception& e) {
-	}
+	} catch (const std::exception& e) {}
 
 	// Validate that the tile (3rd parameter) is a tile char
 	if (tileStr.length() == 1) {
@@ -126,13 +135,12 @@ bool Input::validateTurnCommand(std::vector<std::string> arguments) {
 	try {
 		int row = std::stoi(rowStr);
 		rowValid = (row > 0 && row <= WALL_DIM + 1);
-	} catch (const std::exception& e) {
-	}
+	} catch (const std::exception& e) {}
 
 	return (factoryValid && tileValid && rowValid);
 }
 
-bool Input::validateSaveCommand(std::vector<std::string> arguments) {
+bool Input::validateSaveCommand(std::vector<std::string>& arguments) {
 	bool filenameValid = true;
 
 	std::string filename = arguments[1];
@@ -171,4 +179,24 @@ std::vector<std::string> Input::explode(std::string str) {
 	}
 
 	return arguments;
+}
+
+void Input::toUpper(std::string& str) {
+	std::string newStr;
+	
+	for(char c : str) {
+		newStr += std::toupper(c);
+	}
+
+	str = newStr;
+}
+
+void Input::toLower(std::string& str) {
+	std::string newStr;
+	
+	for(char c : str) {
+		newStr += std::tolower(c);
+	}
+
+	str = newStr;
 }
