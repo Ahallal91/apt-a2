@@ -147,8 +147,8 @@ void Factories::resetSingleFactory(int factoryNumber) {
 bool Factories::areFactoriesEmpty() {
 	bool retValue = false;
 	bool factoryEmpty = true;
-	for (int i = 0; i < NUM_FACTORIES; i++) {
-		for (int j = 0; j < FACTORY_SIZE; j++) {
+	for (int i = 0; i < NUM_FACTORIES && factoryEmpty; i++) {
+		for (int j = 0; j < FACTORY_SIZE && factoryEmpty; j++) {
 			if (factories[i][j] != '\0') {
 				factoryEmpty = false;
 			}
