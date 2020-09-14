@@ -62,13 +62,6 @@ void GameManager::playGame(GameState* gameState) {
 
 			this->validateMove(gameState, currentPlayer);
 
-			/*
-			while (!this->validateMove(gameState, currentPlayer)) {
-				output->invalidInput();
-				output->requestInput();
-			}
-			*/
-
 			this->output->turnSuccess();
 			this->output->outputBoard(currentPlayer);
 
