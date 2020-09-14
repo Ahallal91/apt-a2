@@ -16,9 +16,11 @@ public:
 
 	// returns true if the tile is in any of the factories chosen.
 	bool isTileInFactories(int factoryNumber, char tile);
-
-	bool addToCenterFactory(char* tiles, int numTiles);
+		
 	std::vector<char>* takeTilesCenterFactory(char tile);
+
+	// checks if all factories are empty and returns true if they are;
+	bool areFactoriesEmpty();
 
 	// clears all factories then re-initialises them 
 	void resetFactories();
@@ -26,6 +28,9 @@ public:
 private:
 	// deletes / clears all factories
 	void clearFactories();
+
+	// reset one factory.
+	void resetSingleFactory(int factoryNumber);
 
 	// set of 5 factories of size 4
 	char** factories;

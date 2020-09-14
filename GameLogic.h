@@ -38,6 +38,9 @@ private:
 
 	// checks if tile being placed on line is already in wall
 	bool playerWallCheck(Player* player, char tile, int destPatternLine);
+	
+	// gets the horizontal location of the tile on the wall
+	int tileLocation(int destPatternLine, char tile);
 };
 
 #endif // GAME_LOGIC_H

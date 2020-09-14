@@ -44,6 +44,7 @@ bool Factories::addToFactory(int factoryNumber, char tile) {
 
 bool Factories::isTileInFactories(int factoryNumber, char tile) {
 	bool retValue = false;
+	// checks normal factories
 	if (factoryNumber > 0 && factoryNumber <= NUM_FACTORIES) {
 		for (int i = 0; i < FACTORY_SIZE; ++i) {
 			if (factories[factoryNumber - 1][i] == tile) {
@@ -51,6 +52,7 @@ bool Factories::isTileInFactories(int factoryNumber, char tile) {
 			}
 		}
 	} else if (factoryNumber == 0) {
+		// checks center factory
 		std::vector<char>::iterator iter = centerFactory->begin();
 		int tileAt = 0;
 		while (iter != centerFactory->end() && !retValue) {
@@ -71,33 +73,21 @@ char* Factories::takeTilesFactory(int factoryNumber, char tile) {
 		retValue[i] = '\0';
 	}
 
-	int count = 0;
 	// takes matching tiles from selected factory
 	if (factoryNumber >= 0 && factoryNumber < NUM_FACTORIES) {
+		int tilesAdded = 0;
 		for (int i = 0; i < FACTORY_SIZE; ++i) {
 			if (factories[factoryNumber][i] == tile) {
-				retValue[count] = factories[factoryNumber][i];
+				retValue[tilesAdded] = factories[factoryNumber][i];
 				factories[factoryNumber][i] = '\0';
-				count++;
-			}
-		}
-
-		// adds left over tiles to center factory
-		for (int i = 0; i < FACTORY_SIZE; ++i) {
-			if (factories[factoryNumber][i] != '\0') {
+				tilesAdded++;
+			} else if (factories[factoryNumber][i] != '\0'){
 				centerFactory->push_back(factories[factoryNumber][i]);
-				factories[factoryNumber][i] = '\0';
 			}
 		}
-	}
-	return retValue;
-}
+		// adds left over tiles to center factory and resets factory.
+		resetSingleFactory(factoryNumber);
 
-bool Factories::addToCenterFactory(char* tiles, int numTiles) {
-	bool retValue = false;
-	for (int i = 0; i < numTiles; ++i) {
-		centerFactory->push_back(tiles[i]);
-		retValue = true;
 	}
 	return retValue;
 }
@@ -146,4 +136,26 @@ void Factories::resetFactories() {
 	// clears center factory and adds first
 	centerFactory->clear();
 	centerFactory->push_back(FIRST);
+}
+
+void Factories::resetSingleFactory(int factoryNumber) {
+	for (int i = 0; i < FACTORY_SIZE; ++i) {
+		factories[factoryNumber][i] = '\0';
+	}
+}
+
+bool Factories::areFactoriesEmpty() {
+	bool retValue = false;
+	bool factoryEmpty = true;
+	for (int i = 0; i < NUM_FACTORIES && factoryEmpty; i++) {
+		for (int j = 0; j < FACTORY_SIZE && factoryEmpty; j++) {
+			if (factories[i][j] != '\0') {
+				factoryEmpty = false;
+			}
+		}
+	}
+	if (centerFactory->empty() && factoryEmpty) {
+		retValue = true;
+	}
+	return retValue;
 }

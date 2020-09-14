@@ -16,7 +16,6 @@ LinkedList::LinkedList() {
 
 LinkedList::~LinkedList() {
 	clear();
-	delete head;
 }
 
 unsigned int LinkedList::size() const {
@@ -30,14 +29,9 @@ unsigned int LinkedList::size() const {
 }
 
 void LinkedList::clear() {
-	Node* current = head;
-    for(unsigned int i = 0; i < size(); ++i) {
-        Node* temp = current->next;
-        delete current;
-        current = nullptr;
-        current = temp;
+    while(head != nullptr) {
+        removeFront();
     }
-    head = nullptr;
 }
 
 char LinkedList::get(const unsigned int index) const {
@@ -76,9 +70,8 @@ void LinkedList::addBack(char data) {
 
 void LinkedList::removeFront() {
 	if (head != nullptr) {
-        Node* tempNode = head;
-        head = head->next;
-        delete tempNode;
-        tempNode = nullptr;
+        Node* current = head->next;
+        delete head;
+        head = current;
     }
 }

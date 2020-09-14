@@ -36,7 +36,8 @@ void runMenu() {
 			exitMenu = true;
 			// TODO may not want to declare this inside here. Will move when required later.
 			GameManager* gameManager = new GameManager();
-			gameManager->playGame();
+			//gameManager->playGame();
+			gameManager->newGame();
 			delete gameManager;
 		} else if (choice == choice2) {
 

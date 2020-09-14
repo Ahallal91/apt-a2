@@ -17,39 +17,37 @@ public:
 	GameManager();
 	~GameManager();
 
-	Player* getPlayer1();
-	Player* getPlayer2();
-
-	GameState* getGameState();
-
 	void newGame();
 	void loadGame();
 	
 	// main game loop
 	void playGame();
 
+	// TODO the new play method (will be used once the old on is no longer needed when moved to GameState)
+	void playGame(GameState* gameState);
+
 	GameState* importGame(std::string fileName);
 	void exportGame(GameState* gameState, std::string fileName);
 
 private:
-
-	// The current Game State of the game
-	GameState* gameState;
-
-	// THESE WILL MOVE TO GAME STATE, HERE FOR NOW THOUGH
-
-	Player* player1;
-	Player* player2;
-
 	GameLogic* gameLogic;
 	Input* input;
 	Output* output;
-	Factories* factories;
-	TileBag* tileBag;
 
-	bool validateMove(Player* currentPlayer);
+	bool validateMove(GameState* gameState, Player* currentPlayer);
 
-	int currentRound;
+	// old fields (can delete when ready)
+	// THESE WILL MOVE TO GAME STATE, HERE FOR NOW THOUGH
+
+	//Player* player1;
+	//Player* player2;
+
+	//Factories* factories;
+	//TileBag* tileBag;
+
+	//bool validateMove(Player* currentPlayer);
+
+	//int currentRound;
 };
 
 #endif // GAME_MANAGER_H

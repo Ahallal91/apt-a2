@@ -153,24 +153,7 @@ void GameLogic::resetBoard(Player* player, TileBag* tileBag) {
 // returns true if all factories and center are empty, false otherwise
 // used for checking if a round is over
 bool GameLogic::roundOver(Factories* factories) {
-	bool roundOver = true;
-
-	// if center factory isn't empty, then the round isn't over
-	if (!factories->getCenterFactory()->empty()) {
-		roundOver = false;
-	}
-
-	// check all factory tiles. If there exists a tile, the round isn't over
-	for (int i = 0; i < NUM_FACTORIES && roundOver; i++) {
-		char* tiles = factories->getFactory(i);
-		for (int j = 0; j < FACTORY_SIZE && roundOver; j++) {
-			if (tiles[j] != '\0') {
-				roundOver = false;
-			}
-		}
-	}
-
-	return roundOver;
+	return factories->areFactoriesEmpty();
 }
 
 /*
@@ -179,11 +162,6 @@ bool GameLogic::roundOver(Factories* factories) {
  * PatternLines that match the tile colour or are empty.
  * Returns true if the tiles are placed in the players patternLine/brokenLine
  */
- /* Allows the player to select tiles from a specified factory and place those
-  * tiles into their patternLine/brokenLine. Players can only place tiles in
-  * PatternLines that match the tile colour or are empty.
-  * Returns true if the tiles are placed in the players patternLine/brokenLine
-  */
 bool GameLogic::takeTiles(Factories* factories, Player* player,
 						  int factoryNumber, char tile, int destPatternLine, TileBag* tileBag) {
 	bool retValue = false;
@@ -288,13 +266,33 @@ bool GameLogic::playerTileCheck(Player* player, char tile, int destPatternLine) 
 bool GameLogic::playerWallCheck(Player* player, char tile, int destPatternLine) {
 	bool retValue = true;
 	if (destPatternLine != BROKEN_LINE) {
-		for (int i = 0; i < WALL_DIM; ++i) {
-			if (player->getPlayerBoard()->getWallTile(i, destPatternLine) == tile) {
+		int tileLocation = this->tileLocation(destPatternLine, tile);
+		if (player->getPlayerBoard()->getWallTile(tileLocation, destPatternLine) == tile) {
 				retValue = false;
-			}
 		}
 	} else if (destPatternLine == BROKEN_LINE) {
 		retValue = true;
 	}
 	return retValue;
+}
+
+int GameLogic::tileLocation(int destPatternLine, char tile) {
+	int tileCount = 0;
+	if (tile == DARK_BLUE) {
+		tileCount = 0;
+	} else if (tile == YELLOW) {
+		tileCount = 1;
+	} else if (tile == RED) {
+		tileCount = 2;
+	} else if (tile == BLACK) {
+		tileCount = 3;
+	} else if (tile == LIGHT_BLUE) {
+		tileCount = 4;
+	}
+
+	tileCount = tileCount + destPatternLine;
+	if (tileCount > WALL_DIM) {
+		tileCount = 0 + destPatternLine;
+	}
+	return tileCount;
 }

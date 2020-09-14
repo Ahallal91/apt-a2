@@ -27,6 +27,10 @@ int GameState::getRound() {
 	return round;
 }
 
+void GameState::incrementRound() {
+    round++;
+}
+
 TileBag* GameState::getTileBag() {
 	return tileBag;
 }

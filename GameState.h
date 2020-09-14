@@ -14,6 +14,7 @@ public:
     ~GameState();
 
     int getRound();
+    void incrementRound();
 
     TileBag* getTileBag();
 
