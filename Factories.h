@@ -19,13 +19,13 @@ public:
 		
 	std::vector<char>* takeTilesCenterFactory(char tile);
 
+	// checks if all factories are empty and returns true if they are;
+	bool areFactoriesEmpty();
+
 	// clears all factories then re-initialises them 
 	void resetFactories();
 
 private:
-	// adds tiles to center factory, does not add empty tiles
-	bool addToCenterFactory(char* tiles, int numTiles);
-
 	// deletes / clears all factories
 	void clearFactories();
 

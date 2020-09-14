@@ -81,24 +81,13 @@ char* Factories::takeTilesFactory(int factoryNumber, char tile) {
 				retValue[tilesAdded] = factories[factoryNumber][i];
 				factories[factoryNumber][i] = '\0';
 				tilesAdded++;
+			} else if (factories[factoryNumber][i] != '\0'){
+				centerFactory->push_back(factories[factoryNumber][i]);
 			}
 		}
 		// adds left over tiles to center factory and resets factory.
-		if(addToCenterFactory(factories[factoryNumber], 
-		FACTORY_SIZE - tilesAdded)) {
-			resetSingleFactory(factoryNumber);
-		}
-	}
-	return retValue;
-}
+		resetSingleFactory(factoryNumber);
 
-bool Factories::addToCenterFactory(char* tiles, int numTiles) {
-	bool retValue = false;
-	for (int i = 0; i < numTiles; ++i) {
-		if(tiles[i] != '\0') {
-			centerFactory->push_back(tiles[i]);
-			retValue = true;
-		}
 	}
 	return retValue;
 }
@@ -153,4 +142,20 @@ void Factories::resetSingleFactory(int factoryNumber) {
 	for (int i = 0; i < FACTORY_SIZE; ++i) {
 		factories[factoryNumber][i] = '\0';
 	}
+}
+
+bool Factories::areFactoriesEmpty() {
+	bool retValue = false;
+	bool factoryEmpty = true;
+	for (int i = 0; i < NUM_FACTORIES; i++) {
+		for (int j = 0; j < FACTORY_SIZE; j++) {
+			if (factories[i][j] != '\0') {
+				factoryEmpty = false;
+			}
+		}
+	}
+	if (centerFactory->empty() && factoryEmpty) {
+		retValue = true;
+	}
+	return retValue;
 }
