@@ -34,7 +34,7 @@ private:
 	Input* input;
 	Output* output;
 
-	bool validateMove(GameState* gameState, Player* currentPlayer);
+	void validateMove(GameState* gameState, Player* currentPlayer);
 
 	// old fields (can delete when ready)
 	// THESE WILL MOVE TO GAME STATE, HERE FOR NOW THOUGH

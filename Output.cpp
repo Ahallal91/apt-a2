@@ -14,6 +14,10 @@ void Output::outputRound(int roundNum) {
 	std::cout << "== START ROUND " << roundNum << " ==" << std::endl;
 }
 
+void Output::saveSuccess(std::string fileName) {
+	std::cout << "Save filed successfully generated as: " << fileName << ".txt" << std::endl;
+}
+
 void Output::outputTurn(Player* player) {
 	std::cout << "TURN FOR PLAYER: " << player->getPlayerName() << std::endl;
 }

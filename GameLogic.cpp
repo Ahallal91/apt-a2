@@ -4,9 +4,6 @@
 #include "Player.h"
 #include "Types.h"
 
-// REMEMBER TO DELET AFTER; used for debugging
-#include <iostream>
-
 GameLogic::GameLogic() {}
 
 GameLogic::~GameLogic() {}
@@ -49,7 +46,8 @@ void GameLogic::calculatePoints(Player* player, int x, int y) {
 	PlayerBoard* playerBoard = player->getPlayerBoard();
 
 	int playerPoints = player->getPoints();
-	int pointsToAdd = 1; // 1 point for adding a new tile
+	// 1 point for adding a new tile
+	int pointsToAdd = 1; 
 	bool comboCol = false;
 	bool comboRow = false;
 
@@ -102,11 +100,6 @@ void GameLogic::calculatePoints(Player* player, int x, int y) {
 	if (comboCol && comboRow) {
 		pointsToAdd++;
 	}
-
-	/*
-	std::cout << player->getPlayerName() << " has been awared "
-		<< pointsToAdd << " for placing tile at (" << x << ", " << y << ")" << std::endl;
-	*/
 
 	// calculate final scoring
 	playerPoints += pointsToAdd;

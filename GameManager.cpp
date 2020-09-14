@@ -17,7 +17,6 @@ GameManager::GameManager() {
 	this->output = new Output();
 }
 
-
 GameManager::~GameManager() {
 	delete this->gameLogic;
 	delete this->input;
@@ -27,7 +26,7 @@ GameManager::~GameManager() {
 void GameManager::newGame() {
 	TileBag* tileBag = new TileBag();
 	Factories* factories = new Factories();
-	
+
 	// TODO might want to change the enterPlayerName and do looping here instead (Input class should be strictly for input - no game logic!)
 	Player* player1 = input->enterPlayerName(1);
 	Player* player2 = input->enterPlayerName(2);
@@ -42,7 +41,7 @@ void GameManager::newGame() {
 // TODO this will loop user input and calling importGame() until a valid game is found, then create a GameState from that
 // After a valid game file is detected, should call playGame(GameState* gameState) to play the game from the GameState
 void GameManager::loadGame() {
-	
+
 }
 
 // main game loop
@@ -60,12 +59,15 @@ void GameManager::playGame(GameState* gameState) {
 			this->output->outputTurn(currentPlayer);
 			this->output->outputFactory(gameState->getFactories());
 			this->output->outputBoard(currentPlayer);
-			this->output->requestInput();
 
+			this->validateMove(gameState, currentPlayer);
+
+			/*
 			while (!this->validateMove(gameState, currentPlayer)) {
 				output->invalidInput();
 				output->requestInput();
 			}
+			*/
 
 			this->output->turnSuccess();
 			this->output->outputBoard(currentPlayer);
@@ -95,11 +97,11 @@ void GameManager::playGame(GameState* gameState) {
 GameState* GameManager::importGame(std::string fileName) {
 	bool validGame = true;
 	GameState* gameState = nullptr;
-	
+
 	std::ifstream file(fileName);
-	
+
 	// check file exists
-	if(file.good()) {
+	if (file.good()) {
 
 		// prepare the bag
 		TileBag bag;
@@ -109,9 +111,9 @@ GameState* GameManager::importGame(std::string fileName) {
 		std::getline(file, tileString);
 
 		std::vector<char> tiles;
-		if(tileString.length() == 100) {
-			for(char tile : tileString) {
-				if(tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK) {
+		if (tileString.length() == 100) {
+			for (char tile : tileString) {
+				if (tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK) {
 					bag.addToBag(tile);
 				} else {
 					validGame = false;
@@ -135,7 +137,7 @@ GameState* GameManager::importGame(std::string fileName) {
 		//TODO
 
 		// Create a new GameState
-		
+
 		//testing
 		/*
 		std::cout << "TILES: " << std::endl;
@@ -147,11 +149,11 @@ GameState* GameManager::importGame(std::string fileName) {
 		std::cout << name2 << std::endl;
 		*/
 
-		
-		if(validGame) {
+
+		if (validGame) {
 			// need copy constructor
 			gameState = new GameState();
-		}		
+		}
 	}
 	return gameState;
 }
@@ -159,7 +161,7 @@ GameState* GameManager::importGame(std::string fileName) {
 // TODO might be outputting the updated tile bag when it should stick to initial order!!!
 // TODO currently doing from GameManager rather than GameState (for testing)
 void GameManager::exportGame(GameState* gameState, std::string fileName) {
-	std::ofstream file(fileName.c_str());
+	std::ofstream file(fileName + FILE_NAME_EXTENSION);
 
 	// Output Tile Bag
 	file << gameState->getInitialTileBag() << std::endl;
@@ -168,34 +170,42 @@ void GameManager::exportGame(GameState* gameState, std::string fileName) {
 	file << gameState->getPlayer1()->getPlayerName() << std::endl;
 	file << gameState->getPlayer2()->getPlayerName() << std::endl;
 
-	for(unsigned int i = 0; i < gameState->getTurns()->size(); i++) {
+	for (unsigned int i = 0; i < gameState->getTurns()->size(); i++) {
 		file << gameState->getTurns()->at(i) << std::endl;
 	}
 }
 
-bool GameManager::validateMove(GameState* gameState, Player* currentPlayer) {
+void GameManager::validateMove(GameState* gameState, Player* currentPlayer) {
 	std::vector<std::string> commands = {};
-	bool validMove = true;
+	bool moveSuccess = false;
 
-	commands = this->input->getGameplayInput();
+	while (!moveSuccess) {
+		this->output->requestInput();
+		commands = this->input->getGameplayInput();
+		std::cout << commands.size() << std::endl;
 
-	if (commands.empty()) {
-		validMove = false;
-	}
+		if (!commands.empty()) {
+			if (commands.at(0) == "turn") {
+				moveSuccess = this->gameLogic->takeTiles(gameState->getFactories(), currentPlayer, stoi(commands.at(1)), commands.at(2).at(0), stoi(commands.at(3)), gameState->getTileBag());
 
-	if (validMove) {
-		validMove = this->gameLogic->takeTiles(gameState->getFactories(), currentPlayer, stoi(commands.at(1)), commands.at(2).at(0), stoi(commands.at(3)), gameState->getTileBag());
-
-		// add the valid turn to turn history
-		std::string turn;
-		for(unsigned int i = 0; i < commands.size(); i++) {
-			turn.append(commands[i]);
-			if(i != commands.size() - 1) {
-				turn.append(" ");
+				// add the valid turn to turn history
+				std::string turn;
+				for (unsigned int i = 0; i < commands.size(); i++) {
+					turn.append(commands[i]);
+					if (i != commands.size() - 1) {
+						turn.append(" ");
+					}
+				}
+				gameState->addTurn(turn);
+			} else if (commands.at(0) == "save") {
+				this->exportGame(gameState, commands.at(1));
+				this->output->saveSuccess(commands.at(1));
 			}
 		}
-		gameState->addTurn(turn);
-	}
 
-	return validMove;
+		// display invalid input if they entered nothing or they entered invalid turn
+		if (commands.empty() || (commands.at(0) == "turn" && !moveSuccess)) {
+			this->output->invalidInput();
+		}
+	}
 }
