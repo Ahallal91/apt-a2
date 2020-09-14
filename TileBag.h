@@ -5,8 +5,19 @@
 
 class TileBag {
 public:
+	// default constructor
 	TileBag();
-	//TileBag(std::string fileName);
+
+	// reads tilebag string into tilebag
+	// TileBag(std::string fileName);
+
+	// copyConstructor
+	TileBag(TileBag& other);
+
+	// moveConstructor
+	TileBag(TileBag&& other);
+
+	// delete constructor
 	~TileBag();
 
 	// Adds tiles to back of the queue
@@ -17,7 +28,7 @@ public:
 
 	int size();
 
-	char at(int index);
+	LinkedList* getTileBag();
 
 private:
 	// Where the tiles are stored

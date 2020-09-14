@@ -8,10 +8,38 @@ Node::Node(char data, Node* next) {
 
 Node::Node(Node& other):
 	data(other.data),
-	next(other.next) {}
+	next(other.next) 
+{
+}
+
+Node::Node(Node&& other):
+	data(other.data),
+	next(other.next) 
+{
+}
 
 LinkedList::LinkedList() {
 	this->head = nullptr;
+}
+
+LinkedList::LinkedList(LinkedList& other) {
+	this->head = nullptr;
+    Node* current = other.head;
+    while(current != nullptr) {
+        Node* tempNode = new Node(current->data, head);  
+        current = tempNode; 
+        current = current->next;
+    }
+}
+
+LinkedList::LinkedList(LinkedList&& other) {
+	this->head = nullptr;
+    Node* current = other.head;
+    while(current != nullptr) {
+        Node* tempNode = new Node(current->data, head);  
+        current = tempNode; 
+        current = current->next;
+    }
 }
 
 LinkedList::~LinkedList() {

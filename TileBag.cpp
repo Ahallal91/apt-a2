@@ -11,13 +11,19 @@ TileBag::TileBag() {
 }
 
 // new constructor for file input. will use later when ready
-/*
-TileBag::TileBag(std::string fileName) {
-	this->tileBag = new LinkedList();
-	FileHandler reader;
-	reader.readTileBag(*this->tileBag, fileName);
+// TileBag::TileBag(std::string fileName) {
+// 	this->tileBag = new LinkedList();
+// 	FileHandler reader;
+// 	reader.readTileBag(*this->tileBag, fileName);
+// }
+
+TileBag::TileBag(TileBag& other) {
+	this->tileBag = new LinkedList(*other.tileBag);
 }
-*/
+
+TileBag::TileBag(TileBag&& other) {
+	this->tileBag = new LinkedList(*other.tileBag);
+}
 
 TileBag::~TileBag() {
 	delete tileBag;
@@ -38,6 +44,6 @@ int TileBag::size() {
 	return tileBag->size();
 }
 
-char TileBag::at(int index) {
-	return tileBag->get(index);
+LinkedList* TileBag::getTileBag() {
+	return tileBag;
 }

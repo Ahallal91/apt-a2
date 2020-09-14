@@ -15,7 +15,7 @@ GameState::GameState(int round, Player* player1, Player* player2, TileBag* tileB
 
     // Initialise initial tile bag order
     for(int i = 0; i < tileBag->size(); i++) {
-        initialTileBag += tileBag->at(i);
+        initialTileBag += tileBag->getTileBag()->get(i);
     }
     
 }

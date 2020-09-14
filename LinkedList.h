@@ -5,6 +5,7 @@ class Node {
 public:
     Node(char data, Node* next);
     Node(Node& other);
+    Node(Node&& other);
 
     char data;
     Node* next;
@@ -13,6 +14,8 @@ public:
 class LinkedList {
 public:
     LinkedList();
+    LinkedList(LinkedList& other);
+    LinkedList(LinkedList&& other);
     ~LinkedList();
 
     unsigned int size() const;
