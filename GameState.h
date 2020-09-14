@@ -16,6 +16,8 @@ public:
     int getRound();
     void incrementRound();
 
+    std::string getInitialTileBag();
+
     TileBag* getTileBag();
 
     Factories* getFactories();
@@ -23,12 +25,15 @@ public:
     // TODO could make these methods less redundant and use 1 that takes in player number
     Player* getPlayer1();
     Player* getPlayer2();
-
+    
     // Add a turn (the command inputted by the player) to the history of turns
     void addTurn(std::string turn);
 
+    std::vector<std::string>* getTurns();
+
 private:
     int round;
+    std::string initialTileBag;
 
     TileBag* tileBag;
     Factories* factories;

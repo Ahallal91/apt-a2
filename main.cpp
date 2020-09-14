@@ -14,7 +14,8 @@ int main(int argc, char** argv) {
 }
 
 void runMenu() {
-	bool exitMenu = false;
+	GameManager* gameManager = new GameManager();
+
 	const std::string choice1 = "1";
 	const std::string choice2 = "2";
 	const std::string choice3 = "3";
@@ -24,6 +25,7 @@ void runMenu() {
 	printLine("-------------------");
 	printLine("");
 
+	bool exitMenu = false;
 	while (!exitMenu) {
 		menuText();
 		std::string choice;
@@ -33,14 +35,11 @@ void runMenu() {
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		
 		if (choice == choice1) {
-			exitMenu = true;
-			// TODO may not want to declare this inside here. Will move when required later.
-			GameManager* gameManager = new GameManager();
-			//gameManager->playGame();
 			gameManager->newGame();
-			delete gameManager;
+			exitMenu = true;
 		} else if (choice == choice2) {
-
+			gameManager->loadGame();
+			exitMenu = true;
 		} else if (choice == choice3) {
 			credits();
 		} else if (std::cin.eof() || choice == choice4) {
@@ -49,6 +48,8 @@ void runMenu() {
 			printLine("Please select a valid option");
 		}
 	}
+
+	delete gameManager;
 }
 
 void menuText() {
