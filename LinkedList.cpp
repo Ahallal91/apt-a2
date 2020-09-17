@@ -1,43 +1,55 @@
 #include "LinkedList.h"
 #include <stdexcept>
 
-Node::Node(char data, Node* next) {
+Node::Node(char data, Node* prev, Node* next) {
 	this->data = data;
 	this->next = next;
+    this->prev = prev;
 }
 
 Node::Node(Node& other):
 	data(other.data),
-	next(other.next) 
+	next(other.next),
+    prev(other.prev) 
 {
 }
 
 Node::Node(Node&& other):
 	data(other.data),
-	next(other.next) 
+	next(other.next),
+    prev(other.prev) 
 {
 }
 
 LinkedList::LinkedList() {
 	this->head = nullptr;
+    this->tail = nullptr;
 }
 
 LinkedList::LinkedList(LinkedList& other) {
-	this->head = nullptr;
     Node* current = other.head;
     while(current != nullptr) {
-        Node* tempNode = new Node(current->data, head);  
-        current = tempNode; 
+        if(tail == nullptr) {
+            head = other.head;
+            tail = other.tail;
+        } else {
+            tail->next = current;
+        }
+        tail = current;
         current = current->next;
     }
 }
 
 LinkedList::LinkedList(LinkedList&& other) {
-	this->head = nullptr;
     Node* current = other.head;
     while(current != nullptr) {
-        Node* tempNode = new Node(current->data, head);  
-        current = tempNode; 
+        if(tail == nullptr) {
+            head = other.head;
+            tail = other.tail;
+        } else {
+            tail->next = current;
+        }
+        tail = current;
         current = current->next;
     }
 }
@@ -79,27 +91,51 @@ char LinkedList::get(const unsigned int index) const {
 }
 
 void LinkedList::addFront(char data) {
-	Node* tempNode = new Node(data, head);  
-    head = tempNode;
+    Node* toAdd = new Node(data, nullptr, head); 
+    if(head == nullptr) {
+        head = toAdd;
+        tail = toAdd;
+    } else {
+        head->prev = toAdd;
+    }
+    head = toAdd;
 }
 
 void LinkedList::addBack(char data) {
-	Node* tempNode = new Node(data, nullptr);
-    if(head == nullptr) {
-        head = tempNode;
-    } else {  
-        Node* current = head;
-        while(current->next != nullptr) {
-            current = current->next;
-        } 
-        current->next = tempNode;
+	Node* toAdd = new Node(data, tail, nullptr);
+    if(tail == nullptr) {
+        head = toAdd;
+        tail = toAdd;
+    } else {
+        tail->next = toAdd;
     }
+    tail = toAdd;
 }
 
 void LinkedList::removeFront() {
-	if (head != nullptr) {
-        Node* current = head->next;
-        delete head;
-        head = current;
+    if (tail != nullptr) {
+        Node* toDelete = head;
+        head = head->next;
+ 
+        if(head == nullptr) {
+            tail = nullptr;
+        } else {
+            head->prev = nullptr;
+        }
+        delete toDelete;
+    }
+}
+
+void LinkedList::removeBack() {
+    if (tail != nullptr) {
+        Node* toDelete = tail;
+        tail = tail->prev;
+ 
+        if(tail == nullptr) {
+            head = nullptr;
+        } else {
+            tail->next = nullptr;
+        }
+        delete toDelete;
     }
 }
