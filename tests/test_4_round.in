@@ -23,3 +23,14 @@ turn 0 B 5
 turn 5 B 1
 turn 0 U 1
 turn 0 R 4
+turn 5 B 5
+turn 0 R 4
+turn 2 U 3
+turn 1 B 3
+turn 4 U 3
+turn 3 U 1
+turn 0 Y 4
+turn 0 B 3
+turn 0 R 2
+turn 0 U 2
+turn 0 L 1
