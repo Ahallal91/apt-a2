@@ -278,16 +278,10 @@ bool GameLogic::playerWallCheck(Player* player, char tile, int destPatternLine) 
 
 int GameLogic::tileLocation(int destPatternLine, char tile) {
 	int tileCount = 0;
-	if (tile == DARK_BLUE) {
-		tileCount = 0;
-	} else if (tile == YELLOW) {
-		tileCount = 1;
-	} else if (tile == RED) {
-		tileCount = 2;
-	} else if (tile == BLACK) {
-		tileCount = 3;
-	} else if (tile == LIGHT_BLUE) {
-		tileCount = 4;
+	for (int i = 0; i < WALL_DIM; ++i) {
+		if(validTile[i] == tile) {
+			tileCount = i;
+		}
 	}
 
 	tileCount = tileCount + destPatternLine;

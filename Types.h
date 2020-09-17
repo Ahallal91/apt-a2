@@ -15,6 +15,8 @@
 #define LIGHT_BLUE     		'L'
 #define BLACK          		'U'
 
+const char validTile[] = {DARK_BLUE, YELLOW, RED, BLACK, LIGHT_BLUE};
+
 #define FIRST          		'F'
 #define EMPTY           	'.'
 
