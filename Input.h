@@ -29,13 +29,16 @@ public:
 
 private:
 	// Validates the turn command parameters
-	bool validateTurnCommand(std::vector<std::string> arguments);
+	bool validateTurnCommand(std::vector<std::string>& arguments);
 
 	// Validates the save command parameters
-	bool validateSaveCommand(std::vector<std::string> arguments);
+	bool validateSaveCommand(std::vector<std::string>& arguments);
 
 	// A helper function to split a string into a vector of strings deliminated by white space
 	std::vector<std::string> explode(std::string input);
+
+	void toUpper(std::string& str);
+	void toLower(std::string& str);
 
 };
 
