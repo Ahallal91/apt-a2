@@ -47,7 +47,7 @@ void GameManager::loadGame(std::string testFile) {
 
 	// If not in testing mode, ask a user to import a game
 	if(!testMode) {
-		while(gameState == nullptr) {
+		while(gameState == nullptr && !std::cin.eof()) {
 			std::string fileName;
 		
 			std::cout << "Enter the filename from which to load a game" << std::endl;
@@ -56,7 +56,7 @@ void GameManager::loadGame(std::string testFile) {
 
 			gameState = importGame(fileName);
 
-			if(gameState == nullptr) {
+			if(gameState == nullptr && !std::cin.eof()) {
 				std::cout << "This is not a valid azul game!" << std::endl;
 			}
 		}
