@@ -18,7 +18,7 @@ public:
 	~GameManager();
 
 	void newGame();
-	void loadGame();
+	void loadGame(std::string testingFile = "");
 
 	// main game loop
 	void playGame(GameState* gameState);
