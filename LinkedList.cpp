@@ -29,29 +29,21 @@ LinkedList::LinkedList() {
 LinkedList::LinkedList(LinkedList& other) {
     Node* current = other.head;
     while(current != nullptr) {
-        if(tail == nullptr) {
-            head = other.head;
-            tail = other.tail;
-        } else {
-            tail->next = current;
-        }
-        tail = current;
+        addBack(current->data);
         current = current->next;
     }
+    this->head  = other.head;
+    this->tail = other.tail;
 }
 
 LinkedList::LinkedList(LinkedList&& other) {
     Node* current = other.head;
     while(current != nullptr) {
-        if(tail == nullptr) {
-            head = other.head;
-            tail = other.tail;
-        } else {
-            tail->next = current;
-        }
-        tail = current;
+        addBack(current->data);
         current = current->next;
     }
+    this->head  = other.head;
+    this->tail = other.tail;
 }
 
 LinkedList::~LinkedList() {
