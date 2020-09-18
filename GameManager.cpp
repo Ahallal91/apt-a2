@@ -60,6 +60,9 @@ void GameManager::loadGame(std::string testFile) {
 				std::cout << "This is not a valid azul game!" << std::endl;
 			}
 		}
+
+		// If gameState is not null (AKA a valid game), resume the game
+		playGame(gameState);
 	
 	// If launched in testing mode
 	} else {
@@ -71,11 +74,6 @@ void GameManager::loadGame(std::string testFile) {
 		} else {
 			std::cout << "Testing mode failed - This is not a valid azul game!" << std::endl;
 		}
-	}
-
-	// If not in testing mode and a valid save was entered, resume the game
-	if(!testMode) {
-		playGame(gameState);
 	}
 	
 	delete gameState;
