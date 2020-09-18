@@ -144,7 +144,6 @@ GameState* GameManager::importGame(std::string fileName) {
 		std::string tileString;
 		std::getline(file, tileString);
 
-		std::vector<char> tiles;
 		if(tileString.length() == 100) {
 			for(char tile : tileString) {
 				if(tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK) {
@@ -179,8 +178,6 @@ GameState* GameManager::importGame(std::string fileName) {
 	return gameState;
 }
 
-// TODO might be outputting the updated tile bag when it should stick to initial order!!!
-// TODO currently doing from GameManager rather than GameState (for testing)
 void GameManager::exportGame(GameState* gameState, std::string fileName) {
 	std::ofstream file(fileName.c_str());
 
