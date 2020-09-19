@@ -196,7 +196,6 @@ void GameManager::validateMove(GameState* gameState, Player* currentPlayer) {
 			}
 		}
 
-
 		// display invalid input if they entered nothing or they entered invalid turn
 		// (lazy operator avoids exception)
 		if (commands.empty() || (commands[0] == "turn" && !moveSuccess)) {
