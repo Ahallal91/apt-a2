@@ -47,7 +47,7 @@ void GameLogic::calculatePoints(Player* player, int x, int y) {
 
 	int playerPoints = player->getPoints();
 	// 1 point for adding a new tile
-	int pointsToAdd = 1; 
+	int pointsToAdd = 1;
 	bool comboCol = false;
 	bool comboRow = false;
 
@@ -186,7 +186,7 @@ bool GameLogic::addTilesFromCenterFact(Factories* factories, Player* player,
 	bool retValue = false;
 	std::vector<char>* tempTiles = factories->takeTilesCenterFactory(tile);
 	for (unsigned int i = 0; i < tempTiles->size(); ++i) {
-		if(destPatternLine != BROKEN_LINE) {
+		if (destPatternLine != BROKEN_LINE) {
 			if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->addTile(tempTiles->at(i)))) {
 				if (!(player->getPlayerBoard()->addBrokenTile(tempTiles->at(i)))) {
 					tileBag->addToBag(tempTiles->at(i));
@@ -217,7 +217,7 @@ bool GameLogic::addTilesFromFact(Factories* factories, Player* player,
 	for (unsigned int i = 0; i < FACTORY_SIZE; ++i) {
 		if (destPatternLine != BROKEN_LINE) {
 			if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
-			  addTile(tempTiles[i]))) {
+				  addTile(tempTiles[i]))) {
 				if (!(player->getPlayerBoard()->addBrokenTile(tempTiles[i]))) {
 					tileBag->addToBag(tempTiles[i]);
 				}
@@ -272,7 +272,7 @@ bool GameLogic::playerWallCheck(Player* player, char tile, int destPatternLine) 
 int GameLogic::tileLocation(int destPatternLine, char tile) {
 	int tileCount = 0;
 	for (int i = 0; i < WALL_DIM; ++i) {
-		if(validTile[i] == tile) {
+		if (validTile[i] == tile) {
 			tileCount = i;
 		}
 	}

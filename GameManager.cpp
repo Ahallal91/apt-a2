@@ -109,9 +109,13 @@ void GameManager::playGame(GameState* gameState) {
 		this->gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
 		this->gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
 
+		// OUTPUT round over here
 		// output score
 		this->output->outputScore(gameState->getPlayer1());
 		this->output->outputScore(gameState->getPlayer2());
+		std::cout << std::endl;
+		this->output->outputBoard(gameState->getPlayer1());
+		this->output->outputBoard(gameState->getPlayer2());
 	}
 
 	// game finished
