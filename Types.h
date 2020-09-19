@@ -45,6 +45,10 @@ constexpr int brokenLinePoints[] = {0, -1, -2, -4, -6, -8, -11, -14};
 #define NUM_FACTORIES 		5
 
 // User input Commands config
+#define TURN_COMMAND 		"turn"
+#define SAVE_COMMAND		"save"
+#define EOF_COMMAND			"quit"
+
 #define TURN_ARGUMENTS 		4
 #define SAVE_ARGUMENTS		2
 

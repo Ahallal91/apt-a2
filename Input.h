@@ -37,7 +37,10 @@ private:
 	// A helper function to split a string into a vector of strings deliminated by white space
 	std::vector<std::string> explode(std::string input);
 
+	// Converts a String to Uppercase
 	void toUpper(std::string& str);
+	
+	// Convers a String to Lowercase
 	void toLower(std::string& str);
 
 };

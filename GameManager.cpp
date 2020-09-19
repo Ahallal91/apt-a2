@@ -33,7 +33,7 @@ void GameManager::newGame() {
 	Player* player2 = input->enterPlayerName(2);
 
 	// Create a default GameState
-	GameState* gameState = new GameState(1, player1, player2, tileBag, factories);
+	GameState* gameState = new GameState(1, player1, player2, tileBag, factories, player1);
 	playGame(gameState);
 
 	delete gameState;
@@ -41,14 +41,48 @@ void GameManager::newGame() {
 
 // TODO this will loop user input and calling importGame() until a valid game is found, then create a GameState from that
 // After a valid game file is detected, should call playGame(GameState* gameState) to play the game from the GameState
-void GameManager::loadGame() {
+void GameManager::loadGame(std::string testFile) {
+	GameState* gameState = nullptr;
+	bool testMode = !testFile.empty();
+
+	// If not in testing mode, ask a user to import a game
+	if(!testMode) {
+		while(gameState == nullptr && !std::cin.eof()) {
+			std::string fileName;
+		
+			std::cout << "Enter the filename from which to load a game" << std::endl;
+			output->requestInput();
+			std::getline(std::cin, fileName);
+
+			gameState = importGame(fileName);
+
+			if(gameState == nullptr && !std::cin.eof()) {
+				std::cout << "This is not a valid azul game!" << std::endl;
+			}
+		}
+
+		// If gameState is not null (AKA a valid game), resume the game
+		playGame(gameState);
 	
+	// If launched in testing mode
+	} else {
+		gameState = importGame(testFile);
+
+		if(gameState != nullptr) {
+			// output the state of the game (testing mode)
+			// will need a new method in Output for this
+		} else {
+			std::cout << "Testing mode failed - This is not a valid azul game!" << std::endl;
+		}
+	}
+	
+	delete gameState;
 }
 
 // main game loop
 // remember to end the loop if player enter ends of line character
 void GameManager::playGame(GameState* gameState) {
-	Player* currentPlayer = gameState->getPlayer1();
+	//Player* currentPlayer = gameState->getPlayer1();
 
 	for (; gameState->getRound() <= NUM_ROUNDS; gameState->incrementRound()) {
 		// start of round
@@ -57,20 +91,21 @@ void GameManager::playGame(GameState* gameState) {
 
 		while (!this->gameLogic->roundOver(gameState->getFactories())) {
 			// this could all be in one method in output, then these methods could become private
-			this->output->outputTurn(currentPlayer);
+			this->output->outputTurn(gameState->getCurrentPlayer());
 			this->output->outputFactory(gameState->getFactories());
-			this->output->outputBoard(currentPlayer);
+			this->output->outputBoard(gameState->getCurrentPlayer());
 			this->output->requestInput();
 
-			while (!this->validateMove(gameState, currentPlayer)) {
+			while (!this->validateMove(gameState, gameState->getCurrentPlayer())) {
 				output->invalidInput();
 				output->requestInput();
 			}
 
 			this->output->turnSuccess();
-			this->output->outputBoard(currentPlayer);
+			this->output->outputBoard(gameState->getCurrentPlayer());
 
-			currentPlayer = currentPlayer == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1();
+			gameState->setCurrentPlayer(gameState->getCurrentPlayer() == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1());
+			//currentPlayer = currentPlayer == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1();
 		}
 		// round has ended
 
@@ -101,14 +136,14 @@ GameState* GameManager::importGame(std::string fileName) {
 	// check file exists
 	if(file.good()) {
 
-		// prepare the bag
+		// prepare the bag and factories
 		TileBag bag;
+		Factories factories;
 
-		// Import the Tile Bag
+		// Import the Tile Bag and validate it
 		std::string tileString;
 		std::getline(file, tileString);
 
-		std::vector<char> tiles;
 		if(tileString.length() == 100) {
 			for(char tile : tileString) {
 				if(tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK) {
@@ -121,7 +156,7 @@ GameState* GameManager::importGame(std::string fileName) {
 			validGame = false;
 		}
 
-		// Import Players
+		// Import Players (might want to utilise the enterPlayerName() method in input instead?)
 		std::string name1;
 		std::string name2;
 
@@ -131,23 +166,10 @@ GameState* GameManager::importGame(std::string fileName) {
 		Player player1(name1);
 		Player player2(name2);
 
-		// Import Moves
-		//TODO
+		// PLAY GAME HERE
+
 
 		// Create a new GameState
-		
-		//testing
-		/*
-		std::cout << "TILES: " << std::endl;
-		for(int i = 0; i < bag.size(); i++) {
-			std::cout << bag.at(i) << std::endl;
-		}
-		std::cout << "NAMES: " << std::endl;
-		std::cout << name1 << std::endl;
-		std::cout << name2 << std::endl;
-		*/
-
-		
 		if(validGame) {
 			// need copy constructor
 			gameState = new GameState();
@@ -156,8 +178,6 @@ GameState* GameManager::importGame(std::string fileName) {
 	return gameState;
 }
 
-// TODO might be outputting the updated tile bag when it should stick to initial order!!!
-// TODO currently doing from GameManager rather than GameState (for testing)
 void GameManager::exportGame(GameState* gameState, std::string fileName) {
 	std::ofstream file(fileName.c_str());
 

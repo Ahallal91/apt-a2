@@ -80,14 +80,14 @@ std::vector<std::string> Input::getGameplayInput() {
 	bool valid = false;
 
 	// Turn command
-	if (command == "turn") {
-		// Validate turn command | FORMAT: turn [0-5] [RYDBU] [1-5]
+	if (command == TURN_COMMAND) {
+		// Validate turn command | FORMAT: turn [0-5] [RYDBU] [1-6]
 		if (arguments.size() == TURN_ARGUMENTS) {
 			valid = validateTurnCommand(arguments);
 		}
 
 		// Save command
-	} else if (command == "save") {
+	} else if (command == SAVE_COMMAND) {
 		// Validate save command (FORMAT: save [filename])
 		if (arguments.size() == SAVE_ARGUMENTS) {
 			valid = validateSaveCommand(arguments);
@@ -101,7 +101,7 @@ std::vector<std::string> Input::getGameplayInput() {
 
 	// If EOF was entered, set the return argument to "quit"
 	if (eof) {
-		arguments = explode("quit");
+		arguments = explode(EOF_COMMAND);
 	}
 
 	return arguments;
@@ -159,11 +159,10 @@ bool Input::validateSaveCommand(std::vector<std::string>& arguments) {
 
 std::vector<std::string> Input::explode(std::string str) {
 
-	// Vector of the command keywords seperated by white space
+	// Vector of the command arguments seperated by white space
 	std::vector<std::string> arguments;
 
 	std::string word = "";
-
 	for (char c : str) {
 		if (c == ' ') {
 			if (word.find_first_not_of(' ') != std::string::npos) {
