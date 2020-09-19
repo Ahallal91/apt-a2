@@ -9,46 +9,46 @@
 
 class GameState {
 public:
-    GameState();
+	GameState();
 
-    // TODO some of these constructor fields can be moved to setters to make it smaller
-    GameState(int round, Player* player1, Player* player2, TileBag* tileBag, Factories* factories, Player* currentPlayer);
-    ~GameState();
+	// TODO some of these constructor fields can be moved to setters to make it smaller
+	GameState(int round, Player* player1, Player* player2, TileBag* tileBag, Factories* factories, Player* currentPlayer);
+	~GameState();
 
-    int getRound();
-    void incrementRound();
+	int getRound();
+	void incrementRound();
 
-    std::string getInitialTileBag();
+	std::string getInitialTileBag();
 
-    TileBag* getTileBag();
+	TileBag* getTileBag();
 
-    Factories* getFactories();
+	Factories* getFactories();
 
-    // TODO could make these methods less redundant and use 1 that takes in player number
-    Player* getPlayer1();
-    Player* getPlayer2();
+	// TODO could make these methods less redundant and use 1 that takes in player number
+	Player* getPlayer1();
+	Player* getPlayer2();
 
-    Player* getCurrentPlayer();
-    void setCurrentPlayer(Player* player);
-    
-    // Add a turn (the command inputted by the player) to the history of turns
-    void addTurn(std::string turn);
+	Player* getCurrentPlayer();
+	void setCurrentPlayer(Player* player);
 
-    std::vector<std::string>* getTurns();
+	// Add a turn (the command inputted by the player) to the history of turns
+	void addTurn(std::string turn);
+
+	std::vector<std::string>* getTurns();
 
 private:
-    int round;
-    std::string initialTileBag;
+	int round;
+	std::string initialTileBag;
 
-    TileBag* tileBag;
-    Factories* factories;
+	TileBag* tileBag;
+	Factories* factories;
 
-    Player* player1;
-    Player* player2;
+	Player* player1;
+	Player* player2;
 
-    Player* currentPlayer;
+	Player* currentPlayer;
 
-    std::vector<std::string>* turns;
+	std::vector<std::string>* turns;
 
 };
 

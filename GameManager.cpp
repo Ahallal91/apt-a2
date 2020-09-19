@@ -17,7 +17,6 @@ GameManager::GameManager() {
 	this->output = new Output();
 }
 
-
 GameManager::~GameManager() {
 	delete this->gameLogic;
 	delete this->input;
@@ -27,7 +26,7 @@ GameManager::~GameManager() {
 void GameManager::newGame() {
 	TileBag* tileBag = new TileBag();
 	Factories* factories = new Factories();
-	
+
 	// TODO might want to change the enterPlayerName and do looping here instead (Input class should be strictly for input - no game logic!)
 	Player* player1 = input->enterPlayerName(1);
 	Player* player2 = input->enterPlayerName(2);
@@ -46,43 +45,41 @@ void GameManager::loadGame(std::string testFile) {
 	bool testMode = !testFile.empty();
 
 	// If not in testing mode, ask a user to import a game
-	if(!testMode) {
-		while(gameState == nullptr && !std::cin.eof()) {
+	if (!testMode) {
+		while (gameState == nullptr && !std::cin.eof()) {
 			std::string fileName;
-		
+
 			std::cout << "Enter the filename from which to load a game" << std::endl;
 			output->requestInput();
 			std::getline(std::cin, fileName);
 
 			gameState = importGame(fileName);
 
-			if(gameState == nullptr && !std::cin.eof()) {
+			if (gameState == nullptr && !std::cin.eof()) {
 				std::cout << "This is not a valid azul game!" << std::endl;
 			}
 		}
 
 		// If gameState is not null (AKA a valid game), resume the game
 		playGame(gameState);
-	
-	// If launched in testing mode
+
+		// If launched in testing mode
 	} else {
 		gameState = importGame(testFile);
 
-		if(gameState != nullptr) {
+		if (gameState != nullptr) {
 			// output the state of the game (testing mode)
 			// will need a new method in Output for this
 		} else {
 			std::cout << "Testing mode failed - This is not a valid azul game!" << std::endl;
 		}
 	}
-	
+
 	delete gameState;
 }
 
-// main game loop
 // remember to end the loop if player enter ends of line character
 void GameManager::playGame(GameState* gameState) {
-	//Player* currentPlayer = gameState->getPlayer1();
 
 	for (; gameState->getRound() <= NUM_ROUNDS; gameState->incrementRound()) {
 		// start of round
@@ -94,18 +91,13 @@ void GameManager::playGame(GameState* gameState) {
 			this->output->outputTurn(gameState->getCurrentPlayer());
 			this->output->outputFactory(gameState->getFactories());
 			this->output->outputBoard(gameState->getCurrentPlayer());
-			this->output->requestInput();
 
-			while (!this->validateMove(gameState, gameState->getCurrentPlayer())) {
-				output->invalidInput();
-				output->requestInput();
-			}
+			this->validateMove(gameState);
 
 			this->output->turnSuccess();
 			this->output->outputBoard(gameState->getCurrentPlayer());
 
 			gameState->setCurrentPlayer(gameState->getCurrentPlayer() == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1());
-			//currentPlayer = currentPlayer == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1();
 		}
 		// round has ended
 
@@ -130,23 +122,23 @@ void GameManager::playGame(GameState* gameState) {
 GameState* GameManager::importGame(std::string fileName) {
 	bool validGame = true;
 	GameState* gameState = nullptr;
-	
+
 	std::ifstream file(fileName);
-	
+
 	// check file exists
-	if(file.good()) {
+	if (file.good()) {
 
-		// prepare the bag and factories
+		// prepare the bag
 		TileBag bag;
-		Factories factories;
 
-		// Import the Tile Bag and validate it
+		// Import the Tile Bag
 		std::string tileString;
 		std::getline(file, tileString);
 
-		if(tileString.length() == 100) {
-			for(char tile : tileString) {
-				if(tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK) {
+		std::vector<char> tiles;
+		if (tileString.length() == 100) {
+			for (char tile : tileString) {
+				if (tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK) {
 					bag.addToBag(tile);
 				} else {
 					validGame = false;
@@ -156,7 +148,7 @@ GameState* GameManager::importGame(std::string fileName) {
 			validGame = false;
 		}
 
-		// Import Players (might want to utilise the enterPlayerName() method in input instead?)
+		// Import Players
 		std::string name1;
 		std::string name2;
 
@@ -166,20 +158,16 @@ GameState* GameManager::importGame(std::string fileName) {
 		Player player1(name1);
 		Player player2(name2);
 
-		// PLAY GAME HERE
-
-
-		// Create a new GameState
-		if(validGame) {
+		if (validGame) {
 			// need copy constructor
 			gameState = new GameState();
-		}		
+		}
 	}
 	return gameState;
 }
 
 void GameManager::exportGame(GameState* gameState, std::string fileName) {
-	std::ofstream file(fileName.c_str());
+	std::ofstream file(fileName + FILE_NAME_EXTENSION);
 
 	// Output Tile Bag
 	file << gameState->getInitialTileBag() << std::endl;
@@ -188,34 +176,43 @@ void GameManager::exportGame(GameState* gameState, std::string fileName) {
 	file << gameState->getPlayer1()->getPlayerName() << std::endl;
 	file << gameState->getPlayer2()->getPlayerName() << std::endl;
 
-	for(unsigned int i = 0; i < gameState->getTurns()->size(); i++) {
+	for (unsigned int i = 0; i < gameState->getTurns()->size(); i++) {
 		file << gameState->getTurns()->at(i) << std::endl;
 	}
 }
 
-bool GameManager::validateMove(GameState* gameState, Player* currentPlayer) {
+void GameManager::validateMove(GameState* gameState) {
 	std::vector<std::string> commands = {};
-	bool validMove = true;
+	bool moveSuccess = false;
 
-	commands = this->input->getGameplayInput();
+	while (!moveSuccess) {
+		this->output->requestInput();
+		commands = this->input->getGameplayInput();
+		std::cout << commands.size() << std::endl;
 
-	if (commands.empty()) {
-		validMove = false;
-	}
+		if (!commands.empty()) {
+			if (commands[0] == "turn") {
+				moveSuccess = this->gameLogic->takeTiles(gameState->getFactories(), gameState->getCurrentPlayer(), stoi(commands[1]), commands[2].at(0), stoi(commands[3]), gameState->getTileBag());
 
-	if (validMove) {
-		validMove = this->gameLogic->takeTiles(gameState->getFactories(), currentPlayer, stoi(commands.at(1)), commands.at(2).at(0), stoi(commands.at(3)), gameState->getTileBag());
-
-		// add the valid turn to turn history
-		std::string turn;
-		for(unsigned int i = 0; i < commands.size(); i++) {
-			turn.append(commands[i]);
-			if(i != commands.size() - 1) {
-				turn.append(" ");
+				// add the valid turn to turn history
+				std::string turn;
+				for (unsigned int i = 0; i < commands.size(); i++) {
+					turn.append(commands[i]);
+					if (i != commands.size() - 1) {
+						turn.append(" ");
+					}
+				}
+				gameState->addTurn(turn);
+			} else if (commands[0] == "save") {
+				this->exportGame(gameState, commands.at(1));
+				this->output->saveSuccess(commands.at(1));
 			}
 		}
-		gameState->addTurn(turn);
-	}
 
-	return validMove;
+		// display invalid input if they entered nothing or they entered invalid turn
+		// (lazy operator avoids exception)
+		if (commands.empty() || (commands[0] == "turn" && !moveSuccess)) {
+			this->output->invalidInput();
+		}
+	}
 }
