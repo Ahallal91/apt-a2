@@ -8,13 +8,29 @@ void runMenu();
 void credits();
 void menuText();
 
+GameManager* gameManager;
+
 int main(int argc, char** argv) {
-	runMenu();
+	gameManager = new GameManager();
+	
+	if(argc >= 3 && std::string(argv[1]) == "-t") {
+		gameManager->loadGame(std::string(argv[2]));
+	} else {
+		if(argc > 1) {
+			std::cout << "Unknown command line arguments specified, starting game normally..." << std::endl;
+		}
+		
+		// Run the main menu
+		runMenu();
+	}
+	
+	delete gameManager;
+	
 	return EXIT_SUCCESS;
 }
 
 void runMenu() {
-	GameManager* gameManager = new GameManager();
+	//GameManager* gameManager = new GameManager();
 
 	const std::string choice1 = "1";
 	const std::string choice2 = "2";

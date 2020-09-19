@@ -4,12 +4,13 @@ GameState::GameState() {
 
 }
 
-GameState::GameState(int round, Player* player1, Player* player2, TileBag* tileBag, Factories* factories) :
+GameState::GameState(int round, Player* player1, Player* player2, TileBag* tileBag, Factories* factories, Player* currentPlayer) :
     round(round),
     tileBag(tileBag),
     factories(factories),
     player1(player1),
-    player2(player2)
+    player2(player2),
+    currentPlayer(currentPlayer)
 {
     turns = new std::vector<std::string>;
 
@@ -56,6 +57,14 @@ Player* GameState::getPlayer1() {
 
 Player* GameState::getPlayer2() {
     return player2;
+}
+
+Player* GameState::getCurrentPlayer() {
+    return currentPlayer;
+}
+
+void GameState::setCurrentPlayer(Player* player) {
+    currentPlayer = player;
 }
 
 void GameState::addTurn(std::string turn) {
