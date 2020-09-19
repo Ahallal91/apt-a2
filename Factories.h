@@ -16,7 +16,9 @@ public:
 
 	// returns true if the tile is in any of the factories chosen.
 	bool isTileInFactories(int factoryNumber, char tile);
-		
+
+	// removes tiles from center factory and returns a vector of tiles that match
+	// if first tile is in center factory is it always removed.	
 	std::vector<char>* takeTilesCenterFactory(char tile);
 
 	// checks if all factories are empty and returns true if they are;
@@ -34,6 +36,8 @@ private:
 
 	// set of 5 factories of size 4
 	char** factories;
+	
+	// vector for center factory
 	std::vector<char>* centerFactory;
 
 };

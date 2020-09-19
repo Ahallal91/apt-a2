@@ -128,9 +128,7 @@ void Factories::clearFactories() {
 void Factories::resetFactories() {
 	// re-initialises factories
 	for (int i = 0; i < NUM_FACTORIES; ++i) {
-		for (int j = 0; j < FACTORY_SIZE; ++j) {
-			factories[i][j] = '\0';
-		}
+		resetSingleFactory(i);
 	}
 
 	// clears center factory and adds first
