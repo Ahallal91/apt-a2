@@ -19,7 +19,7 @@ public:
 
 	// Starts a new game by asking for player names and creating a default GameState
 	void newGame();
-	
+
 	// Loads a game from a save file by asking for save file input and resuming the game.
 	// If called with a file name as its parameter, will instead show the output of the
 	// current game state which is used during testing mode
@@ -32,7 +32,7 @@ public:
 	// Imports a game from a save file
 	// Returns a GameState of the game if successfull, otherwise returns nullptr
 	GameState* importGame(std::string fileName);
-	
+
 	// Exports a game to a save file
 	void exportGame(GameState* gameState, std::string fileName);
 
@@ -41,7 +41,7 @@ private:
 	Input* input;
 	Output* output;
 
-	bool validateMove(GameState* gameState, Player* currentPlayer);
+	void validateMove(GameState* gameState);
 };
 
 #endif // GAME_MANAGER_H
