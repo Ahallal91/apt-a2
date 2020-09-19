@@ -52,10 +52,8 @@ void runMenu() {
 		
 		if (choice == choice1) {
 			gameManager->newGame();
-			exitMenu = true;
 		} else if (choice == choice2) {
 			gameManager->loadGame();
-			exitMenu = true;
 		} else if (choice == choice3) {
 			credits();
 		} else if (std::cin.eof() || choice == choice4) {
