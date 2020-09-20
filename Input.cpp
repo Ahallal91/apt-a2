@@ -41,7 +41,7 @@ Player* Input::enterPlayerName(int playerNum) {
 	return new Player(name);
 }
 
-std::vector<std::string> Input::getGameplayInput() {
+std::vector<std::string> Input::getGameplayInput(std::istream& stream) {
 
 
 	// A string containing the full line a user inputted
@@ -53,12 +53,12 @@ std::vector<std::string> Input::getGameplayInput() {
 	// Gets the input of the user one char at a time while checking for EOF
 	bool entered = false;
 	while (!entered) {
-		if (std::cin.eof()) {
+		if (stream.eof()) {
 			entered = true;
 			eof = true;
 		}
 
-		char c = std::cin.get();
+		char c = stream.get();
 		if (c != '\n') {
 			input = input + c;
 		} else {
@@ -76,7 +76,6 @@ std::vector<std::string> Input::getGameplayInput() {
 		
 		command = arguments[0];
 	}
-
 
 	// Checks whether an input is valid
 	bool valid = false;

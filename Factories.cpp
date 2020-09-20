@@ -154,6 +154,10 @@ bool Factories::areFactoriesEmpty() {
 	}
 	if (centerFactory->empty() && factoryEmpty) {
 		retValue = true;
+	
+	// set factories empty if just the first tile is in the center (used for new games)
+	} else if(centerFactory->size() == 1 && centerFactory->at(0) == 'F' && factoryEmpty) {
+		retValue = true;
 	}
 	return retValue;
 }

@@ -10,6 +10,8 @@
 #include "GameState.h"
 #include <fstream>
 
+#define LOG(x) std::cout << x << std::endl
+
 // TODO overload this constructor to take in a file; that is a save file.
 GameManager::GameManager() {
 	this->gameLogic = new GameLogic();
@@ -79,12 +81,20 @@ void GameManager::loadGame(std::string testFile) {
 }
 
 // remember to end the loop if player enter ends of line character
+
+// TODO check for winning BEFORE doing a move
 void GameManager::playGame(GameState* gameState) {
+	LOG("in");
+	LOG(gameState->getPlayer1()->getPlayerName());
 
 	for (; gameState->getRound() <= NUM_ROUNDS; gameState->incrementRound()) {
 		// start of round
-		this->gameLogic->initFactoryTiles(gameState->getFactories(), gameState->getTileBag());
-		this->output->outputRound(gameState->getRound());
+		// ONLY CHECK THIS AT NEW ROUND (dont do if loading a game mid round)
+		if(gameLogic->roundOver(gameState->getFactories())) {
+			LOG("THE ROUND IS OVER!!!");
+			this->gameLogic->initFactoryTiles(gameState->getFactories(), gameState->getTileBag());
+			this->output->outputRound(gameState->getRound());
+		}
 
 		while (!this->gameLogic->roundOver(gameState->getFactories())) {
 			// this could all be in one method in output, then these methods could become private
@@ -132,17 +142,19 @@ GameState* GameManager::importGame(std::string fileName) {
 	// check file exists
 	if (file.good()) {
 
-		// prepare the bag
-		TileBag bag;
+		// prepare the bag and factories
+		// using default bag
+		TileBag* bag = new TileBag();
+		Factories* factories = new Factories();
 
 		// Import the Tile Bag
 		std::string tileString;
 		std::getline(file, tileString);
 
-		std::vector<char> tiles;
+		/*
 		if (tileString.length() == 100) {
 			for (char tile : tileString) {
-				if (tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK) {
+				if (tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK) { // MAKE isValidTile(char tile) method!!!
 					bag.addToBag(tile);
 				} else {
 					validGame = false;
@@ -151,6 +163,7 @@ GameState* GameManager::importGame(std::string fileName) {
 		} else {
 			validGame = false;
 		}
+		*/
 
 		// Import Players
 		std::string name1;
@@ -159,14 +172,79 @@ GameState* GameManager::importGame(std::string fileName) {
 		std::getline(file, name1);
 		std::getline(file, name2);
 
-		Player player1(name1);
-		Player player2(name2);
+		Player* player1 = new Player(name1);
+		Player* player2 = new Player(name2);
+		
+		//GS
+		gameState = new GameState(1, player1, player2, bag, factories, player1);
 
-		if (validGame) {
-			// need copy constructor
-			gameState = new GameState();
+		bool eof = false;
+		
+		// game loop
+		while (!eof && validGame) {
+			// start of round
+			this->gameLogic->initFactoryTiles(factories, bag);
+			
+			while (!this->gameLogic->roundOver(factories) && validGame && !eof) {
+				//this->validateMove(gameState);
+
+				// DO STUFF HERE
+				std::vector<std::string> commands = input->getGameplayInput(file);
+				
+				// check that command is valid (lazy operator)
+				bool validMove = false;
+				if(!commands.empty() && commands[0] == "turn") {
+					validMove = gameLogic->takeTiles(factories, gameState->getCurrentPlayer(), stoi(commands[1]), commands[2].at(0), stoi(commands[3]), bag);
+
+					if(!validMove) {
+						validGame = false;
+					}
+				} else if(!commands.empty() && commands[0] == "quit") {
+					eof = true;
+				} else {
+					validGame = false;
+				}
+
+				// might do a check
+				if(!eof) gameState->setCurrentPlayer(gameState->getCurrentPlayer() == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1());
+				LOG("changing player " + gameState->getCurrentPlayer()->getPlayerName());
+			}
+			
+			// BUGGED! should only do this stuff at end of round!!!
+			if(validGame && gameLogic->roundOver(factories)) {
+				// round has ended
+
+				// calculate player points and move to wall
+				this->gameLogic->addToWall(gameState->getPlayer1());
+				this->gameLogic->addToWall(gameState->getPlayer2());
+
+				// reset board and add back to tile bag
+				this->gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
+				this->gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
+
+				if(gameState->getRound() < NUM_ROUNDS) {
+					gameState->incrementRound();
+				} else {
+					eof = true;
+				}
+			}
 		}
-	}
+
+		// END JOSH
+
+		if (!validGame) {
+			// this is bad there will be memeory leaks
+			//gameState = new GameState(1, player1, player2, bag, factories, currentPlayer);
+			delete gameState;
+			gameState = nullptr;
+		}
+
+	} // file exists
+
+
+	LOG("DEBUGGING");
+	LOG("ROUND = " + gameState->getRound());
+
 	return gameState;
 }
 
@@ -191,7 +269,7 @@ void GameManager::validateMove(GameState* gameState) {
 
 	while (!moveSuccess) {
 		this->output->requestInput();
-		commands = this->input->getGameplayInput();
+		commands = this->input->getGameplayInput(std::cin);
 		std::cout << commands.size() << std::endl;
 
 		if (!commands.empty()) {

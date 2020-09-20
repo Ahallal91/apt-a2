@@ -25,7 +25,7 @@ public:
 	// "turn 3 Y 1" - valid
 	// "save azulgame" - valid
 	// "save azulgame?/*" - not valid (not allowed question mark, forward slash or asterix in filenames)
-	std::vector<std::string> getGameplayInput();
+	std::vector<std::string> getGameplayInput(std::istream& stream);
 
 private:
 	// Validates the turn command parameters
