@@ -4,18 +4,19 @@
 #include "Player.h"
 #include "Types.h"
 #include "Factories.h"
+#include "GameState.h"
 
 Output::Output() {}
 
 Output::~Output() {}
 
 
-void Output::outputRound(int roundNum) {
-	std::cout << "== START ROUND " << roundNum << " ==" << std::endl;
+void Output::outputRound(GameState* gameState) {
+	std::cout << "=== Round " << gameState->getRound() << " ===" << std::endl;
 }
 
 void Output::saveSuccess(std::string fileName) {
-	std::cout << "Save filed successfully generated as: " << fileName << ".txt" << std::endl;
+	std::cout << "Save filed successfully generated as: " << fileName << ".azul" << std::endl;
 }
 
 void Output::outputTurn(Player* player) {

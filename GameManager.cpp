@@ -63,6 +63,7 @@ void GameManager::loadGame(std::string testFile) {
 		}
 
 		// If gameState is not null (AKA a valid game), resume the game
+		std::cout << "Azul game successfully loaded" << std::endl << std::endl;
 		playGame(gameState);
 
 		// If launched in testing mode
@@ -70,8 +71,13 @@ void GameManager::loadGame(std::string testFile) {
 		gameState = importGame(testFile);
 
 		if (gameState != nullptr) {
-			// output the state of the game (testing mode)
-			// will need a new method in Output for this
+			output->outputRound(gameState);
+			output->outputFactory(gameState->getFactories());
+			output->outputScore(gameState->getPlayer1());
+			output->outputBoard(gameState->getPlayer1());
+
+			output->outputScore(gameState->getPlayer2());
+			output->outputBoard(gameState->getPlayer2());
 		} else {
 			std::cout << "Testing mode failed - This is not a valid azul game!" << std::endl;
 		}
@@ -84,16 +90,14 @@ void GameManager::loadGame(std::string testFile) {
 
 // TODO check for winning BEFORE doing a move
 void GameManager::playGame(GameState* gameState) {
-	LOG("in");
-	LOG(gameState->getPlayer1()->getPlayerName());
 
 	for (; gameState->getRound() <= NUM_ROUNDS; gameState->incrementRound()) {
 		// start of round
 		// ONLY CHECK THIS AT NEW ROUND (dont do if loading a game mid round)
 		if(gameLogic->roundOver(gameState->getFactories())) {
-			LOG("THE ROUND IS OVER!!!");
+			LOG("[DEBUG] THE ROUND IS OVER!!!");
 			this->gameLogic->initFactoryTiles(gameState->getFactories(), gameState->getTileBag());
-			this->output->outputRound(gameState->getRound());
+			this->output->outputRound(gameState);
 		}
 
 		while (!this->gameLogic->roundOver(gameState->getFactories())) {
@@ -141,7 +145,6 @@ GameState* GameManager::importGame(std::string fileName) {
 
 	// check file exists
 	if (file.good()) {
-
 		// prepare the bag and factories
 		// using default bag
 		TileBag* bag = new TileBag();
@@ -184,10 +187,8 @@ GameState* GameManager::importGame(std::string fileName) {
 		while (!eof && validGame) {
 			// start of round
 			this->gameLogic->initFactoryTiles(factories, bag);
-			
-			while (!this->gameLogic->roundOver(factories) && validGame && !eof) {
-				//this->validateMove(gameState);
 
+			while (!this->gameLogic->roundOver(factories) && validGame && !eof) {
 				// DO STUFF HERE
 				std::vector<std::string> commands = input->getGameplayInput(file);
 				
@@ -195,9 +196,10 @@ GameState* GameManager::importGame(std::string fileName) {
 				bool validMove = false;
 				if(!commands.empty() && commands[0] == "turn") {
 					validMove = gameLogic->takeTiles(factories, gameState->getCurrentPlayer(), stoi(commands[1]), commands[2].at(0), stoi(commands[3]), bag);
-
 					if(!validMove) {
 						validGame = false;
+					} else {
+						logTurn(commands, gameState);
 					}
 				} else if(!commands.empty() && commands[0] == "quit") {
 					eof = true;
@@ -207,7 +209,7 @@ GameState* GameManager::importGame(std::string fileName) {
 
 				// might do a check
 				if(!eof) gameState->setCurrentPlayer(gameState->getCurrentPlayer() == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1());
-				LOG("changing player " + gameState->getCurrentPlayer()->getPlayerName());
+				//LOG("changing player " + gameState->getCurrentPlayer()->getPlayerName());
 			}
 			
 			// BUGGED! should only do this stuff at end of round!!!
@@ -241,10 +243,6 @@ GameState* GameManager::importGame(std::string fileName) {
 
 	} // file exists
 
-
-	LOG("DEBUGGING");
-	LOG("ROUND = " + gameState->getRound());
-
 	return gameState;
 }
 
@@ -276,15 +274,11 @@ void GameManager::validateMove(GameState* gameState) {
 			if (commands[0] == "turn") {
 				moveSuccess = this->gameLogic->takeTiles(gameState->getFactories(), gameState->getCurrentPlayer(), stoi(commands[1]), commands[2].at(0), stoi(commands[3]), gameState->getTileBag());
 
-				// add the valid turn to turn history
-				std::string turn;
-				for (unsigned int i = 0; i < commands.size(); i++) {
-					turn.append(commands[i]);
-					if (i != commands.size() - 1) {
-						turn.append(" ");
-					}
+				// if succesfull move, add it to the game state turn history
+				if(moveSuccess) {
+					logTurn(commands, gameState);
 				}
-				gameState->addTurn(turn);
+				
 			} else if (commands[0] == "save") {
 				this->exportGame(gameState, commands.at(1));
 				this->output->saveSuccess(commands.at(1));
@@ -297,4 +291,17 @@ void GameManager::validateMove(GameState* gameState) {
 			this->output->invalidInput();
 		}
 	}
+}
+
+void GameManager::logTurn(std::vector<std::string> commands, GameState* gameState) {
+	// add the valid turn to turn history
+	std::string turn;
+	for (unsigned int i = 0; i < commands.size(); i++) {
+		turn.append(commands[i]);
+		if (i != commands.size() - 1) {
+			turn.append(" ");
+		}
+	}
+	
+	gameState->addTurn(turn);
 }

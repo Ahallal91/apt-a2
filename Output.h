@@ -4,8 +4,7 @@
 
 class Player;
 class Factories;
-
-
+class GameState;
 
 // used for outputting the game to the console; does not modify any state
 class Output {
@@ -14,7 +13,7 @@ public:
 	~Output();
 
 	// TODO too many methods
-	void outputRound(int roundNum);
+	void outputRound(GameState* gameState);
 	void outputFactory(Factories* factory);
 	void outputBoard(Player* player);
 	void outputTurn(Player* player);

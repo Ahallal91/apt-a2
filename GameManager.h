@@ -42,6 +42,11 @@ private:
 	Output* output;
 
 	void validateMove(GameState* gameState);
+
+	// Logs a valid turn vector of arguments to a GameState
+	// Eg: if input recieved as vector: ["turn", 4, 'R', 2],
+	// will record the turn as: turn 4 R 2
+	void logTurn(std::vector<std::string> commands, GameState* gameState);
 };
 
 #endif // GAME_MANAGER_H
