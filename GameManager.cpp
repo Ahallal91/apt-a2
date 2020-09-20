@@ -88,7 +88,6 @@ void GameManager::loadGame(std::string testFile) {
 
 // remember to end the loop if player enter ends of line character
 
-// TODO check for winning BEFORE doing a move
 void GameManager::playGame(GameState* gameState) {
 
 	for (; gameState->getRound() <= NUM_ROUNDS; gameState->incrementRound()) {
@@ -212,7 +211,6 @@ GameState* GameManager::importGame(std::string fileName) {
 				//LOG("changing player " + gameState->getCurrentPlayer()->getPlayerName());
 			}
 			
-			// BUGGED! should only do this stuff at end of round!!!
 			if(validGame && gameLogic->roundOver(factories)) {
 				// round has ended
 
