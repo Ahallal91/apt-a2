@@ -232,11 +232,8 @@ GameState* GameManager::importGame(std::string fileName) {
 			}
 		}
 
-		// END JOSH
-
 		if (!validGame) {
-			// this is bad there will be memeory leaks
-			//gameState = new GameState(1, player1, player2, bag, factories, currentPlayer);
+			// no memory leaks as when deleting a gameState, the previously made pointers will get cleaned up
 			delete gameState;
 			gameState = nullptr;
 		}
