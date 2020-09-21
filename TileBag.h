@@ -2,6 +2,7 @@
 #define TILE_BAG_H
 
 #include "LinkedList.h"
+#include <string>
 
 class TileBag {
 public:
@@ -9,7 +10,7 @@ public:
 	TileBag();
 
 	// reads tilebag string into tilebag
-	// TileBag(std::string fileName);
+	TileBag(std::string fileName);
 
 	// copyConstructor
 	TileBag(TileBag& other);
