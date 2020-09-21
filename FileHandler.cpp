@@ -28,8 +28,3 @@ bool FileHandler::fileExists(std::string fileName) {
 	std::ifstream file(fileName);
 	return file.good();
 }
-
-bool FileHandler::isAzulGame(std::string fileName) {
-	// TODO check that the file is azul game (.azul extensions and contents)
-	return false;
-}

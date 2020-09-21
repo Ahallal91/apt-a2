@@ -9,6 +9,7 @@
 #include "TileBag.h"
 #include "GameState.h"
 #include <fstream>
+#include "FileHandler.h"
 
 #define LOG(x) std::cout << x << std::endl
 
@@ -17,12 +18,14 @@ GameManager::GameManager() {
 	this->gameLogic = new GameLogic();
 	this->input = new Input();
 	this->output = new Output();
+	this->fileHandler = new FileHandler();
 }
 
 GameManager::~GameManager() {
 	delete this->gameLogic;
 	delete this->input;
 	delete this->output;
+	delete this->fileHandler;
 }
 
 void GameManager::newGame() {
@@ -55,10 +58,14 @@ void GameManager::loadGame(std::string testFile) {
 			output->requestInput();
 			std::getline(std::cin, fileName);
 
-			gameState = importGame(fileName);
+			if(fileHandler->fileExists(fileName)) {
+				gameState = importGame(fileName);
 
-			if (gameState == nullptr && !std::cin.eof()) {
-				std::cout << "This is not a valid azul game!" << std::endl;
+				if (gameState == nullptr && !std::cin.eof()) {
+					std::cout << "Load failed - This is not a valid azul game!" << std::endl << std::endl;
+				}
+			} else {
+				std::cout << "Load failed - Could not find the file specified" << std::endl << std::endl;
 			}
 		}
 
@@ -68,19 +75,24 @@ void GameManager::loadGame(std::string testFile) {
 
 		// If launched in testing mode
 	} else {
-		gameState = importGame(testFile);
+		if(fileHandler->fileExists(testFile)) {
+			gameState = importGame(testFile);
 
-		if (gameState != nullptr) {
-			output->outputRound(gameState);
-			output->outputFactory(gameState->getFactories());
-			output->outputScore(gameState->getPlayer1());
-			output->outputBoard(gameState->getPlayer1());
+			if (gameState != nullptr) {
+				output->outputRound(gameState);
+				output->outputFactory(gameState->getFactories());
+				output->outputScore(gameState->getPlayer1());
+				output->outputBoard(gameState->getPlayer1());
 
-			output->outputScore(gameState->getPlayer2());
-			output->outputBoard(gameState->getPlayer2());
+				output->outputScore(gameState->getPlayer2());
+				output->outputBoard(gameState->getPlayer2());
+			} else {
+				std::cout << "Testing mode failed - This is not a valid azul game!" << std::endl;
+			}
 		} else {
-			std::cout << "Testing mode failed - This is not a valid azul game!" << std::endl;
+			std::cout << "Testing mode failed - Could not find the file specified" << std::endl;
 		}
+
 	}
 
 	delete gameState;
@@ -135,110 +147,104 @@ void GameManager::playGame(GameState* gameState) {
 	this->output->outputWinner(gameState->getPlayer1(), gameState->getPlayer2());
 }
 
-// TODO need copy constructors before dealing with this to copy the stack GameState to a heap allocated one (if the import is valid)
+// TODO fix the tilbag (right now is just using default one)
 GameState* GameManager::importGame(std::string fileName) {
 	bool validGame = true;
 	GameState* gameState = nullptr;
 
 	std::ifstream file(fileName);
 
-	// check file exists
-	if (file.good()) {
-		// prepare the bag and factories
-		// using default bag
-		TileBag* bag = new TileBag();
-		Factories* factories = new Factories();
+	// prepare the bag and factories
+	// using default bag
+	TileBag* bag = new TileBag();
+	Factories* factories = new Factories();
 
-		// Import the Tile Bag
-		std::string tileString;
-		std::getline(file, tileString);
+	// Import the Tile Bag
+	std::string tileString;
+	std::getline(file, tileString);
 
-		/*
-		if (tileString.length() == 100) {
-			for (char tile : tileString) {
-				if (tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK) { // MAKE isValidTile(char tile) method!!!
-					bag.addToBag(tile);
-				} else {
-					validGame = false;
-				}
+	/*
+	if (tileString.length() == 100) {
+		for (char tile : tileString) {
+			if (tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK) { // MAKE isValidTile(char tile) method!!!
+				bag.addToBag(tile);
+			} else {
+				validGame = false;
 			}
-		} else {
-			validGame = false;
 		}
-		*/
+	} else {
+		validGame = false;
+	}
+	*/
 
-		// Import Players
-		std::string name1;
-		std::string name2;
+	// Import Players
+	std::string name1;
+	std::string name2;
 
-		std::getline(file, name1);
-		std::getline(file, name2);
+	std::getline(file, name1);
+	std::getline(file, name2);
 
-		Player* player1 = new Player(name1);
-		Player* player2 = new Player(name2);
+	Player* player1 = new Player(name1);
+	Player* player2 = new Player(name2);
 		
-		//GS
-		gameState = new GameState(1, player1, player2, bag, factories, player1);
+	//GS
+	gameState = new GameState(1, player1, player2, bag, factories, player1);
 
-		bool eof = false;
-		
-		// game loop
-		while (!eof && validGame) {
-			// start of round
-			this->gameLogic->initFactoryTiles(factories, bag);
+	// play the game from a file
+	bool eof = false;
+	while (!eof && validGame) {
+		// start of round
+		this->gameLogic->initFactoryTiles(factories, bag);
 
-			while (!this->gameLogic->roundOver(factories) && validGame && !eof) {
-				// DO STUFF HERE
-				std::vector<std::string> commands = input->getGameplayInput(file);
+		while (!this->gameLogic->roundOver(factories) && validGame && !eof) {
+			// DO STUFF HERE
+			std::vector<std::string> commands = input->getGameplayInput(file);
 				
-				// check that command is valid (lazy operator)
-				bool validMove = false;
-				if(!commands.empty() && commands[0] == "turn") {
-					validMove = gameLogic->takeTiles(factories, gameState->getCurrentPlayer(), stoi(commands[1]), commands[2].at(0), stoi(commands[3]), bag);
-					if(!validMove) {
-						validGame = false;
-					} else {
-						logTurn(commands, gameState);
-					}
-				} else if(!commands.empty() && commands[0] == "quit") {
-					eof = true;
-				} else {
+			// check that command is valid (lazy operator)
+			bool validMove = false;
+			if(!commands.empty() && commands[0] == TURN_COMMAND) {
+				validMove = gameLogic->takeTiles(factories, gameState->getCurrentPlayer(), stoi(commands[1]), commands[2].at(0), stoi(commands[3]), bag);
+				if(!validMove) {
 					validGame = false;
-				}
-
-				// might do a check
-				if(!eof) gameState->setCurrentPlayer(gameState->getCurrentPlayer() == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1());
-				//LOG("changing player " + gameState->getCurrentPlayer()->getPlayerName());
-			}
-			
-			if(validGame && gameLogic->roundOver(factories)) {
-				// round has ended
-
-				// calculate player points and move to wall
-				this->gameLogic->addToWall(gameState->getPlayer1());
-				this->gameLogic->addToWall(gameState->getPlayer2());
-
-				// reset board and add back to tile bag
-				this->gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
-				this->gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
-
-				if(gameState->getRound() < NUM_ROUNDS) {
-					gameState->incrementRound();
 				} else {
-					std::cout << "FINISHED!" << std::endl;
-					std::cout << gameState->getRound() << std::endl;
-					eof = true;
+					logTurn(commands, gameState);
 				}
+			} else if(!commands.empty() && commands[0] == EOF_COMMAND) {
+				eof = true;
+			} else {
+				validGame = false;
+			}
+
+			// might do a check
+			if(!eof) gameState->setCurrentPlayer(gameState->getCurrentPlayer() == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1());
+			//LOG("changing player " + gameState->getCurrentPlayer()->getPlayerName());
+		}
+			
+		if(validGame && gameLogic->roundOver(factories)) {
+			// round has ended
+
+			// calculate player points and move to wall
+			this->gameLogic->addToWall(gameState->getPlayer1());
+			this->gameLogic->addToWall(gameState->getPlayer2());
+
+			// reset board and add back to tile bag
+			this->gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
+			this->gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
+
+			if(gameState->getRound() < NUM_ROUNDS) {
+				gameState->incrementRound();
+			} else {
+				std::cout << "[Debug] GAME FINISHED!" << std::endl;
+				eof = true;
 			}
 		}
+	}
 
-		if (!validGame) {
-			// no memory leaks as when deleting a gameState, the previously made pointers will get cleaned up
-			delete gameState;
-			gameState = nullptr;
-		}
-
-	} // file exists
+	if (!validGame) {
+		// no memory leaks as when deleting a gameState, the previously made pointers will get cleaned up
+		delete gameState;
+		gameState = nullptr;
+	}
 
 	return gameState;
 }

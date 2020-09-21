@@ -9,6 +9,7 @@ class Input;
 class GameLogic;
 class Factories;
 class TileBag;
+class FileHandler;
 
 class GameState;
 
@@ -30,7 +31,7 @@ public:
 	void playGame(GameState* gameState);
 
 	// Imports a game from a save file
-	// Returns a GameState of the game if successfull, otherwise returns nullptr
+	// Returns a GameState of the game if it is valid, otherwise returns a nullptr
 	GameState* importGame(std::string fileName);
 
 	// Exports a game to a save file
@@ -40,10 +41,11 @@ private:
 	GameLogic* gameLogic;
 	Input* input;
 	Output* output;
+	FileHandler* fileHandler;
 
 	void validateMove(GameState* gameState);
 
-	// Logs a valid turn vector of arguments to a GameState
+	// Logs a valid turn vector of arguments to a GameState's turn history
 	// Eg: if input recieved as vector: ["turn", 4, 'R', 2],
 	// will record the turn as: turn 4 R 2
 	void logTurn(std::vector<std::string> commands, GameState* gameState);

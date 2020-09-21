@@ -18,9 +18,6 @@ public:
 	// Checks if a file exists
 	bool fileExists(std::string fileName);
 
-	// Checks if a file is an azul saved game
-	bool isAzulGame(std::string fileName);
-
 private:
 	
 
