@@ -19,7 +19,7 @@ public:
 	~GameManager();
 
 	// Starts a new game by asking for player names and creating a default GameState
-	void newGame();
+	bool newGame();
 
 	// Loads a game from a save file by asking for save file input and resuming the game.
 	// If called with a file name as its parameter, will instead show the output of the
@@ -41,8 +41,9 @@ private:
 	GameLogic* gameLogic;
 	Input* input;
 	Output* output;
-	bool playing;
 	FileHandler* fileHandler;
+	// used to end the game if player decides to quit
+	bool playing;
 
 	bool validateMove(GameState* gameState);
 
