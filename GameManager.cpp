@@ -113,7 +113,7 @@ void GameManager::playGame(GameState* gameState) {
 			gameState->setCurrentPlayer(gameState->getCurrentPlayer() == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1());
 		}
 		// round has ended
-
+		
 		// calculate player points and move to wall
 		this->gameLogic->addToWall(gameState->getPlayer1());
 		this->gameLogic->addToWall(gameState->getPlayer2());
@@ -225,6 +225,8 @@ GameState* GameManager::importGame(std::string fileName) {
 				if(gameState->getRound() < NUM_ROUNDS) {
 					gameState->incrementRound();
 				} else {
+					std::cout << "FINISHED!" << std::endl;
+					std::cout << gameState->getRound() << std::endl;
 					eof = true;
 				}
 			}
