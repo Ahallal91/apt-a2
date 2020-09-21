@@ -4,24 +4,26 @@
 #include <limits>
 
 void printLine(std::string message);
-void runMenu();
+void runMenu(GameManager* gameManager);
 void credits();
 void menuText();
 
-GameManager* gameManager;
-
 int main(int argc, char** argv) {
-	gameManager = new GameManager();
+	GameManager* gameManager = new GameManager();
 	
-	if(argc >= 3 && std::string(argv[1]) == "-t") {
-		gameManager->loadGame(std::string(argv[2]));
+	if(argc >= 2 && std::string(argv[1]) == "-t") {
+		if(argc == 3) {
+			gameManager->loadGame(std::string(argv[2]));
+		} else {
+			std::cout << "Unrecognised arguments for testing mode\n\nUSAGE:\n\t -t <filename>" << std::endl;
+		}
 	} else {
 		if(argc > 1) {
-			std::cout << "Unknown command line arguments specified, starting game normally..." << std::endl;
+			std::cout << "Unknown command line arguments specified, starting game normally..." << std::endl << std::endl;
 		}
 		
 		// Run the main menu
-		runMenu();
+		runMenu(gameManager);
 	}
 	
 	delete gameManager;
@@ -29,7 +31,7 @@ int main(int argc, char** argv) {
 	return EXIT_SUCCESS;
 }
 
-void runMenu() {
+void runMenu(GameManager* gameManager) {
 	//GameManager* gameManager = new GameManager();
 
 	const std::string choice1 = "1";
@@ -62,8 +64,6 @@ void runMenu() {
 			printLine("Please select a valid option");
 		}
 	}
-
-	delete gameManager;
 }
 
 void menuText() {
