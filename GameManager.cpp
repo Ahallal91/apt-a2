@@ -29,7 +29,7 @@ GameManager::~GameManager() {
 }
 
 void GameManager::newGame() {
-	TileBag* tileBag = new TileBag();
+	TileBag* tileBag = new TileBag("TileBag.txt");
 	Factories* factories = new Factories();
 
 	// TODO might want to change the enterPlayerName and do looping here instead (Input class should be strictly for input - no game logic!)
@@ -163,19 +163,40 @@ GameState* GameManager::importGame(std::string fileName) {
 	std::string tileString;
 	std::getline(file, tileString);
 
-	/*
+	// an array to represent how many of each valid tile has been read in
+	// the goal is to read in 20 of each tile
+	int tileCounts[NUM_TILES] = {};
+	
+	// check that 100 tiles are in the string
 	if (tileString.length() == 100) {
 		for (char tile : tileString) {
-			if (tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK) { // MAKE isValidTile(char tile) method!!!
-				bag.addToBag(tile);
-			} else {
-				validGame = false;
+
+			// check each individual tile is a valid one. if valid, increase the tileCount for the respective tile
+			for(int i = 0; i < NUM_TILES; i++) { // FIX MAGIC NUMBER
+				if(tile == validTile[i]) {
+					tileCounts[i]++;
+				}
 			}
 		}
 	} else {
 		validGame = false;
 	}
-	*/
+
+	// check that 20 of each tile were read in
+	if(validGame) {
+		for(int i = 0; i < NUM_TILES; i++) {
+			if(tileCounts[i] != 20) {
+				validGame = false;
+			}
+		}
+	}
+
+	// if the tile string passed validation check (20 of each tile), then add the tiles to the bag
+	if(validGame) {
+		for(char tile : tileString) {
+			bag->addToBag(tile);
+		}
+	}
 
 	// Import Players
 	std::string name1;
