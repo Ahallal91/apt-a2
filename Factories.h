@@ -39,7 +39,6 @@ private:
 	
 	// vector for center factory
 	std::vector<char>* centerFactory;
-
 };
 
 #endif // FACTORIES_H

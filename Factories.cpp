@@ -1,6 +1,5 @@
 #include "Factories.h"
 #include "Types.h"
-#include <iostream>
 
 Factories::Factories() {
 	// creates 5 factories of size 4
@@ -156,7 +155,7 @@ bool Factories::areFactoriesEmpty() {
 		retValue = true;
 	
 	// set factories empty if just the first tile is in the center (used for new games)
-	} else if(centerFactory->size() == 1 && centerFactory->at(0) == 'F' && factoryEmpty) {
+	} else if (centerFactory->front() == FIRST && factoryEmpty) {
 		retValue = true;
 	}
 	return retValue;
