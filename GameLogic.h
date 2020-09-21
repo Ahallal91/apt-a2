@@ -44,8 +44,8 @@ private:
 
 	// helper method to count tile points on the wall
 	// 
-	void countTiles(int start, char sign, int& pointsToAdd, bool& combo,
-					PlayerBoard* playerBoard);
+	void countTiles(int start, int tileLoc, char sign, int& pointsToAdd, bool& combo,
+					PlayerBoard* playerBoard, bool swap);
 };
 
 #endif // GAME_LOGIC_H

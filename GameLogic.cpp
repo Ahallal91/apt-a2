@@ -55,16 +55,49 @@ void GameLogic::calculatePoints(Player* player, int x, int y) {
 	bool comboRow = false;
 
 	// counts tiles above
-	countTiles(y, NEGATIVE, pointsToAdd, comboCol, playerBoard);
+	bool finished = false;
+	for (int row = y - 1; row >= 0 && !finished; row--) {
+		if (playerBoard->getWallTile(x, row) != EMPTY) {
+			comboCol = true;
+			pointsToAdd++;
+		} else {
+			finished = true;
+		}
+	}
 
 	// count tiles below
-	countTiles(y, POSITIVE, pointsToAdd, comboCol, playerBoard);
+	finished = false;
+	for (int row = y + 1; row < WALL_DIM && !finished; row++) {
+		if (playerBoard->getWallTile(x, row) != EMPTY) {
+			comboCol = true;
+			pointsToAdd++;
+		} else {
+			finished = true;
+		}
+	}
+
 
 	// count tiles left
-	countTiles(x, NEGATIVE, pointsToAdd, comboRow, playerBoard);
+	finished = false;
+	for (int col = x - 1; col >= 0 && !finished; col--) {
+		if (playerBoard->getWallTile(col, y) != EMPTY) {
+			comboRow = true;
+			pointsToAdd++;
+		} else {
+			finished = true;
+		}
+	}
 
 	// count tiles right
-	countTiles(x, POSITIVE, pointsToAdd, comboRow, playerBoard);
+	finished = false;
+	for (int col = x + 1; col < WALL_DIM && !finished; col++) {
+		if (playerBoard->getWallTile(col, y) != EMPTY) {
+			comboRow = true;
+			pointsToAdd++;
+		} else {
+			finished = true;
+		}
+	}
 
 	// additional point for connecting both row and col
 	if (comboCol && comboRow) {
@@ -78,12 +111,18 @@ void GameLogic::calculatePoints(Player* player, int x, int y) {
 	player->setPoints(playerPoints);
 }
 
-void GameLogic::countTiles(int start, char sign, int& pointsToAdd, bool& combo,
-PlayerBoard* playerBoard) {
+void GameLogic::countTiles(int start, int tileLoc, char sign, int& pointsToAdd, bool& combo,
+PlayerBoard* playerBoard, bool swap) {
 	bool finished = false;
 	if (sign == NEGATIVE) {
 		for (int row = start - 1; row >= 0 && !finished; row--) {
-			if (playerBoard->getWallTile(start, row) != EMPTY) {
+			char compareTile = '\0';
+			if(!swap) {
+				compareTile = playerBoard->getWallTile(tileLoc, row);
+			} else {
+				compareTile = playerBoard->getWallTile(row, tileLoc);
+			}
+			if (compareTile != EMPTY) {
 				combo = true;
 				pointsToAdd++;
 			} else {
@@ -92,7 +131,13 @@ PlayerBoard* playerBoard) {
 		}
 	} else if (sign == POSITIVE) {
 		for (int row = start + 1; row < WALL_DIM && !finished; row++) {
-			if (playerBoard->getWallTile(start, row) != EMPTY) {
+			char compareTile = '\0';
+			if(!swap) {
+				compareTile = playerBoard->getWallTile(tileLoc, row);
+			} else {
+				compareTile = playerBoard->getWallTile(row, tileLoc);
+			}
+			if (compareTile != EMPTY) {
 				combo = true;
 				pointsToAdd++;
 			} else {
