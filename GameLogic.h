@@ -41,6 +41,11 @@ private:
 	
 	// gets the horizontal location of the tile on the wall
 	int tileLocation(int destPatternLine, char tile);
+
+	// helper method to count tile points on the wall
+	// 
+	void countTiles(int start, char sign, int& pointsToAdd, bool& combo,
+					PlayerBoard* playerBoard);
 };
 
 #endif // GAME_LOGIC_H

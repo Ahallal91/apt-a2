@@ -4,6 +4,9 @@
 #include "Player.h"
 #include "Types.h"
 
+#define POSITIVE '+'
+#define NEGATIVE '-'
+
 GameLogic::GameLogic() {}
 
 GameLogic::~GameLogic() {}
@@ -52,49 +55,16 @@ void GameLogic::calculatePoints(Player* player, int x, int y) {
 	bool comboRow = false;
 
 	// counts tiles above
-	bool finished = false;
-	for (int row = y - 1; row >= 0 && !finished; row--) {
-		if (playerBoard->getWallTile(x, row) != EMPTY) {
-			comboCol = true;
-			pointsToAdd++;
-		} else {
-			finished = true;
-		}
-	}
+	countTiles(y, NEGATIVE, pointsToAdd, comboCol, playerBoard);
 
 	// count tiles below
-	finished = false;
-	for (int row = y + 1; row < WALL_DIM && !finished; row++) {
-		if (playerBoard->getWallTile(x, row) != EMPTY) {
-			comboCol = true;
-			pointsToAdd++;
-		} else {
-			finished = true;
-		}
-	}
-
+	countTiles(y, POSITIVE, pointsToAdd, comboCol, playerBoard);
 
 	// count tiles left
-	finished = false;
-	for (int col = x - 1; col >= 0 && !finished; col--) {
-		if (playerBoard->getWallTile(col, y) != EMPTY) {
-			comboRow = true;
-			pointsToAdd++;
-		} else {
-			finished = true;
-		}
-	}
+	countTiles(x, NEGATIVE, pointsToAdd, comboRow, playerBoard);
 
 	// count tiles right
-	finished = false;
-	for (int col = x + 1; col < WALL_DIM && !finished; col++) {
-		if (playerBoard->getWallTile(col, y) != EMPTY) {
-			comboRow = true;
-			pointsToAdd++;
-		} else {
-			finished = true;
-		}
-	}
+	countTiles(x, POSITIVE, pointsToAdd, comboRow, playerBoard);
 
 	// additional point for connecting both row and col
 	if (comboCol && comboRow) {
@@ -104,7 +74,32 @@ void GameLogic::calculatePoints(Player* player, int x, int y) {
 	// calculate final scoring
 	playerPoints += pointsToAdd;
 	playerPoints += brokenLinePoints[playerBoard->getBrokenSize()];
+
 	player->setPoints(playerPoints);
+}
+
+void GameLogic::countTiles(int start, char sign, int& pointsToAdd, bool& combo,
+PlayerBoard* playerBoard) {
+	bool finished = false;
+	if (sign == NEGATIVE) {
+		for (int row = start - 1; row >= 0 && !finished; row--) {
+			if (playerBoard->getWallTile(start, row) != EMPTY) {
+				combo = true;
+				pointsToAdd++;
+			} else {
+				finished = true;
+			}
+		}
+	} else if (sign == POSITIVE) {
+		for (int row = start + 1; row < WALL_DIM && !finished; row++) {
+			if (playerBoard->getWallTile(start, row) != EMPTY) {
+				combo = true;
+				pointsToAdd++;
+			} else {
+				finished = true;
+			}
+		}
+	}
 }
 
 /*
