@@ -43,6 +43,7 @@ void GameLogic::addToWall(Player* player) {
 			}
 		}
 	}
+	player->setPoints(player->getPoints() + brokenLinePoints[playerBoard->getBrokenSize()]);
 }
 
 void GameLogic::calculatePoints(Player* player, int x, int y) {
@@ -106,8 +107,6 @@ void GameLogic::calculatePoints(Player* player, int x, int y) {
 
 	// calculate final scoring
 	playerPoints += pointsToAdd;
-	playerPoints += brokenLinePoints[playerBoard->getBrokenSize()];
-
 	player->setPoints(playerPoints);
 }
 
@@ -117,10 +116,10 @@ PlayerBoard* playerBoard, bool swap) {
 	if (sign == NEGATIVE) {
 		for (int row = start - 1; row >= 0 && !finished; row--) {
 			char compareTile = '\0';
-			if(!swap) {
-				compareTile = playerBoard->getWallTile(tileLoc, row);
-			} else {
+			if(swap) {
 				compareTile = playerBoard->getWallTile(row, tileLoc);
+			} else {
+				compareTile = playerBoard->getWallTile(tileLoc, row);
 			}
 			if (compareTile != EMPTY) {
 				combo = true;
@@ -132,10 +131,10 @@ PlayerBoard* playerBoard, bool swap) {
 	} else if (sign == POSITIVE) {
 		for (int row = start + 1; row < WALL_DIM && !finished; row++) {
 			char compareTile = '\0';
-			if(!swap) {
-				compareTile = playerBoard->getWallTile(tileLoc, row);
-			} else {
+			if(swap) {
 				compareTile = playerBoard->getWallTile(row, tileLoc);
+			} else {
+				compareTile = playerBoard->getWallTile(tileLoc, row);
 			}
 			if (compareTile != EMPTY) {
 				combo = true;
