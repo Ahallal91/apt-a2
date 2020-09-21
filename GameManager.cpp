@@ -17,6 +17,7 @@ GameManager::GameManager() {
 	this->gameLogic = new GameLogic();
 	this->input = new Input();
 	this->output = new Output();
+	this->playing = true;
 }
 
 GameManager::~GameManager() {
@@ -87,52 +88,54 @@ void GameManager::loadGame(std::string testFile) {
 }
 
 // remember to end the loop if player enter ends of line character
-
 void GameManager::playGame(GameState* gameState) {
 
-	for (; gameState->getRound() <= NUM_ROUNDS; gameState->incrementRound()) {
+	for (; gameState->getRound() <= NUM_ROUNDS && playing; gameState->incrementRound()) {
 		// start of round
 		// ONLY CHECK THIS AT NEW ROUND (dont do if loading a game mid round)
-		if(gameLogic->roundOver(gameState->getFactories())) {
+		if (gameLogic->roundOver(gameState->getFactories())) {
 			LOG("[DEBUG] THE ROUND IS OVER!!!");
 			this->gameLogic->initFactoryTiles(gameState->getFactories(), gameState->getTileBag());
 			this->output->outputRound(gameState);
 		}
 
-		while (!this->gameLogic->roundOver(gameState->getFactories())) {
-			// this could all be in one method in output, then these methods could become private
-			this->output->outputTurn(gameState->getCurrentPlayer());
-			this->output->outputFactory(gameState->getFactories());
-			this->output->outputBoard(gameState->getCurrentPlayer());
+		// this could all be in one method in output, then these methods could become private
+		this->output->outputTurn(gameState->getCurrentPlayer());
+		this->output->outputFactory(gameState->getFactories());
+		this->output->outputBoard(gameState->getCurrentPlayer());
 
-			this->validateMove(gameState);
+		this->playing = this->validateMove(gameState);
 
-			this->output->turnSuccess();
-			this->output->outputBoard(gameState->getCurrentPlayer());
+		if (playing) {
+			if (!this->gameLogic->roundOver(gameState->getFactories())) {
+				this->output->turnSuccess();
+				this->output->outputBoard(gameState->getCurrentPlayer());
 
-			gameState->setCurrentPlayer(gameState->getCurrentPlayer() == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1());
+				gameState->setCurrentPlayer(gameState->getCurrentPlayer() == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1());
+			} else if (this->gameLogic->roundOver(gameState->getFactories())) {
+				// calculate player points and move to wall
+				this->gameLogic->addToWall(gameState->getPlayer1());
+				this->gameLogic->addToWall(gameState->getPlayer2());
+
+				// reset board and add back to tile bag
+				this->gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
+				this->gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
+
+				// OUTPUT round over here
+				// output score
+				this->output->outputScore(gameState->getPlayer1());
+				this->output->outputScore(gameState->getPlayer2());
+				std::cout << std::endl;
+				this->output->outputBoard(gameState->getPlayer1());
+				this->output->outputBoard(gameState->getPlayer2());
+			}
 		}
-		// round has ended
-
-		// calculate player points and move to wall
-		this->gameLogic->addToWall(gameState->getPlayer1());
-		this->gameLogic->addToWall(gameState->getPlayer2());
-
-		// reset board and add back to tile bag
-		this->gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
-		this->gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
-
-		// OUTPUT round over here
-		// output score
-		this->output->outputScore(gameState->getPlayer1());
-		this->output->outputScore(gameState->getPlayer2());
-		std::cout << std::endl;
-		this->output->outputBoard(gameState->getPlayer1());
-		this->output->outputBoard(gameState->getPlayer2());
 	}
 
-	// game finished
-	this->output->outputWinner(gameState->getPlayer1(), gameState->getPlayer2());
+	// output the winner
+	if (playing) {
+		this->output->outputWinner(gameState->getPlayer1(), gameState->getPlayer2());
+	}
 }
 
 // TODO need copy constructors before dealing with this to copy the stack GameState to a heap allocated one (if the import is valid)
@@ -176,12 +179,12 @@ GameState* GameManager::importGame(std::string fileName) {
 
 		Player* player1 = new Player(name1);
 		Player* player2 = new Player(name2);
-		
+
 		//GS
 		gameState = new GameState(1, player1, player2, bag, factories, player1);
 
 		bool eof = false;
-		
+
 		// game loop
 		while (!eof && validGame) {
 			// start of round
@@ -190,28 +193,28 @@ GameState* GameManager::importGame(std::string fileName) {
 			while (!this->gameLogic->roundOver(factories) && validGame && !eof) {
 				// DO STUFF HERE
 				std::vector<std::string> commands = input->getGameplayInput(file);
-				
+
 				// check that command is valid (lazy operator)
 				bool validMove = false;
-				if(!commands.empty() && commands[0] == "turn") {
+				if (!commands.empty() && commands[0] == "turn") {
 					validMove = gameLogic->takeTiles(factories, gameState->getCurrentPlayer(), stoi(commands[1]), commands[2].at(0), stoi(commands[3]), bag);
-					if(!validMove) {
+					if (!validMove) {
 						validGame = false;
 					} else {
 						logTurn(commands, gameState);
 					}
-				} else if(!commands.empty() && commands[0] == "quit") {
+				} else if (!commands.empty() && commands[0] == "quit") {
 					eof = true;
 				} else {
 					validGame = false;
 				}
 
 				// might do a check
-				if(!eof) gameState->setCurrentPlayer(gameState->getCurrentPlayer() == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1());
+				if (!eof) gameState->setCurrentPlayer(gameState->getCurrentPlayer() == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1());
 				//LOG("changing player " + gameState->getCurrentPlayer()->getPlayerName());
 			}
-			
-			if(validGame && gameLogic->roundOver(factories)) {
+
+			if (validGame && gameLogic->roundOver(factories)) {
 				// round has ended
 
 				// calculate player points and move to wall
@@ -222,7 +225,7 @@ GameState* GameManager::importGame(std::string fileName) {
 				this->gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
 				this->gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
 
-				if(gameState->getRound() < NUM_ROUNDS) {
+				if (gameState->getRound() < NUM_ROUNDS) {
 					gameState->incrementRound();
 				} else {
 					eof = true;
@@ -256,7 +259,7 @@ void GameManager::exportGame(GameState* gameState, std::string fileName) {
 	}
 }
 
-void GameManager::validateMove(GameState* gameState) {
+bool GameManager::validateMove(GameState* gameState) {
 	std::vector<std::string> commands = {};
 	bool moveSuccess = false;
 
@@ -266,26 +269,31 @@ void GameManager::validateMove(GameState* gameState) {
 		std::cout << commands.size() << std::endl;
 
 		if (!commands.empty()) {
-			if (commands[0] == "turn") {
+			if (commands[0] == TURN_COMMAND) {
 				moveSuccess = this->gameLogic->takeTiles(gameState->getFactories(), gameState->getCurrentPlayer(), stoi(commands[1]), commands[2].at(0), stoi(commands[3]), gameState->getTileBag());
 
 				// if succesfull move, add it to the game state turn history
-				if(moveSuccess) {
+				if (moveSuccess) {
 					logTurn(commands, gameState);
 				}
-				
-			} else if (commands[0] == "save") {
+
+			} else if (commands[0] == SAVE_COMMAND) {
 				this->exportGame(gameState, commands.at(1));
 				this->output->saveSuccess(commands.at(1));
+			} else if (commands[0] == EOF_COMMAND) {
+				moveSuccess = true;
 			}
 		}
 
 		// display invalid input if they entered nothing or they entered invalid turn
 		// (lazy operator avoids exception)
-		if (commands.empty() || (commands[0] == "turn" && !moveSuccess)) {
+		if (commands.empty() || (commands[0] == TURN_COMMAND && !moveSuccess)) {
 			this->output->invalidInput();
 		}
 	}
+
+	// return false if the user quit so the game ends
+	return commands[0] != EOF_COMMAND;
 }
 
 void GameManager::logTurn(std::vector<std::string> commands, GameState* gameState) {
@@ -297,6 +305,6 @@ void GameManager::logTurn(std::vector<std::string> commands, GameState* gameStat
 			turn.append(" ");
 		}
 	}
-	
+
 	gameState->addTurn(turn);
 }

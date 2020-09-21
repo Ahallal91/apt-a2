@@ -68,8 +68,6 @@ void Output::outputFactory(Factories* factory) {
 	std::cout << std::endl << std::endl;
 }
 
-
-
 // TODO could maybe tell the user what the valid commands are, 
 // but for now, just say invalid
 void Output::invalidInput() {
@@ -118,4 +116,3 @@ void Output::outputBoard(Player* player) {
 	// Print a blank line for seperation purposes
 	std::cout << std::endl;
 }
-

@@ -12,20 +12,20 @@ GameManager* gameManager;
 
 int main(int argc, char** argv) {
 	gameManager = new GameManager();
-	
-	if(argc >= 3 && std::string(argv[1]) == "-t") {
+
+	if (argc >= 3 && std::string(argv[1]) == "-t") {
 		gameManager->loadGame(std::string(argv[2]));
 	} else {
-		if(argc > 1) {
+		if (argc > 1) {
 			std::cout << "Unknown command line arguments specified, starting game normally..." << std::endl;
 		}
-		
+
 		// Run the main menu
 		runMenu();
 	}
-	
+
 	delete gameManager;
-	
+
 	return EXIT_SUCCESS;
 }
 
@@ -46,12 +46,13 @@ void runMenu() {
 		menuText();
 		std::string choice;
 		std::cin >> choice;
-		
+
 		//ignore any characters after whitespace until \n to not intefere with input later in the program
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		
+
 		if (choice == choice1) {
 			gameManager->newGame();
+			exitMenu = true;
 		} else if (choice == choice2) {
 			gameManager->loadGame();
 		} else if (choice == choice3) {

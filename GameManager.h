@@ -40,8 +40,9 @@ private:
 	GameLogic* gameLogic;
 	Input* input;
 	Output* output;
+	bool playing;
 
-	void validateMove(GameState* gameState);
+	bool validateMove(GameState* gameState);
 
 	// Logs a valid turn vector of arguments to a GameState
 	// Eg: if input recieved as vector: ["turn", 4, 'R', 2],
