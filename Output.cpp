@@ -12,7 +12,7 @@ Output::~Output() {}
 
 
 void Output::outputRound(GameState* gameState) {
-	std::cout << "=== Round " << gameState->getRound() << " ===" << std::endl;
+	std::cout << "=== Round " << gameState->getRound() << " ===" << std::endl << std::endl;
 }
 
 void Output::saveSuccess(std::string fileName) {
