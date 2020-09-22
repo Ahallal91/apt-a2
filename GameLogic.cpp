@@ -4,8 +4,8 @@
 #include "Player.h"
 #include "Types.h"
 
-#define POSITIVE '+'
-#define NEGATIVE '-'
+#define POSITIVE 		'+'
+#define NEGATIVE 		'-'
 
 GameLogic::GameLogic() {}
 
@@ -35,7 +35,8 @@ void GameLogic::addToWall(Player* player) {
 			bool found = false;
 			// find where to place on the wall
 			for (int col = 0; col < WALL_DIM && !found; col++) {
-				if (playerBoard->getPatternLine(row)->getTileType() == pattern[row][col]) {
+				if (playerBoard->getPatternLine(row)->getTileType() 
+					== pattern[row][col]) {
 					playerBoard->setWallTile(col, row);
 					calculatePoints(player, col, row);
 					found = true;
@@ -43,7 +44,8 @@ void GameLogic::addToWall(Player* player) {
 			}
 		}
 	}
-	player->setPoints(player->getPoints() + brokenLinePoints[playerBoard->getBrokenSize()]);
+	player->setPoints(player->getPoints() 
+						+ brokenLinePoints[playerBoard->getBrokenSize()]);
 }
 
 void GameLogic::calculatePoints(Player* player, int x, int y) {
@@ -56,49 +58,16 @@ void GameLogic::calculatePoints(Player* player, int x, int y) {
 	bool comboRow = false;
 
 	// counts tiles above
-	bool finished = false;
-	for (int row = y - 1; row >= 0 && !finished; row--) {
-		if (playerBoard->getWallTile(x, row) != EMPTY) {
-			comboCol = true;
-			pointsToAdd++;
-		} else {
-			finished = true;
-		}
-	}
+	countTiles(y, x, NEGATIVE, pointsToAdd, comboCol, playerBoard, false);
 
 	// count tiles below
-	finished = false;
-	for (int row = y + 1; row < WALL_DIM && !finished; row++) {
-		if (playerBoard->getWallTile(x, row) != EMPTY) {
-			comboCol = true;
-			pointsToAdd++;
-		} else {
-			finished = true;
-		}
-	}
-
+	countTiles(y, x, POSITIVE, pointsToAdd, comboCol, playerBoard, false);
 
 	// count tiles left
-	finished = false;
-	for (int col = x - 1; col >= 0 && !finished; col--) {
-		if (playerBoard->getWallTile(col, y) != EMPTY) {
-			comboRow = true;
-			pointsToAdd++;
-		} else {
-			finished = true;
-		}
-	}
+	countTiles(x, y, NEGATIVE, pointsToAdd, comboRow, playerBoard, true);
 
 	// count tiles right
-	finished = false;
-	for (int col = x + 1; col < WALL_DIM && !finished; col++) {
-		if (playerBoard->getWallTile(col, y) != EMPTY) {
-			comboRow = true;
-			pointsToAdd++;
-		} else {
-			finished = true;
-		}
-	}
+	countTiles(x, y, POSITIVE, pointsToAdd, comboRow, playerBoard, true);
 
 	// additional point for connecting both row and col
 	if (comboCol && comboRow) {
@@ -110,13 +79,25 @@ void GameLogic::calculatePoints(Player* player, int x, int y) {
 	player->setPoints(playerPoints);
 }
 
-void GameLogic::countTiles(int start, int tileLoc, char sign, int& pointsToAdd, bool& combo,
-PlayerBoard* playerBoard, bool swap) {
+/*
+Calculates the points for 1 tile location, 
+parameters: {start} is the start location where you want to iterate, (x or y)
+			{tileLoc} is the opposite axis for the start location, (x or y)
+			{sign} pass POSITIVE to iterate right or down, NEGATIVE to iterate
+				left or up.
+			{pointsToAdd} is where the players points are added
+			{combo} checks whether the player gets combo points for row or column
+			{playerboard} is the players board
+			{horizontal} pass true here if you are iterating left or right. False
+				for iterating up or down.
+*/
+void GameLogic::countTiles(int start, int tileLoc, char sign, int& pointsToAdd, 
+	bool& combo, PlayerBoard* playerBoard, bool horizontal) {
 	bool finished = false;
 	if (sign == NEGATIVE) {
 		for (int row = start - 1; row >= 0 && !finished; row--) {
 			char compareTile = '\0';
-			if(swap) {
+			if(horizontal) {
 				compareTile = playerBoard->getWallTile(row, tileLoc);
 			} else {
 				compareTile = playerBoard->getWallTile(tileLoc, row);
@@ -131,7 +112,7 @@ PlayerBoard* playerBoard, bool swap) {
 	} else if (sign == POSITIVE) {
 		for (int row = start + 1; row < WALL_DIM && !finished; row++) {
 			char compareTile = '\0';
-			if(swap) {
+			if(horizontal) {
 				compareTile = playerBoard->getWallTile(row, tileLoc);
 			} else {
 				compareTile = playerBoard->getWallTile(tileLoc, row);
@@ -160,7 +141,10 @@ void GameLogic::resetBoard(Player* player, TileBag* tileBag) {
 		PatternLine* patternLine = player->getPlayerBoard()->getPatternLine(i);
 
 		// add tiles back to bag. -1 if it's full since it will be moved to the wall
-		int numToAdd = patternLine->isFull() ? patternLine->getCurrentSize() - 1 : patternLine->getCurrentSize();
+		int numToAdd = patternLine->isFull() 
+						? patternLine->getCurrentSize() - 1
+						: patternLine->getCurrentSize();
+
 		for (int i = 0; i < numToAdd; i++) {
 			tileBag->addToBag(patternLine->getTileType());
 		}
@@ -195,7 +179,7 @@ bool GameLogic::roundOver(Factories* factories) {
  * Returns true if the tiles are placed in the players patternLine/brokenLine
  */
 bool GameLogic::takeTiles(Factories* factories, Player* player,
-						  int factoryNumber, char tile, int destPatternLine, TileBag* tileBag) {
+	int factoryNumber, char tile, int destPatternLine, TileBag* tileBag) {
 	bool retValue = false;
 	// reduces input patternLine by 1 to fit array
 	destPatternLine--;
@@ -220,13 +204,13 @@ bool GameLogic::takeTiles(Factories* factories, Player* player,
  * returns true if the amount of tiles added is greater than zero.
  */
 bool GameLogic::addTilesFromCenterFact(Factories* factories, Player* player,
-									   int factoryNumber, char tile,
-									   int destPatternLine, TileBag* tileBag) {
+	int factoryNumber, char tile, int destPatternLine, TileBag* tileBag) {
 	bool retValue = false;
 	std::vector<char>* tempTiles = factories->takeTilesCenterFactory(tile);
 	for (unsigned int i = 0; i < tempTiles->size(); ++i) {
 		if (destPatternLine != BROKEN_LINE) {
-			if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->addTile(tempTiles->at(i)))) {
+			if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)
+				->addTile(tempTiles->at(i)))) {
 				if (!(player->getPlayerBoard()->addBrokenTile(tempTiles->at(i)))) {
 					tileBag->addToBag(tempTiles->at(i));
 				}
@@ -250,7 +234,7 @@ bool GameLogic::addTilesFromCenterFact(Factories* factories, Player* player,
  * go back to the tilebag, returns true if any tile added was not empty.
  */
 bool GameLogic::addTilesFromFact(Factories* factories, Player* player,
-								 int factoryNumber, char tile, int destPatternLine, TileBag* tileBag) {
+	int factoryNumber, char tile, int destPatternLine, TileBag* tileBag) {
 	bool retValue = false;
 	char* tempTiles = factories->takeTilesFactory(factoryNumber - 1, tile);
 	for (unsigned int i = 0; i < FACTORY_SIZE; ++i) {
@@ -295,6 +279,9 @@ bool GameLogic::playerTileCheck(Player* player, char tile, int destPatternLine) 
 	return retValue;
 }
 
+/* Checks if the location on the players wall has already been filled by
+ * the tile before. Returns false if the tile location is filled.
+ */
 bool GameLogic::playerWallCheck(Player* player, char tile, int destPatternLine) {
 	bool retValue = true;
 	if (destPatternLine != BROKEN_LINE) {
@@ -308,6 +295,10 @@ bool GameLogic::playerWallCheck(Player* player, char tile, int destPatternLine) 
 	return retValue;
 }
 
+/* Directly finds the location of a specific tile on the wall without
+ * iterating over the wall itself. This is a helper method for:
+ * bool playerWallCheck(Player* player, char tile, int destPatternLine)
+ */
 int GameLogic::tileLocation(int destPatternLine, char tile) {
 	int tileCount = 0;
 	for (int i = 0; i < WALL_DIM; ++i) {
