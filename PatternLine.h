@@ -11,10 +11,7 @@ public:
 
 	// Adds a tile to the end of the pattern line if not full
 	bool addTile(char tile);
-
-	// Removes a tile at specific index
-	// void removeTile(int index);
-
+	
 	int getSize();
 	int getCurrentSize();
 
