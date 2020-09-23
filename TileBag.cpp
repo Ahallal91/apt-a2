@@ -19,10 +19,6 @@ TileBag::TileBag(TileBag& other) {
 	this->tileBag = new LinkedList(*other.tileBag);
 }
 
-TileBag::TileBag(TileBag&& other) {
-	this->tileBag = new LinkedList(*other.tileBag);
-}
-
 TileBag::~TileBag() {
 	delete tileBag;
 }

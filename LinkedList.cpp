@@ -14,29 +14,12 @@ Node::Node(Node& other):
 {
 }
 
-Node::Node(Node&& other):
-	data(other.data),
-	next(other.next),
-    prev(other.prev) 
-{
-}
-
 LinkedList::LinkedList() {
 	this->head = nullptr;
     this->tail = nullptr;
 }
 
 LinkedList::LinkedList(LinkedList& other) {
-    Node* current = other.head;
-    while(current != nullptr) {
-        addBack(current->data);
-        current = current->next;
-    }
-    this->head  = other.head;
-    this->tail = other.tail;
-}
-
-LinkedList::LinkedList(LinkedList&& other) {
     Node* current = other.head;
     while(current != nullptr) {
         addBack(current->data);
