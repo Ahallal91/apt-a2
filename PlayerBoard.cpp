@@ -98,6 +98,19 @@ char PlayerBoard::getBrokenTile(int index) {
 	return tile;
 }
 
+bool PlayerBoard::brokenLineHasFirst() {
+	bool retValue = false;
+	unsigned int index = 0;
+	while(index < brokenLine->size() && !retValue) {
+		if (getBrokenTile(index) == FIRST) {
+			retValue = true;
+		}
+		index++;
+	}
+
+	return retValue;
+}
+
 int PlayerBoard::getBrokenSize() {
 	return brokenLine->size();
 }

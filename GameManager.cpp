@@ -122,10 +122,18 @@ void GameManager::playGame(GameState* gameState) {
 			this->output->turnSuccess();
 			this->output->outputBoard(gameState->getCurrentPlayer());
 
-			gameState->setCurrentPlayer(gameState->getCurrentPlayer() == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1());
+			gameState->setCurrentPlayer(
+				gameState->getCurrentPlayer() == gameState->getPlayer1()
+				? gameState->getPlayer2() 
+				: gameState->getPlayer1());
 		}
 		// round has ended
-		
+
+		// sets the player with the first tile to the starting player for next round
+		gameState->getPlayer2()->getPlayerBoard()->brokenLineHasFirst()
+			? gameState->setCurrentPlayer(gameState->getPlayer2())
+			: gameState->setCurrentPlayer(gameState->getPlayer1());
+
 		// calculate player points and move to wall
 		this->gameLogic->addToWall(gameState->getPlayer1());
 		this->gameLogic->addToWall(gameState->getPlayer2());

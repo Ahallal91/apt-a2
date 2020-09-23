@@ -35,6 +35,9 @@ public:
 	// Returns the tile at an index of the broken line
 	char getBrokenTile(int index);
 
+	// Returns true if the players broken line contains the FIRST tile
+	bool brokenLineHasFirst();
+	
 	// Returns the amount of tiles in the broken line
 	int getBrokenSize();
 
