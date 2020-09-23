@@ -24,8 +24,18 @@ char* Factories::getFactory(int factoryNumber) {
 	return retValue;
 }
 
-std::vector<char>* Factories::getCenterFactory() {
-	return centerFactory;
+char Factories::getCenterFactoryTile(unsigned int index) {
+	char tile = EMPTY;
+
+	if (index >= 0 && index < centerFactory->size()) {
+		tile = centerFactory->at(index);
+	}
+
+	return tile;
+}
+
+int Factories::centerFactorySize() {
+	return centerFactory->size();
 }
 
 bool Factories::addToFactory(int factoryNumber, char tile) {

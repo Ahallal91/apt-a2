@@ -8,8 +8,13 @@ public:
 	Factories();
 	~Factories();
 
+	// returns a single factory by factory number. Does not return center factory
 	char* getFactory(int factoryNumber);
-	std::vector<char>* getCenterFactory();
+
+	// returns a tile from the center factory by index
+	char getCenterFactoryTile(unsigned int index);
+
+	int centerFactorySize();
 
 	bool addToFactory(int factoryNumber, char tile);
 	char* takeTilesFactory(int factoryNumber, char tile);
