@@ -51,7 +51,7 @@ void Output::outputFactory(Factories* factory) {
 
 	// output the center factory
 	std::cout << "0: ";
-	for (int i = 0; i < factory->centerFactorySize(); ++i) {
+	for (unsigned int i = 0; i < factory->getCenterFactorySize(); ++i) {
 		std::cout << factory->getCenterFactoryTile(i) << " ";
 	}
 

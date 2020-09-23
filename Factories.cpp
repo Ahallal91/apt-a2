@@ -34,7 +34,7 @@ char Factories::getCenterFactoryTile(unsigned int index) {
 	return tile;
 }
 
-int Factories::centerFactorySize() {
+unsigned int Factories::getCenterFactorySize() {
 	return centerFactory->size();
 }
 

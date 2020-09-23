@@ -14,7 +14,8 @@ public:
 	// returns a tile from the center factory by index
 	char getCenterFactoryTile(unsigned int index);
 
-	int centerFactorySize();
+	// returns size of the center factory
+	unsigned int getCenterFactorySize();
 
 	bool addToFactory(int factoryNumber, char tile);
 	char* takeTilesFactory(int factoryNumber, char tile);
