@@ -129,7 +129,8 @@ bool Input::validateTurnCommand(std::vector<std::string>& arguments) {
 	// Validate that the tile (3rd parameter) is a tile char
 	if (tileStr.length() == 1) {
 		char tile = tileStr[0];
-		tileValid = (tile == RED || tile == YELLOW || tile == DARK_BLUE || tile == LIGHT_BLUE || tile == BLACK);
+		tileValid = (tile == RED || tile == YELLOW || tile == DARK_BLUE 
+					|| tile == LIGHT_BLUE || tile == BLACK);
 	}
 
 	// Validate the row / pattern line (4th parameter) is a number 1 - 6
@@ -147,7 +148,7 @@ bool Input::validateSaveCommand(std::vector<std::string>& arguments) {
 	std::string filename = arguments[1];
 
 	// Characters not allowed in filenames
-	char invalidCharacters[] = {'<', '>', ':', '"', '/', '\\', '|', '?', '*'};
+	const char invalidCharacters[] = {'<', '>', ':', '"', '/', '\\', '|', '?', '*'};
 
 	for (char c : invalidCharacters) {
 		if (filename.find(c) != std::string::npos) {

@@ -232,7 +232,13 @@ GameState* GameManager::importGame(std::string fileName) {
 			// check that command is valid (lazy operator)
 			bool validMove = false;
 			if(!commands.empty() && commands[0] == TURN_COMMAND) {
-				validMove = gameLogic->takeTiles(factories, gameState->getCurrentPlayer(), stoi(commands[1]), commands[2].at(0), stoi(commands[3]), bag);
+
+				validMove = gameLogic
+							->takeTiles(factories, gameState->getCurrentPlayer(),
+							stoi(commands[1]),
+							commands[2].at(0),
+							stoi(commands[3]), bag);
+
 				if(!validMove) {
 					validGame = false;
 				} else {
@@ -245,7 +251,11 @@ GameState* GameManager::importGame(std::string fileName) {
 			}
 
 			// might do a check
-			if(!eof) gameState->setCurrentPlayer(gameState->getCurrentPlayer() == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1());
+			if(!eof) gameState->setCurrentPlayer(gameState->getCurrentPlayer()
+					== gameState->getPlayer1() 
+					? gameState->getPlayer2() 
+					: gameState->getPlayer1());
+
 			//LOG("changing player " + gameState->getCurrentPlayer()->getPlayerName());
 		}
 			
@@ -253,12 +263,12 @@ GameState* GameManager::importGame(std::string fileName) {
 			// round has ended
 
 			// calculate player points and move to wall
-			this->gameLogic->addToWall(gameState->getPlayer1());
-			this->gameLogic->addToWall(gameState->getPlayer2());
+			gameLogic->addToWall(gameState->getPlayer1());
+			gameLogic->addToWall(gameState->getPlayer2());
 
 			// reset board and add back to tile bag
-			this->gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
-			this->gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
+			gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
+			gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
 
 			if(gameState->getRound() < NUM_ROUNDS) {
 				gameState->incrementRound();
@@ -298,13 +308,17 @@ void GameManager::validateMove(GameState* gameState) {
 	bool moveSuccess = false;
 
 	while (!moveSuccess) {
-		this->output->requestInput();
-		commands = this->input->getGameplayInput(std::cin);
-		std::cout << commands.size() << std::endl;
+		output->requestInput();
+		commands = input->getGameplayInput(std::cin);
 
 		if (!commands.empty()) {
 			if (commands[0] == "turn") {
-				moveSuccess = this->gameLogic->takeTiles(gameState->getFactories(), gameState->getCurrentPlayer(), stoi(commands[1]), commands[2].at(0), stoi(commands[3]), gameState->getTileBag());
+				moveSuccess = gameLogic->takeTiles(gameState->getFactories(),
+							gameState->getCurrentPlayer(),
+							stoi(commands[1]),
+							commands[2].at(0),
+							stoi(commands[3]),
+							gameState->getTileBag());
 
 				// if succesfull move, add it to the game state turn history
 				if(moveSuccess) {
@@ -312,15 +326,15 @@ void GameManager::validateMove(GameState* gameState) {
 				}
 				
 			} else if (commands[0] == "save") {
-				this->exportGame(gameState, commands.at(1));
-				this->output->saveSuccess(commands.at(1));
+				exportGame(gameState, commands.at(1));
+				output->saveSuccess(commands.at(1));
 			}
 		}
 
 		// display invalid input if they entered nothing or they entered invalid turn
 		// (lazy operator avoids exception)
 		if (commands.empty() || (commands[0] == "turn" && !moveSuccess)) {
-			this->output->invalidInput();
+			output->invalidInput();
 		}
 	}
 }
