@@ -2,7 +2,8 @@
 
 GameState::GameState() {}
 
-GameState::GameState(int round, Player* player1, Player* player2, TileBag* tileBag, Factories* factories, Player* currentPlayer):
+GameState::GameState(int round, Player* player1, Player* player2, 
+	TileBag* tileBag, Factories* factories, Player* currentPlayer):
 	round(round),
 	tileBag(tileBag),
 	factories(factories),

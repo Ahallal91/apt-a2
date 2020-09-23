@@ -12,7 +12,8 @@ public:
 	GameState();
 
 	// TODO some of these constructor fields can be moved to setters to make it smaller
-	GameState(int round, Player* player1, Player* player2, TileBag* tileBag, Factories* factories, Player* currentPlayer);
+	GameState(int round, Player* player1, Player* player2, TileBag* tileBag, 
+				Factories* factories, Player* currentPlayer);
 	~GameState();
 
 	int getRound();
