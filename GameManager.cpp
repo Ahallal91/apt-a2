@@ -79,13 +79,7 @@ void GameManager::loadGame(std::string testFile) {
 			gameState = importGame(testFile);
 
 			if (gameState != nullptr) {
-				output->outputRound(gameState);
-				output->outputFactory(gameState->getFactories());
-				output->outputScore(gameState->getPlayer1());
-				output->outputBoard(gameState->getPlayer1());
-
-				output->outputScore(gameState->getPlayer2());
-				output->outputBoard(gameState->getPlayer2());
+				output->outputTestingGameState(gameState);
 			} else {
 				std::cout << "Testing mode failed - This is not a valid azul game!" << std::endl;
 			}
@@ -113,14 +107,13 @@ void GameManager::playGame(GameState* gameState) {
 
 		while (!this->gameLogic->roundOver(gameState->getFactories())) {
 			// this could all be in one method in output, then these methods could become private
-			this->output->outputTurn(gameState->getCurrentPlayer());
-			this->output->outputFactory(gameState->getFactories());
-			this->output->outputBoard(gameState->getCurrentPlayer());
+			output->outputCurrentGameState(gameState->getCurrentPlayer(),
+											gameState->getFactories());
+
 
 			this->validateMove(gameState);
 
-			this->output->turnSuccess();
-			this->output->outputBoard(gameState->getCurrentPlayer());
+			output->turnSuccess(gameState->getCurrentPlayer());
 
 			gameState->setCurrentPlayer(
 				gameState->getCurrentPlayer() == gameState->getPlayer1()
@@ -144,15 +137,11 @@ void GameManager::playGame(GameState* gameState) {
 
 		// OUTPUT round over here
 		// output score
-		this->output->outputScore(gameState->getPlayer1());
-		this->output->outputScore(gameState->getPlayer2());
-		std::cout << std::endl;
-		this->output->outputBoard(gameState->getPlayer1());
-		this->output->outputBoard(gameState->getPlayer2());
+		output->outputEndOfRound(gameState);
 	}
 
 	// game finished
-	this->output->outputWinner(gameState->getPlayer1(), gameState->getPlayer2());
+	output->outputWinner(gameState->getPlayer1(), gameState->getPlayer2());
 }
 
 // TODO fix the tilbag (right now is just using default one)

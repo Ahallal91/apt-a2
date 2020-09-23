@@ -10,6 +10,30 @@ Output::Output() {}
 
 Output::~Output() {}
 
+void Output::outputCurrentGameState(Player* currentPlayer, 
+	Factories* factories) {
+	outputTurn(currentPlayer);
+	outputFactory(factories);
+	outputBoard(currentPlayer);
+}
+
+void Output::outputEndOfRound(GameState* gamestate) {
+	outputScore(gamestate->getPlayer1());
+	outputScore(gamestate->getPlayer2());
+	std::cout << std::endl;
+	outputBoard(gamestate->getPlayer1());
+	outputBoard(gamestate->getPlayer2());
+}
+
+void Output::outputTestingGameState(GameState* gameState) {
+	outputRound(gameState);
+	outputFactory(gameState->getFactories());
+	outputScore(gameState->getPlayer1());
+	outputBoard(gameState->getPlayer1());
+
+	outputScore(gameState->getPlayer2());
+	outputBoard(gameState->getPlayer2());
+}
 
 void Output::outputRound(GameState* gameState) {
 	std::cout << "=== Round " << gameState->getRound() << " ===" << std::endl << std::endl;
@@ -23,8 +47,9 @@ void Output::outputTurn(Player* player) {
 	std::cout << "TURN FOR PLAYER: " << player->getPlayerName() << std::endl;
 }
 
-void Output::turnSuccess() {
+void Output::turnSuccess(Player* currentPlayer) {
 	std::cout << "Turn successful" << std::endl;
+	outputBoard(currentPlayer);
 }
 
 void Output::requestInput() {
