@@ -106,15 +106,17 @@ void GameManager::playGame(GameState* gameState) {
 		}
 
 		while (!this->gameLogic->roundOver(gameState->getFactories())) {
-			// this could all be in one method in output, then these methods could become private
+			// outputs the current state of the game
 			output->outputCurrentGameState(gameState->getCurrentPlayer(),
 											gameState->getFactories());
 
+			// checks for valid move on input
+			validateMove(gameState);
 
-			this->validateMove(gameState);
-
+			// outputs successful turn for player
 			output->turnSuccess(gameState->getCurrentPlayer());
 
+			// changes current player to opposite player
 			gameState->setCurrentPlayer(
 				gameState->getCurrentPlayer() == gameState->getPlayer1()
 				? gameState->getPlayer2() 
@@ -128,19 +130,18 @@ void GameManager::playGame(GameState* gameState) {
 			: gameState->setCurrentPlayer(gameState->getPlayer1());
 
 		// calculate player points and move to wall
-		this->gameLogic->addToWall(gameState->getPlayer1());
-		this->gameLogic->addToWall(gameState->getPlayer2());
+		gameLogic->addToWall(gameState->getPlayer1());
+		gameLogic->addToWall(gameState->getPlayer2());
 
 		// reset board and add back to tile bag
-		this->gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
-		this->gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
+		gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
+		gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
 
-		// OUTPUT round over here
-		// output score
+		// outputs the end of round and player points information
 		output->outputEndOfRound(gameState);
 	}
 
-	// game finished
+	// game finished, outputs the final winner of the game.
 	output->outputWinner(gameState->getPlayer1(), gameState->getPlayer2());
 }
 
