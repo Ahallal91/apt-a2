@@ -15,9 +15,6 @@ public:
 	// copyConstructor
 	TileBag(TileBag& other);
 
-	// moveConstructor
-	TileBag(TileBag&& other);
-
 	// delete constructor
 	~TileBag();
 
@@ -27,9 +24,8 @@ public:
 	// removes the tile at the front of the queue and returns the tile removed
 	char removeFrontTile();
 
-	int size();
-
-	char at(const unsigned int index) const;
+	// returns the current tilebag as a string;
+	std::string toString();
 
 private:
 	// Where the tiles are stored

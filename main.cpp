@@ -1,7 +1,7 @@
 #include <iostream>
-#include "GameManager.h"
-
 #include <limits>
+
+#include "GameManager.h"
 
 void printLine(std::string message);
 void runMenu(GameManager* gameManager);

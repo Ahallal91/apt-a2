@@ -1,9 +1,11 @@
-#include "Input.h"
-#include <iostream>
-#include "Player.h"
-#include "Types.h"
 #include <istream>
 #include <sstream>
+#include <iostream>
+
+#include "Input.h"
+#include "Player.h"
+#include "Types.h"
+
 
 Input::Input() {}
 

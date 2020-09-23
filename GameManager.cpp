@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+
 #include "GameManager.h"
 #include "Output.h"
 #include "Types.h"
@@ -8,7 +10,6 @@
 #include "Factories.h"
 #include "TileBag.h"
 #include "GameState.h"
-#include <fstream>
 #include "FileHandler.h"
 
 #define LOG(x) std::cout << x << std::endl
@@ -302,7 +303,7 @@ void GameManager::validateMove(GameState* gameState) {
 		commands = input->getGameplayInput(std::cin);
 
 		if (!commands.empty()) {
-			if (commands[0] == "turn") {
+			if (commands[0] == TURN_COMMAND) {
 				moveSuccess = gameLogic->takeTiles(gameState->getFactories(),
 							gameState->getCurrentPlayer(),
 							stoi(commands[1]),
@@ -315,7 +316,7 @@ void GameManager::validateMove(GameState* gameState) {
 					logTurn(commands, gameState);
 				}
 				
-			} else if (commands[0] == "save") {
+			} else if (commands[0] == SAVE_COMMAND) {
 				exportGame(gameState, commands.at(1));
 				output->saveSuccess(commands.at(1));
 			}
@@ -323,7 +324,7 @@ void GameManager::validateMove(GameState* gameState) {
 
 		// display invalid input if they entered nothing or they entered invalid turn
 		// (lazy operator avoids exception)
-		if (commands.empty() || (commands[0] == "turn" && !moveSuccess)) {
+		if (commands.empty() || (commands[0] == TURN_COMMAND && !moveSuccess)) {
 			output->invalidInput();
 		}
 	}

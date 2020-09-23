@@ -1,6 +1,7 @@
-#include "FileHandler.h"
 #include <fstream>
 #include <iostream>
+
+#include "FileHandler.h"
 
 FileHandler::FileHandler() {}
 

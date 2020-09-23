@@ -34,10 +34,10 @@ char TileBag::removeFrontTile() {
 	return retValue;
 }
 
-int TileBag::size() {
-	return tileBag->size();
-}
-
-char TileBag::at(const unsigned int index) const {
-	return tileBag->get(index);
+std::string TileBag::toString() {
+	std::string retValue = "";
+	for(unsigned int i = 0; i < tileBag->size(); ++i) {
+		retValue += tileBag->get(i);
+	}
+	return retValue;
 }

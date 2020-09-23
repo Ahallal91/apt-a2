@@ -1,6 +1,5 @@
 #include "PlayerBoard.h"
 #include "Types.h"
-//#include "PatternLine.h"
 
 PlayerBoard::PlayerBoard() {
 	// Create a 5x5 char array for the wall and patternline

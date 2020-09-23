@@ -1,5 +1,6 @@
-#include "LinkedList.h"
 #include <stdexcept>
+
+#include "LinkedList.h"
 
 Node::Node(char data, Node* prev, Node* next) {
 	this->data = data;
