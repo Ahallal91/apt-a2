@@ -44,7 +44,6 @@ Player* Input::enterPlayerName(int playerNum) {
 
 std::vector<std::string> Input::getGameplayInput(std::istream& stream) {
 
-
 	// A string containing the full line a user inputted
 	std::string input;
 

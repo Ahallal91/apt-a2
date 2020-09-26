@@ -13,7 +13,6 @@
 
 #define LOG(x) std::cout << x << std::endl
 
-// TODO overload this constructor to take in a file; that is a save file.
 GameManager::GameManager() {
 	this->gameLogic = new GameLogic();
 	this->input = new Input();
@@ -29,7 +28,7 @@ GameManager::~GameManager() {
 }
 
 bool GameManager::newGame() {
-	TileBag* tileBag = new TileBag("TileBag.txt");
+	TileBag* tileBag = new TileBag(DEFAULT_TILE_BAG_FILE);
 	Factories* factories = new Factories();
 
 	// TODO might want to change the enterPlayerName and do looping here instead (Input class should be strictly for input - no game logic!)
@@ -44,8 +43,6 @@ bool GameManager::newGame() {
 	return !playing;
 }
 
-// TODO this will loop user input and calling importGame() until a valid game is found, then create a GameState from that
-// After a valid game file is detected, should call playGame(GameState* gameState) to play the game from the GameState
 bool GameManager::loadGame(std::string testFile) {
 	GameState* gameState = nullptr;
 	bool testMode = !testFile.empty();
@@ -250,13 +247,11 @@ GameState* GameManager::importGame(std::string fileName) {
 				validGame = false;
 			}
 
-			// might do a check
+			// switch players
 			if (!eof) gameState->setCurrentPlayer(gameState->getCurrentPlayer()
 												  == gameState->getPlayer1()
 												  ? gameState->getPlayer2()
 												  : gameState->getPlayer1());
-
-			//LOG("changing player " + gameState->getCurrentPlayer()->getPlayerName());
 		}
 
 		if (validGame && gameLogic->roundOver(factories)) {
@@ -284,6 +279,7 @@ GameState* GameManager::importGame(std::string fileName) {
 		}
 	}
 
+	// if the game is not valid, return a nullptr
 	if (!validGame) {
 		// no memory leaks as when deleting a gameState, the previously made pointers will get cleaned up
 		delete gameState;
