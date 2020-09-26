@@ -24,11 +24,11 @@ public:
 	// Loads a game from a save file by asking for save file input and resuming the game.
 	// If called with a file name as its parameter, will instead show the output of the
 	// current game state which is used during testing mode
-	void loadGame(std::string testFile = "");
+	bool loadGame(std::string testFile = "");
 
 	// Main Game Loop
 	// Plays a Game from a GameState until finished or exited
-	void playGame(GameState* gameState);
+	bool playGame(GameState* gameState);
 
 	// Imports a game from a save file
 	// Returns a GameState of the game if it is valid, otherwise returns a nullptr
@@ -43,7 +43,6 @@ private:
 	Output* output;
 	FileHandler* fileHandler;
 	// used to end the game if player decides to quit
-	bool playing;
 
 	bool validateMove(GameState* gameState);
 
