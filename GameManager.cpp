@@ -12,6 +12,8 @@
 #include "GameState.h"
 #include "FileHandler.h"
 
+#define NUM_ROUNDS			 5
+#define FILE_NAME_EXTENSION ".azul"
 #define LOG(x) std::cout << x << std::endl
 
 // TODO overload this constructor to take in a file; that is a save file.

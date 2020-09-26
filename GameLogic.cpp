@@ -6,6 +6,9 @@
 
 #define POSITIVE 		'+'
 #define NEGATIVE 		'-'
+#define BROKEN_LINE			 5
+// amount of points lost where the index is the amount of broken line tiles
+constexpr int brokenLinePoints[] = {0, -1, -2, -4, -6, -8, -11, -14};
 
 GameLogic::GameLogic() {}
 
