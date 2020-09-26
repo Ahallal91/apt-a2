@@ -196,7 +196,7 @@ GameState* GameManager::importGame(std::string fileName) {
 	Player* player1 = new Player(name1);
 	Player* player2 = new Player(name2);
 
-	//GS
+	// GS
 	gameState = new GameState(1, player1, player2, bag, factories, player1);
 
 	// play the game from a file
