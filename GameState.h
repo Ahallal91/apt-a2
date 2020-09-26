@@ -32,6 +32,9 @@ public:
 	Player* getCurrentPlayer();
 	void setCurrentPlayer(Player* player);
 
+	void setFinished(bool gameFinished);
+	bool isFinished();
+
 	// Add a turn (the command inputted by the player) to the history of turns
 	void addTurn(std::string turn);
 
@@ -48,6 +51,8 @@ private:
 	Player* player2;
 
 	Player* currentPlayer;
+
+	bool gameFinished;
 
 	std::vector<std::string>* turns;
 

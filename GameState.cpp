@@ -10,6 +10,8 @@ GameState::GameState(int round, Player* player1, Player* player2,
 	player1(player1),
 	player2(player2),
 	currentPlayer(currentPlayer) {
+	
+	gameFinished = false;
 	turns = new std::vector<std::string>;
 
 	// get initial tile bag order
@@ -60,6 +62,14 @@ Player* GameState::getCurrentPlayer() {
 
 void GameState::setCurrentPlayer(Player* player) {
 	currentPlayer = player;
+}
+
+void GameState::setFinished(bool gameFinished) {
+	this->gameFinished = gameFinished;
+}
+
+bool GameState::isFinished() {
+	return gameFinished;
 }
 
 void GameState::addTurn(std::string turn) {
