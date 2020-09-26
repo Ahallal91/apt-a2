@@ -253,6 +253,11 @@ GameState* GameManager::importGame(std::string fileName) {
 		if(validGame && gameLogic->roundOver(factories)) {
 			// round has ended
 
+			// sets the player with the first tile to the starting player for next round
+			gameState->getPlayer2()->getPlayerBoard()->brokenLineHasFirst()
+			? gameState->setCurrentPlayer(gameState->getPlayer2())
+			: gameState->setCurrentPlayer(gameState->getPlayer1());
+
 			// calculate player points and move to wall
 			gameLogic->addToWall(gameState->getPlayer1());
 			gameLogic->addToWall(gameState->getPlayer2());
