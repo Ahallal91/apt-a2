@@ -119,7 +119,10 @@ void GameManager::playGame(GameState* gameState) {
 			if (!this->gameLogic->roundOver(gameState->getFactories())) {
 				this->output->turnSuccess(gameState->getCurrentPlayer());
 
-				gameState->setCurrentPlayer(gameState->getCurrentPlayer() == gameState->getPlayer1() ? gameState->getPlayer2() : gameState->getPlayer1());
+				gameState->setCurrentPlayer(gameState->getCurrentPlayer() 
+											== gameState->getPlayer1() 
+											? gameState->getPlayer2() 
+											: gameState->getPlayer1());
 			}
 			// else output roundOver info
 			else if (this->gameLogic->roundOver(gameState->getFactories())) {
@@ -128,8 +131,10 @@ void GameManager::playGame(GameState* gameState) {
 				this->gameLogic->addToWall(gameState->getPlayer2());
 
 				// reset board and add back to tile bag
-				this->gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
-				this->gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
+				this->gameLogic->resetBoard(gameState->getPlayer1(), 
+											gameState->getTileBag());
+				this->gameLogic->resetBoard(gameState->getPlayer2(), 
+											gameState->getTileBag());
 
 				// output score
 				this->output->outputEndOfRound(gameState);
@@ -304,7 +309,12 @@ bool GameManager::validateMove(GameState* gameState) {
 
 		if (!commands.empty()) {
 			if (commands[0] == TURN_COMMAND) {
-				moveSuccess = this->gameLogic->takeTiles(gameState->getFactories(), gameState->getCurrentPlayer(), stoi(commands[1]), commands[2].at(0), stoi(commands[3]), gameState->getTileBag());
+				moveSuccess = gameLogic->takeTiles(gameState->getFactories(),
+							 	gameState->getCurrentPlayer(),
+								stoi(commands[1]),
+								commands[2].at(0),
+								stoi(commands[3]),
+								gameState->getTileBag());
 
 				// if succesfull move, add it to the game state turn history
 				if (moveSuccess) {
