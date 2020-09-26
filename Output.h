@@ -30,9 +30,6 @@ public:
 	// output for testing mode.
 	void outputTestingGameState(GameState* gameState);
 	
-	// invalid test game output
-	void invalidTestGame();
-	
 	void requestInput();
 	void invalidInput();
 

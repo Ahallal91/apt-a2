@@ -6,13 +6,12 @@
 #include "Factories.h"
 #include "GameState.h"
 
-#define EMPTY_SPACE " "
 Output::Output() {}
 
 Output::~Output() {}
 
-void Output::outputCurrentGameState(Player* currentPlayer,
-									Factories* factories) {
+void Output::outputCurrentGameState(Player* currentPlayer, 
+	Factories* factories) {
 	outputTurn(currentPlayer);
 	outputFactory(factories);
 	outputBoard(currentPlayer);
@@ -78,7 +77,7 @@ void Output::outputFactory(Factories* factory) {
 	// output the center factory
 	std::cout << "0: ";
 	for (unsigned int i = 0; i < factory->getCenterFactorySize(); ++i) {
-		std::cout << factory->getCenterFactoryTile(i) << EMPTY_SPACE;
+		std::cout << factory->getCenterFactoryTile(i) << " ";
 	}
 
 	// output the factories
@@ -87,12 +86,14 @@ void Output::outputFactory(Factories* factory) {
 		char* tiles = factory->getFactory(i);
 		for (int j = 0; j < FACTORY_SIZE; j++) {
 			if (tiles[j] != '\0') {
-				std::cout << tiles[j] << EMPTY_SPACE;
+				std::cout << tiles[j] << " ";
 			}
 		}
 	}
 	std::cout << std::endl << std::endl;
 }
+
+
 
 // TODO could maybe tell the user what the valid commands are, 
 // but for now, just say invalid
