@@ -26,20 +26,6 @@ constexpr char pattern[WALL_DIM][WALL_DIM] = {
 	{   YELLOW, 		RED, 			BLACK, 			LIGHT_BLUE, 	DARK_BLUE 	}
 };
 
-<<<<<<< HEAD
-=======
-// amount of points lost where the index is the amount of broken line tiles
-constexpr int brokenLinePoints[] = {0, -1, -2, -4, -6, -8, -11, -14};
-
-// Misc
-#define NUM_ROUNDS			 5
-#define FACTORY_SIZE		 4	
-#define BROKEN_LINE			 5
-
-// Broken Line config
-#define NUM_BROKEN_TILES	7 
-
->>>>>>> cbdafe1e13b07831b93a90bec6f4f84624aa6330
 // Factory Config
 #define NUM_FACTORIES 		5
 #define FACTORY_SIZE		 4	
