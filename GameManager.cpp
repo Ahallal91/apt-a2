@@ -122,6 +122,13 @@ bool GameManager::playGame(GameState* gameState) {
 			}
 			// else output roundOver info
 			else if (this->gameLogic->roundOver(gameState->getFactories())) {
+				// the round is over
+
+				// sets the player with the first tile to the starting player for next round
+				gameState->getPlayer2()->getPlayerBoard()->brokenLineHasFirst()
+				? gameState->setCurrentPlayer(gameState->getPlayer2())
+				: gameState->setCurrentPlayer(gameState->getPlayer1());
+				
 				// calculate player points and move to wall
 				this->gameLogic->addToWall(gameState->getPlayer1());
 				this->gameLogic->addToWall(gameState->getPlayer2());
