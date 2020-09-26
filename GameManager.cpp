@@ -29,7 +29,7 @@ GameManager::~GameManager() {
 }
 
 bool GameManager::newGame() {
-	TileBag* tileBag = new TileBag();
+	TileBag* tileBag = new TileBag("TileBag.txt");
 	Factories* factories = new Factories();
 
 	// TODO might want to change the enterPlayerName and do looping here instead (Input class should be strictly for input - no game logic!)
