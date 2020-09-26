@@ -29,8 +29,8 @@ private:
 
 	// takes tiles that match tile passed in from factory, return true if tiles
 	// were added to player board.
-	bool addTilesFromFact(Factories* factories, Player* player,int factoryNumber,
-							char tile, int destPatternLine, TileBag* tileBag);
+	bool addTilesFromFact(Factories* factories, Player* player, int factoryNumber,
+						  char tile, int destPatternLine, TileBag* tileBag);
 
 	// checks if tile matches patternLine or doesn't have tiles yet.
 	bool playerTileCheck(Player* player, char tile, int destPatternLine);
@@ -40,12 +40,23 @@ private:
 
 	// checks if tile being placed on line is already in wall
 	bool playerWallCheck(Player* player, char tile, int destPatternLine);
-	
+
 	// gets the horizontal location of the tile on the wall
 	int tileLocation(int destPatternLine, char tile);
 
-	// helper method to count tile points on the wall
-	void countTiles(int start, int tileLoc, char sign, int& pointsToAdd, 
+	/*
+Calculates the points for 1 tile location,
+parameters: {start} is the start location where you want to iterate, (x or y)
+			{tileLoc} is the opposite axis for the start location, (x or y)
+			{sign} pass POSITIVE to iterate right or down, NEGATIVE to iterate
+				left or up.
+			{pointsToAdd} is where the players points are added
+			{combo} checks whether the player gets combo points for row or column
+			{playerboard} is the players board
+			{horizontal} pass true here if you are iterating left or right. False
+				for iterating up or down.
+*/
+	void countTiles(int start, int tileLoc, char sign, int& pointsToAdd,
 					bool& combo, PlayerBoard* playerBoard, bool horizontal);
 };
 
