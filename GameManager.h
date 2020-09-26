@@ -3,6 +3,9 @@
 
 #include <vector>
 
+#define DEFAULT_TILE_BAG_FILE 	"TileBag.txt"
+#define FILE_NAME_EXTENSION 	".azul"
+
 class Player;
 class Output;
 class Input;
@@ -19,15 +22,18 @@ public:
 	~GameManager();
 
 	// Starts a new game by asking for player names and creating a default GameState
+	// Returns whether the eof was entered during gameplay
 	bool newGame();
 
 	// Loads a game from a save file by asking for save file input and resuming the game.
 	// If called with a file name as its parameter, will instead show the output of the
 	// current game state which is used during testing mode
+	// Returns whether eof was entered during gameplay
 	bool loadGame(std::string testFile = "");
 
 	// Main Game Loop
 	// Plays a Game from a GameState until finished or exited
+	// Returns whether eof was entered during gameplay
 	bool playGame(GameState* gameState);
 
 	// Imports a game from a save file
@@ -42,8 +48,8 @@ private:
 	Input* input;
 	Output* output;
 	FileHandler* fileHandler;
+	
 	// used to end the game if player decides to quit
-
 	bool validateMove(GameState* gameState);
 
 	// Logs a valid turn vector of arguments to a GameState's turn history

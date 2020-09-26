@@ -10,7 +10,7 @@ Advanced Programming Techniques Assignment-2 - A remake of the boardgame Azul
 ### How do I get set up? ###
 
 * To run the game simply clone this repo, run the MAKEFILE using 'make assign2'
-* Testing mode is enabled with the command line arguement -t
+* Testing mode is enabled with the command line argument -t <save-game-file>
 
 ### Modifications to game rules ###
 * This is a two player game only

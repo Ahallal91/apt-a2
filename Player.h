@@ -5,6 +5,10 @@
 
 #include "PlayerBoard.h"
 
+// Player Config
+#define DEFAULT_NAME     	"Player"
+#define INITIAL_POINTS   	0
+
 class Player {
 public:
 	Player();

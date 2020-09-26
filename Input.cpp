@@ -6,9 +6,12 @@
 #include "Player.h"
 #include "Types.h"
 
+<<<<<<< HEAD
 #define TURN_ARGUMENTS 		4
 #define SAVE_ARGUMENTS		2
 
+=======
+>>>>>>> cbdafe1e13b07831b93a90bec6f4f84624aa6330
 Input::Input() {}
 
 Input::~Input() {}
@@ -46,7 +49,6 @@ Player* Input::enterPlayerName(int playerNum) {
 }
 
 std::vector<std::string> Input::getGameplayInput(std::istream& stream) {
-
 
 	// A string containing the full line a user inputted
 	std::string input;

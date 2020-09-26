@@ -32,8 +32,6 @@ int main(int argc, char** argv) {
 }
 
 void runMenu(GameManager* gameManager) {
-	//GameManager* gameManager = new GameManager();
-
 	const std::string choice1 = "1";
 	const std::string choice2 = "2";
 	const std::string choice3 = "3";
@@ -64,6 +62,8 @@ void runMenu(GameManager* gameManager) {
 			printLine("Please select a valid option");
 		}
 	}
+
+	printLine("Goodbye");
 }
 
 void menuText() {
