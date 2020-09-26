@@ -98,11 +98,10 @@ bool GameManager::loadGame(std::string testFile) {
 bool GameManager::playGame(GameState* gameState) {
 	bool playing = true;
 
-	while (gameState->getRound() <= NUM_ROUNDS && playing) {
+	while (gameState->getRound() <= NUM_ROUNDS && !gameState->isFinished() && playing) {
 		// start of round
-		// ONLY CHECK THIS AT NEW ROUND (dont do if loading a game mid round)
+		
 		if (gameLogic->roundOver(gameState->getFactories())) {
-			LOG("[DEBUG] THE ROUND IS OVER!!!");
 			this->gameLogic->initFactoryTiles(gameState->getFactories(), gameState->getTileBag());
 			this->output->outputRound(gameState);
 		}
@@ -149,6 +148,9 @@ bool GameManager::playGame(GameState* gameState) {
 			}
 		}
 	}
+
+	gameState->setFinished(true);
+	output->outputRound(gameState);
 
 	// output the winner
 	if (playing) {
@@ -220,7 +222,7 @@ GameState* GameManager::importGame(std::string fileName) {
 	Player* player1 = new Player(name1);
 	Player* player2 = new Player(name2);
 
-	//GS
+	//Create GameState
 	gameState = new GameState(1, player1, player2, bag, factories, player1);
 
 	// play the game from a file
@@ -280,7 +282,7 @@ GameState* GameManager::importGame(std::string fileName) {
 			if (gameState->getRound() < NUM_ROUNDS) {
 				gameState->incrementRound();
 			} else {
-				std::cout << "[Debug] GAME FINISHED!" << std::endl;
+				gameState->setFinished(true);
 				eof = true;
 			}
 		}

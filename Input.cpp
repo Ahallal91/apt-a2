@@ -6,12 +6,6 @@
 #include "Player.h"
 #include "Types.h"
 
-<<<<<<< HEAD
-#define TURN_ARGUMENTS 		4
-#define SAVE_ARGUMENTS		2
-
-=======
->>>>>>> cbdafe1e13b07831b93a90bec6f4f84624aa6330
 Input::Input() {}
 
 Input::~Input() {}

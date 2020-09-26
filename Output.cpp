@@ -36,7 +36,11 @@ void Output::outputTestingGameState(GameState* gameState) {
 }
 
 void Output::outputRound(GameState* gameState) {
-	std::cout << "=== Round " << gameState->getRound() << " ===" << std::endl << std::endl;
+	if(!gameState->isFinished()) {
+		std::cout << "=== Round " << gameState->getRound() << " ===" << std::endl << std::endl;
+	} else {
+		std::cout << "=== Game is Finished ===" << std::endl << std::endl;
+	}
 }
 
 void Output::saveSuccess(std::string fileName) {
