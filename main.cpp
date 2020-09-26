@@ -53,9 +53,9 @@ void runMenu(GameManager* gameManager) {
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 		if (choice == choice1) {
-			gameManager->newGame();
+			exitMenu = gameManager->newGame();
 		} else if (choice == choice2) {
-			gameManager->loadGame();
+			exitMenu = gameManager->loadGame();
 		} else if (choice == choice3) {
 			credits();
 		} else if (std::cin.eof() || choice == choice4) {

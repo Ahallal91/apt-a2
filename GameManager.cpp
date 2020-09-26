@@ -18,7 +18,6 @@ GameManager::GameManager() {
 	this->gameLogic = new GameLogic();
 	this->input = new Input();
 	this->output = new Output();
-	this->playing = true;
 	this->fileHandler = new FileHandler();
 }
 
@@ -39,17 +38,18 @@ bool GameManager::newGame() {
 
 	// Create a default GameState
 	GameState* gameState = new GameState(1, player1, player2, tileBag, factories, player1);
-	playGame(gameState);
+	bool playing = playGame(gameState);
 
 	delete gameState;
-	return !this->playing;
+	return !playing;
 }
 
 // TODO this will loop user input and calling importGame() until a valid game is found, then create a GameState from that
 // After a valid game file is detected, should call playGame(GameState* gameState) to play the game from the GameState
-void GameManager::loadGame(std::string testFile) {
+bool GameManager::loadGame(std::string testFile) {
 	GameState* gameState = nullptr;
 	bool testMode = !testFile.empty();
+	bool playing = false;
 
 	// If not in testing mode, ask a user to import a game
 	if (!testMode) {
@@ -73,7 +73,7 @@ void GameManager::loadGame(std::string testFile) {
 
 		// If gameState is not null (AKA a valid game), resume the game
 		std::cout << "Azul game successfully loaded" << std::endl << std::endl;
-		playGame(gameState);
+		playing = playGame(gameState);
 
 		// If launched in testing mode
 	} else {
@@ -92,10 +92,12 @@ void GameManager::loadGame(std::string testFile) {
 	}
 
 	delete gameState;
+	return !playing;
 }
 
 // remember to end the loop if player enter ends of line character
-void GameManager::playGame(GameState* gameState) {
+bool GameManager::playGame(GameState* gameState) {
+	bool playing = true;
 
 	while (gameState->getRound() <= NUM_ROUNDS && playing) {
 		// start of round
@@ -109,8 +111,7 @@ void GameManager::playGame(GameState* gameState) {
 		output->outputCurrentGameState(gameState->getCurrentPlayer(),
 									   gameState->getFactories());
 
-
-		this->playing = this->validateMove(gameState);
+		playing = this->validateMove(gameState);
 
 		if (playing) {
 			// output turn info
@@ -142,6 +143,9 @@ void GameManager::playGame(GameState* gameState) {
 	if (playing) {
 		this->output->outputWinner(gameState->getPlayer1(), gameState->getPlayer2());
 	}
+
+	// returns true or false whether the player quit the game
+	return playing;
 }
 
 // TODO fix the tilbag (right now is just using default one)
