@@ -4,6 +4,14 @@
 #include <vector>
 #include <string>
 
+// User input Commands config
+#define TURN_COMMAND 		"turn"
+#define SAVE_COMMAND		"save"
+#define EOF_COMMAND			"quit"
+
+#define TURN_ARGUMENTS 		4
+#define SAVE_ARGUMENTS		2
+
 class Player;
 // used for getting and validating input.
 class Input {

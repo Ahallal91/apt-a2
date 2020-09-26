@@ -6,7 +6,6 @@
 #include "Player.h"
 #include "Types.h"
 
-
 Input::Input() {}
 
 Input::~Input() {}

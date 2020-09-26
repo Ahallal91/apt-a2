@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#define FILE_NAME_EXTENSION ".azul"
+
 class Player;
 class Output;
 class Input;

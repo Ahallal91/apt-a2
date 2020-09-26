@@ -1,10 +1,6 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-// Player Config
-#define DEFAULT_NAME     	"Player"
-#define INITIAL_POINTS   	0
-
 // Player Board Config
 #define WALL_DIM        	5
 
@@ -36,22 +32,12 @@ constexpr int brokenLinePoints[] = {0, -1, -2, -4, -6, -8, -11, -14};
 // Misc
 #define NUM_ROUNDS			 5
 #define FACTORY_SIZE		 4	
-#define NUM_COMMANDS		 4
 #define BROKEN_LINE			 5
-#define FILE_NAME_EXTENSION ".azul"
 
 // Broken Line config
 #define NUM_BROKEN_TILES	7 
 
 // Factory Config
 #define NUM_FACTORIES 		5
-
-// User input Commands config
-#define TURN_COMMAND 		"turn"
-#define SAVE_COMMAND		"save"
-#define EOF_COMMAND			"quit"
-
-#define TURN_ARGUMENTS 		4
-#define SAVE_ARGUMENTS		2
 
 #endif // TYPES_H
