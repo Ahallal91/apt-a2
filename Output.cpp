@@ -11,8 +11,8 @@ Output::Output() {}
 
 Output::~Output() {}
 
-void Output::outputCurrentGameState(Player* currentPlayer, 
-	Factories* factories) {
+void Output::outputCurrentGameState(Player* currentPlayer,
+									Factories* factories) {
 	outputTurn(currentPlayer);
 	outputFactory(factories);
 	outputBoard(currentPlayer);
@@ -94,8 +94,6 @@ void Output::outputFactory(Factories* factory) {
 	std::cout << std::endl << std::endl;
 }
 
-
-
 // TODO could maybe tell the user what the valid commands are, 
 // but for now, just say invalid
 void Output::invalidInput() {
@@ -143,8 +141,4 @@ void Output::outputBoard(Player* player) {
 
 	// Print a blank line for seperation purposes
 	std::cout << std::endl;
-}
-
-void Output::invalidTestGame() {
-
 }
