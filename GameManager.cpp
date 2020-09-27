@@ -180,22 +180,23 @@ GameState* GameManager::importGame(std::string fileName) {
 	// an array to represent how many of each valid tile has been read in
 	// the goal is to read in 20 of each tile
 	int tileCounts[NUM_TILES] = {};
-
+	// total number of tiles that should be in the bag, goal is 100
+	int totalTileCount = 0;
 	// check that 100 tiles are in the string
-	if (tileString.length() == 100) {
-		for (char tile : tileString) {
+	for (char tile : tileString) {
 
-			// check each individual tile is a valid one. if valid, increase the tileCount for the respective tile
-			for (int i = 0; i < NUM_TILES; i++) { // FIX MAGIC NUMBER
-				if (tile == validTile[i]) {
-					tileCounts[i]++;
-				}
+		// check each individual tile is a valid one. if valid, increase the tileCount for the respective tile
+		for (int i = 0; i < NUM_TILES; i++) { // FIX MAGIC NUMBER
+			if (tile == validTile[i]) {
+				tileCounts[i]++;
+				totalTileCount++;
 			}
 		}
-	} else {
+	}
+	if (totalTileCount != 100) {
 		validGame = false;
 	}
-
+		
 	// check that 20 of each tile were read in
 	if (validGame) {
 		for (int i = 0; i < NUM_TILES; i++) {
