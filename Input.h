@@ -33,7 +33,7 @@ public:
 	 * "turn 7 P 8 9" - not valid (numbers too big for board, P not a tile and too many arguments)
 	 * "turn 3 Y 1" - valid
 	 * "save azulgame" - valid
-	 * "save azulgame?/*" - not valid (not allowed question mark, forward slash or asterix in filenames)
+	 * "save azulgame?/ *" - not valid (not allowed question mark, forward slash or asterix in filenames)
 	 */
 	std::vector<std::string> getGameplayInput(std::istream& stream);
 
