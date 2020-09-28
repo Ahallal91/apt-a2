@@ -19,7 +19,8 @@ public:
 	Input();
 	~Input();
 
-	Player* enterPlayerName(int playerNum);
+	// Allows any name excluding entirely whitespace.
+	std::string enterPlayerName(int playerNum);
 	
 	/* Requests the user to enter a command during the game and validates the commands arguments
 	 *

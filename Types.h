@@ -17,6 +17,8 @@ const char validTile[] = {DARK_BLUE, YELLOW, RED, BLACK, LIGHT_BLUE};
 #define FIRST          		'F'
 #define EMPTY           	'.'
 
+#define TILE_BAG_SIZE		100
+
 // The default Azul Wall Pattern
 constexpr char pattern[WALL_DIM][WALL_DIM] = {
 	{   DARK_BLUE,		YELLOW, 		RED, 			BLACK, 			LIGHT_BLUE	},

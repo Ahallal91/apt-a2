@@ -3,6 +3,8 @@
 
 #include "GameManager.h"
 
+#define TESTING_MODE_ARGUMENT	"-t"
+
 void printLine(std::string message);
 void runMenu(GameManager* gameManager);
 void credits();
@@ -11,11 +13,11 @@ void menuText();
 int main(int argc, char** argv) {
 	GameManager* gameManager = new GameManager();
 
-	if (argc >= 2 && std::string(argv[1]) == "-t") {
+	if (argc >= 2 && std::string(argv[1]) == TESTING_MODE_ARGUMENT) {
 		if (argc == 3) {
 			gameManager->loadGame(std::string(argv[2]));
 		} else {
-			std::cout << "Unrecognised arguments for testing mode\n\nUSAGE:\n\t -t <filename>" << std::endl;
+			std::cout << "Unrecognised arguments for testing mode\n\nUSAGE:\n\t" << TESTING_MODE_ARGUMENT << " <filename>" << std::endl;
 		}
 	} else {
 		if (argc > 1) {
