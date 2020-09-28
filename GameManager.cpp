@@ -11,8 +11,6 @@
 #include <fstream>
 #include "FileHandler.h"
 
-#define NUM_ROUNDS			 5
-#define FILE_NAME_EXTENSION ".azul"
 #define LOG(x) std::cout << x << std::endl
 
 GameManager::GameManager() {
@@ -30,24 +28,39 @@ GameManager::~GameManager() {
 }
 
 bool GameManager::newGame() {
-	TileBag* tileBag = new TileBag(DEFAULT_TILE_BAG_FILE);
-	Factories* factories = new Factories();
+	bool playing = false;
+	
+	std::string name1;
+	std::string name2;
+	
+	name1 = input->enterPlayerName(1);
+	if(!name1.empty()) name2 = input->enterPlayerName(2);
 
-	// TODO might want to change the enterPlayerName and do looping here instead (Input class should be strictly for input - no game logic!)
-	Player* player1 = input->enterPlayerName(1);
-	Player* player2 = input->enterPlayerName(2);
+	// check that eof was not entered (indicated by empty player name)
+	if(!name2.empty()) {
+		TileBag* tileBag = new TileBag(DEFAULT_TILE_BAG_FILE);
+		Factories* factories = new Factories();
 
-	// Create a default GameState
-	GameState* gameState = new GameState(1, player1, player2, tileBag, factories, player1);
-	bool playing = playGame(gameState);
+		Player* player1 = new Player(name1);
+		Player* player2 = new Player(name2);
 
-	delete gameState;
+		// Create a default GameState
+		GameState* gameState = new GameState(1, player1, player2, tileBag, factories, player1);
+		
+		// Play the game
+		playing = playGame(gameState);
+
+		// Delete the gameState after playing has stopped
+		delete gameState;
+	}
+
 	return !playing;
 }
 
 bool GameManager::loadGame(std::string testFile) {
 	GameState* gameState = nullptr;
 	bool testMode = !testFile.empty();
+	
 	bool playing = false;
 
 	// If not in testing mode, ask a user to import a game
@@ -59,22 +72,26 @@ bool GameManager::loadGame(std::string testFile) {
 			output->requestInput();
 			std::getline(std::cin, fileName);
 
-			if (fileHandler->fileExists(fileName)) {
-				gameState = importGame(fileName);
+			if(!std::cin.eof()) {
+				if (fileHandler->fileExists(fileName)) {
+					gameState = importGame(fileName);
 
-				if (gameState == nullptr && !std::cin.eof()) {
-					std::cout << "Load failed - This is not a valid azul game!" << std::endl << std::endl;
+					if (gameState == nullptr) {
+						std::cout << "Load failed - This is not a valid azul game!" << std::endl << std::endl;
+					}
+				} else {
+					std::cout << "Load failed - Could not find the file specified" << std::endl << std::endl;
 				}
-			} else {
-				std::cout << "Load failed - Could not find the file specified" << std::endl << std::endl;
 			}
 		}
 
-		// If gameState is not null (AKA a valid game), resume the game
-		std::cout << "Azul game successfully loaded" << std::endl << std::endl;
-		playing = playGame(gameState);
+		// If gameState is not null (AKA a valid game) and EOF was not entered, resume the game
+		if(!std::cin.eof()) {
+			std::cout << "Azul game successfully loaded" << std::endl << std::endl;
+			playing = playGame(gameState);
+		}
 
-		// If launched in testing mode
+	// If launched in testing mode
 	} else {
 		if (fileHandler->fileExists(testFile)) {
 			gameState = importGame(testFile);
@@ -90,7 +107,9 @@ bool GameManager::loadGame(std::string testFile) {
 
 	}
 
+	// Delete the gameState after playing has stopped or EOF was entered
 	delete gameState;
+	
 	return !playing;
 }
 
@@ -149,11 +168,10 @@ bool GameManager::playGame(GameState* gameState) {
 		}
 	}
 
-	gameState->setFinished(true);
-	output->outputRound(gameState);
-
 	// output the winner
 	if (playing) {
+		gameState->setFinished(true);
+		output->outputRound(gameState);
 		this->output->outputWinner(gameState->getPlayer1(), gameState->getPlayer2());
 	}
 
@@ -161,7 +179,6 @@ bool GameManager::playGame(GameState* gameState) {
 	return playing;
 }
 
-// TODO fix the tilbag (right now is just using default one)
 GameState* GameManager::importGame(std::string fileName) {
 	bool validGame = true;
 	GameState* gameState = nullptr;
@@ -169,7 +186,6 @@ GameState* GameManager::importGame(std::string fileName) {
 	std::ifstream file(fileName);
 
 	// prepare the bag and factories
-	// using default bag
 	TileBag* bag = new TileBag();
 	Factories* factories = new Factories();
 
@@ -180,8 +196,10 @@ GameState* GameManager::importGame(std::string fileName) {
 	// an array to represent how many of each valid tile has been read in
 	// the goal is to read in 20 of each tile
 	int tileCounts[NUM_TILES] = {};
+	
 	// total number of tiles that should be in the bag, goal is 100
 	int totalTileCount = 0;
+	
 	// check that 100 tiles are in the string
 	for (char tile : tileString) {
 
@@ -193,14 +211,14 @@ GameState* GameManager::importGame(std::string fileName) {
 			}
 		}
 	}
-	if (totalTileCount != 100) {
+	if (totalTileCount != TILE_BAG_SIZE) {
 		validGame = false;
 	}
 		
 	// check that 20 of each tile were read in
 	if (validGame) {
 		for (int i = 0; i < NUM_TILES; i++) {
-			if (tileCounts[i] != 20) {
+			if (tileCounts[i] != (TILE_BAG_SIZE / NUM_TILES)) {
 				validGame = false;
 			}
 		}
@@ -208,7 +226,7 @@ GameState* GameManager::importGame(std::string fileName) {
 
 	// if the tile string passed validation check (20 of each tile), then add the tiles to the bag
 	if (validGame) {
-		for (char tile : tileString) {
+		for (char& tile : tileString) {
 			bag->addToBag(tile);
 		}
 	}
@@ -233,7 +251,7 @@ GameState* GameManager::importGame(std::string fileName) {
 		this->gameLogic->initFactoryTiles(factories, bag);
 
 		while (!this->gameLogic->roundOver(factories) && validGame && !eof) {
-			// DO STUFF HERE
+			// get gameplay command from the file
 			std::vector<std::string> commands = input->getGameplayInput(file);
 
 			// check that command is valid (lazy operator)

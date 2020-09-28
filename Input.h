@@ -19,8 +19,12 @@ public:
 	Input();
 	~Input();
 
-	Player* enterPlayerName(int playerNum);
-	
+	// Requests the user to enter a player name
+	//
+	// Returns a player name if valid.
+	// If EOF is entered, returns an empty string
+	std::string enterPlayerName(int playerNum);
+
 	// Requests the user to enter a command during the game and validates the commands arguments
 	//
 	// Returns a vector of the arguments entered by the user ONLY IF the command is valid.

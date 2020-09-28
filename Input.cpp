@@ -14,14 +14,19 @@ Input::Input() {}
 Input::~Input() {}
 
 // Allows any name excluding entirely whitespace.
-// TODO eof check? (will cause infinite loop)
-Player* Input::enterPlayerName(int playerNum) {
+std::string Input::enterPlayerName(int playerNum) {
 	std::string name = "";
+	bool eof = false;
 
-	while (name.empty()) {
+	while (name.empty() && !eof) {
 		std::string input = "";
 		std::cout << "Enter a name for Player " << playerNum << std::endl << "> ";
+		
 		std::getline(std::cin, input);
+		
+		if(std::cin.eof()) {
+			eof = true;
+		}
 
 		// A vector that contains the name seperated by white spaces
 		std::vector<std::string> nameVec = explode(input);
@@ -38,11 +43,12 @@ Player* Input::enterPlayerName(int playerNum) {
 			}
 		}
 
-		if (name.empty()) {
+		if (name.empty() && !eof) {
 			std::cout << "Please enter a valid name!" << std::endl;
 		}
 	}
-	return new Player(name);
+	
+	return name;
 }
 
 std::vector<std::string> Input::getGameplayInput(std::istream& stream) {

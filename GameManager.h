@@ -6,6 +6,8 @@
 #define DEFAULT_TILE_BAG_FILE 	"TileBag.txt"
 #define FILE_NAME_EXTENSION 	".azul"
 
+#define NUM_ROUNDS				5
+
 class Player;
 class Output;
 class Input;
