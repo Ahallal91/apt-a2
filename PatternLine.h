@@ -12,11 +12,15 @@ public:
 	// Adds a tile to the end of the pattern line if not full
 	bool addTile(char tile);
 	
+	// gets the total size of the pattern line
 	int getSize();
+
+	// gets the actual size of the pattern line
 	int getCurrentSize();
 
 	// Checks if the pattern line is full
 	bool isFull();
+	
 	// clears the patternline
 	void clear();
 

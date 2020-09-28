@@ -21,23 +21,27 @@ public:
 	GameManager();
 	~GameManager();
 
-	// Starts a new game by asking for player names and creating a default GameState
-	// Returns whether the eof was entered during gameplay
+	/* Starts a new game by asking for player names and creating a default GameState
+	 * Returns whether the eof was entered during gameplay
+	 */
 	bool newGame();
 
-	// Loads a game from a save file by asking for save file input and resuming the game.
-	// If called with a file name as its parameter, will instead show the output of the
-	// current game state which is used during testing mode
-	// Returns whether eof was entered during gameplay
+	/* Loads a game from a save file by asking for save file input and resuming the game.
+	 * If called with a file name as its parameter, will instead show the output of the
+	 * current game state which is used during testing mode
+	 * Returns whether eof was entered during gameplay
+	 */
 	bool loadGame(std::string testFile = "");
 
-	// Main Game Loop
-	// Plays a Game from a GameState until finished or exited
-	// Returns whether eof was entered during gameplay
+	/* Main Game Loop
+	 * Plays a Game from a GameState until finished or exited
+	 * Returns whether eof was entered during gameplay
+	 */
 	bool playGame(GameState* gameState);
 
-	// Imports a game from a save file
-	// Returns a GameState of the game if it is valid, otherwise returns a nullptr
+	/* Imports a game from a save file
+	 * Returns a GameState of the game if it is valid, otherwise returns a nullptr
+	 */
 	GameState* importGame(std::string fileName);
 
 	// Exports a game to a save file
@@ -52,9 +56,10 @@ private:
 	// used to end the game if player decides to quit
 	bool validateMove(GameState* gameState);
 
-	// Logs a valid turn vector of arguments to a GameState's turn history
-	// Eg: if input recieved as vector: ["turn", 4, 'R', 2],
-	// will record the turn as: turn 4 R 2
+	/* Logs a valid turn vector of arguments to a GameState's turn history
+	 * Eg: if input recieved as vector: ["turn", 4, 'R', 2],
+	 * will record the turn as: turn 4 R 2
+	 */
 	void logTurn(std::vector<std::string> commands, GameState* gameState);
 };
 

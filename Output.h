@@ -12,7 +12,7 @@ public:
 	Output();
 	~Output();
 
-	// TODO too many methods
+	// outputs the round number info, if game is finished it output end of game.
 	void outputRound(GameState* gameState);
 
 	// outputs the current game factories, the players and their board
@@ -30,15 +30,26 @@ public:
 	// output for testing mode.
 	void outputTestingGameState(GameState* gameState);
 	
+	// This is the output for request input character '>'
 	void requestInput();
+
+	// output for invalid move
 	void invalidInput();
 
+	// output for successfully saved file
 	void saveSuccess(std::string name);
 
 private:
+	// output for of which players turn it is.
 	void outputTurn(Player* player);
+
+	// output of current factories of game
 	void outputFactory(Factories* factory);
+
+	// output of specific players board information
 	void outputBoard(Player* player);
+
+	// output for a players score.
 	void outputScore(Player* player);
 };
 

@@ -74,7 +74,7 @@ bool GameManager::loadGame(std::string testFile) {
 		std::cout << "Azul game successfully loaded" << std::endl << std::endl;
 		playing = playGame(gameState);
 
-		// If launched in testing mode
+	// If launched in testing mode
 	} else {
 		if (fileHandler->fileExists(testFile)) {
 			gameState = importGame(testFile);
@@ -94,13 +94,12 @@ bool GameManager::loadGame(std::string testFile) {
 	return !playing;
 }
 
-// remember to end the loop if player enter ends of line character
 bool GameManager::playGame(GameState* gameState) {
 	bool playing = true;
 
 	while (gameState->getRound() <= NUM_ROUNDS && !gameState->isFinished() && playing) {
-		// start of round
 		
+		// start of round
 		if (gameLogic->roundOver(gameState->getFactories())) {
 			this->gameLogic->initFactoryTiles(gameState->getFactories(), gameState->getTileBag());
 			this->output->outputRound(gameState);
