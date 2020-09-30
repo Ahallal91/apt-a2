@@ -1,19 +1,7 @@
 #include <stdexcept>
 
+#include "Node.h"
 #include "LinkedList.h"
-
-Node::Node(char data, Node* prev, Node* next) {
-	this->data = data;
-	this->next = next;
-    this->prev = prev;
-}
-
-Node::Node(Node& other):
-	data(other.data),
-	next(other.next),
-    prev(other.prev) 
-{
-}
 
 LinkedList::LinkedList() {
 	this->head = nullptr;

@@ -1,17 +1,7 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 
-class Node {
-public:
-    Node(char data, Node* prev, Node* next);
-    Node(Node& other);
-    Node(Node&& other);
-
-    char data;
-    Node* next;
-    Node* prev;
-};
-
+class Node;
 class LinkedList {
 public:
     LinkedList();
