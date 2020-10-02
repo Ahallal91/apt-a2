@@ -5,7 +5,6 @@
 
 #define TESTING_MODE_ARGUMENT	"-t"
 
-void printLine(std::string message);
 void runMenu(GameManager* gameManager);
 void credits();
 void menuText();
@@ -17,11 +16,14 @@ int main(int argc, char** argv) {
 		if (argc == 3) {
 			gameManager->loadGame(std::string(argv[2]));
 		} else {
-			std::cout << "Unrecognised arguments for testing mode\n\nUSAGE:\n\t" << TESTING_MODE_ARGUMENT << " <filename>" << std::endl;
+			std::cout << "Unrecognised arguments for testing mode\n\nUSAGE:\n\t" 
+			<< TESTING_MODE_ARGUMENT << " <filename>" << std::endl;
 		}
 	} else {
 		if (argc > 1) {
-			std::cout << "Unknown command line arguments specified, starting game normally..." << std::endl << std::endl;
+			std::cout << 
+			"Unknown command line arguments specified, starting game normally..." 
+			<< std::endl << std::endl;
 		}
 
 		// Run the main menu
@@ -39,9 +41,9 @@ void runMenu(GameManager* gameManager) {
 	const std::string choice3 = "3";
 	const std::string choice4 = "4";
 
-	printLine("Welcome to Azul!");
-	printLine("-------------------");
-	printLine("");
+	std::cout << "Welcome to Azul!" << std::endl;
+	std::cout << "-------------------" << std::endl;
+	std::cout << "" << std::endl;
 
 	bool exitMenu = false;
 	while (!exitMenu) {
@@ -61,31 +63,27 @@ void runMenu(GameManager* gameManager) {
 		} else if (std::cin.eof() || choice == choice4) {
 			exitMenu = true;
 		} else {
-			printLine("Please select a valid option");
+			std::cout << "Please select a valid option" << std::endl;
 		}
 	}
 
-	printLine("Goodbye");
+	std::cout << "Goodbye"  << std::endl;
 }
 
 void menuText() {
-	printLine("Menu");
-	printLine("----");
-	printLine("1. New Game");
-	printLine("2. Load Game");
-	printLine("3. Credits (Show student information)");
-	printLine("4. Quit");
+	std::cout << "Menu"  << std::endl;
+	std::cout << "----"  << std::endl;
+	std::cout << "1. New Game"  << std::endl;
+	std::cout << "2. Load Game"  << std::endl;
+	std::cout << "3. Credits (Show student information)"  << std::endl;
+	std::cout << "4. Quit" << std::endl;
 	std::cout << "> ";
 }
 
 void credits() {
-	printLine("-------------------------CREDITS-------------------------");
-	printLine("Joshua Cervenjak (S3783156)  S3783156@student.rmit.edu.au");
-	printLine("John   Patrikios (S3780973)  S3780973@student.rmit.edu.au");
-	printLine("Alicia Hallal    (S3811836)  S3811836@student.rmit.edu.au");
-	printLine("---------------------------------------------------------");
-}
-
-void printLine(std::string message) {
-	std::cout << message << std::endl;
+	std::cout << "-------------------------CREDITS-------------------------" << std::endl;
+	std::cout << "Joshua Cervenjak (S3783156)  S3783156@student.rmit.edu.au" << std::endl;
+	std::cout << "John   Patrikios (S3780973)  S3780973@student.rmit.edu.au" << std::endl;
+	std::cout << "Alicia Hallal    (S3811836)  S3811836@student.rmit.edu.au" << std::endl;
+	std::cout << "---------------------------------------------------------" << std::endl;
 }

@@ -58,6 +58,9 @@ private:
 	// used to end the game if player decides to quit
 	bool validateMove(GameState* gameState);
 
+	// used at end of round, in importGame method and playGame
+	void gameRoundEnd(GameState* gameState, GameLogic* gameLogic);
+
 	/* Logs a valid turn vector of arguments to a GameState's turn history
 	 * Eg: if input recieved as vector: ["turn", 4, 'R', 2],
 	 * will record the turn as: turn 4 R 2

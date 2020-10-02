@@ -11,7 +11,6 @@
 #define LIGHT_BLUE     		'L'
 #define BLACK          		'U'
 
-#define NUM_TILES			5
 const char validTile[] = {DARK_BLUE, YELLOW, RED, BLACK, LIGHT_BLUE};
 
 #define FIRST          		'F'

@@ -11,6 +11,7 @@
 #include <fstream>
 #include "FileHandler.h"
 
+#define NUM_TILES			5
 #define LOG(x) std::cout << x << std::endl
 
 GameManager::GameManager() {
@@ -142,22 +143,7 @@ bool GameManager::playGame(GameState* gameState) {
 			// else output roundOver info
 			else if (this->gameLogic->roundOver(gameState->getFactories())) {
 				// the round is over
-
-				// sets the player with the first tile to the starting player for next round
-				gameState->getPlayer2()->getPlayerBoard()->brokenLineHasFirst()
-				? gameState->setCurrentPlayer(gameState->getPlayer2())
-				: gameState->setCurrentPlayer(gameState->getPlayer1());
-				
-				// calculate player points and move to wall
-				this->gameLogic->addToWall(gameState->getPlayer1());
-				this->gameLogic->addToWall(gameState->getPlayer2());
-
-				// reset board and add back to tile bag
-				this->gameLogic->resetBoard(gameState->getPlayer1(), 
-											gameState->getTileBag());
-				this->gameLogic->resetBoard(gameState->getPlayer2(), 
-											gameState->getTileBag());
-
+				gameRoundEnd(gameState, gameLogic);				
 				// output score
 				this->output->outputEndOfRound(gameState);
 
@@ -283,19 +269,7 @@ GameState* GameManager::importGame(std::string fileName) {
 
 		if (validGame && gameLogic->roundOver(factories)) {
 			// round has ended
-
-			// sets the player with the first tile to the starting player for next round
-			gameState->getPlayer2()->getPlayerBoard()->brokenLineHasFirst()
-			? gameState->setCurrentPlayer(gameState->getPlayer2())
-			: gameState->setCurrentPlayer(gameState->getPlayer1());
-
-			// calculate player points and move to wall
-			gameLogic->addToWall(gameState->getPlayer1());
-			gameLogic->addToWall(gameState->getPlayer2());
-
-			// reset board and add back to tile bag
-			gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
-			gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
+			gameRoundEnd(gameState, gameLogic);
 
 			if (gameState->getRound() < NUM_ROUNDS) {
 				gameState->incrementRound();
@@ -305,7 +279,6 @@ GameState* GameManager::importGame(std::string fileName) {
 			}
 		}
 	}
-
 	// if the game is not valid, return a nullptr
 	if (!validGame) {
 		// no memory leaks as when deleting a gameState, the previously made pointers will get cleaned up
@@ -383,4 +356,19 @@ void GameManager::logTurn(std::vector<std::string> commands, GameState* gameStat
 	}
 
 	gameState->addTurn(turn);
+}
+
+void gameRoundEnd(GameState* gameState, GameLogic* gameLogic) {
+	// sets the player with the first tile to the starting player for next round
+	gameState->getPlayer2()->getPlayerBoard()->brokenLineHasFirst()
+	? gameState->setCurrentPlayer(gameState->getPlayer2())
+	: gameState->setCurrentPlayer(gameState->getPlayer1());
+
+	// calculate player points and move to wall
+	gameLogic->addToWall(gameState->getPlayer1());
+	gameLogic->addToWall(gameState->getPlayer2());
+
+	// reset board and add back to tile bag
+	gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
+	gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
 }
