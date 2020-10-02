@@ -58,6 +58,9 @@ private:
 	// used to end the game if player decides to quit
 	bool validateMove(GameState* gameState);
 
+	// validates game import files
+	bool validateGame(std::string& tileString, bool& validGame, TileBag* bag);
+
 	// used at end of round, in importGame method and playGame
 	void gameRoundEnd(GameState* gameState, GameLogic* gameLogic);
 

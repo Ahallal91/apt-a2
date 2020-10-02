@@ -178,43 +178,8 @@ GameState* GameManager::importGame(std::string fileName) {
 	std::string tileString;
 	std::getline(file, tileString);
 
-	// an array to represent how many of each valid tile has been read in
-	// the goal is to read in 20 of each tile
-	int tileCounts[NUM_TILES] = {};
-	
-	// total number of tiles that should be in the bag, goal is 100
-	int totalTileCount = 0;
-	
-	// check that 100 tiles are in the string
-	for (char tile : tileString) {
-
-		// check each individual tile is a valid one. if valid, increase the tileCount for the respective tile
-		for (int i = 0; i < NUM_TILES; i++) { // FIX MAGIC NUMBER
-			if (tile == validTile[i]) {
-				tileCounts[i]++;
-				totalTileCount++;
-			}
-		}
-	}
-	if (totalTileCount != TILE_BAG_SIZE) {
-		validGame = false;
-	}
-		
-	// check that 20 of each tile were read in
-	if (validGame) {
-		for (int i = 0; i < NUM_TILES; i++) {
-			if (tileCounts[i] != (TILE_BAG_SIZE / NUM_TILES)) {
-				validGame = false;
-			}
-		}
-	}
-
-	// if the tile string passed validation check (20 of each tile), then add the tiles to the bag
-	if (validGame) {
-		for (char& tile : tileString) {
-			bag->addToBag(tile);
-		}
-	}
+	// validates game
+	validGame = validateGame(tileString, validGame, bag);
 
 	// Import Players
 	std::string name1;
@@ -244,10 +209,10 @@ GameState* GameManager::importGame(std::string fileName) {
 			if (!commands.empty() && commands[0] == TURN_COMMAND) {
 
 				validMove = gameLogic
-					->takeTiles(factories, gameState->getCurrentPlayer(),
-								stoi(commands[1]),
-								commands[2].at(0),
-								stoi(commands[3]), bag);
+							->takeTiles(factories, gameState->getCurrentPlayer(),
+							stoi(commands[1]),
+							commands[2].at(0),
+							stoi(commands[3]), bag);
 
 				if (!validMove) {
 					validGame = false;
@@ -279,9 +244,9 @@ GameState* GameManager::importGame(std::string fileName) {
 			}
 		}
 	}
+
 	// if the game is not valid, return a nullptr
 	if (!validGame) {
-		// no memory leaks as when deleting a gameState, the previously made pointers will get cleaned up
 		delete gameState;
 		gameState = nullptr;
 	}
@@ -358,7 +323,7 @@ void GameManager::logTurn(std::vector<std::string> commands, GameState* gameStat
 	gameState->addTurn(turn);
 }
 
-void gameRoundEnd(GameState* gameState, GameLogic* gameLogic) {
+void GameManager::gameRoundEnd(GameState* gameState, GameLogic* gameLogic) {
 	// sets the player with the first tile to the starting player for next round
 	gameState->getPlayer2()->getPlayerBoard()->brokenLineHasFirst()
 	? gameState->setCurrentPlayer(gameState->getPlayer2())
@@ -371,4 +336,47 @@ void gameRoundEnd(GameState* gameState, GameLogic* gameLogic) {
 	// reset board and add back to tile bag
 	gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
 	gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
+}
+
+bool GameManager::validateGame(std::string& tileString, bool& validGame, TileBag* bag) {
+	// an array to represent how many of each valid tile has been read in
+	// the goal is to read in 20 of each tile
+	int tileCounts[NUM_TILES] = {};
+	
+	// total number of tiles that should be in the bag, goal is 100
+	int totalTileCount = 0;
+	
+	// check that 100 tiles are in the string
+	for (char tile : tileString) {
+
+		// check each individual tile is a valid one. if valid, 
+		// increase the tileCount for the respective tile
+		for (int i = 0; i < NUM_TILES; i++) { // FIX MAGIC NUMBER
+			if (tile == validTile[i]) {
+				tileCounts[i]++;
+				totalTileCount++;
+			}
+		}
+	}
+	if (totalTileCount != TILE_BAG_SIZE) {
+		validGame = false;
+	}
+		
+	// check that 20 of each tile were read in
+	if (validGame) {
+		for (int i = 0; i < NUM_TILES; i++) {
+			if (tileCounts[i] != (TILE_BAG_SIZE / NUM_TILES)) {
+				validGame = false;
+			}
+		}
+	}
+
+	// if the tile string passed validation check (20 of each tile), then add the tiles to the bag
+	if (validGame) {
+		for (char& tile : tileString) {
+			bag->addToBag(tile);
+		}
+	}
+
+	return validGame;
 }
