@@ -1,10 +1,6 @@
 #include "Player.h"
 #include "Types.h"
 
-// Player Config
-#define DEFAULT_NAME     	"Player"
-#define INITIAL_POINTS   	0
-
 Player::Player():
 	Player(DEFAULT_NAME) {}
 

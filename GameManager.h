@@ -8,6 +8,8 @@
 
 #define NUM_ROUNDS				5
 
+#define STARTING_ROUND			1
+
 class Player;
 class Output;
 class Input;
@@ -58,8 +60,8 @@ private:
 	// used to end the game if player decides to quit
 	bool validateMove(GameState* gameState);
 
-	// validates game import files
-	bool validateGame(std::string& tileString, bool& validGame, TileBag* bag);
+	// Validates the tile bag when importing a game. Returns whether bag is valid
+	bool validateTileBag(std::string& tileString, bool& validGame, TileBag* bag);
 
 	// used at end of round, in importGame method and playGame
 	void gameRoundEnd(GameState* gameState, GameLogic* gameLogic);

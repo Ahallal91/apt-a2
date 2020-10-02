@@ -21,11 +21,17 @@ public:
 
 	// Allows any name excluding entirely whitespace.
 	std::string enterPlayerName(int playerNum);
+
+	// Requests the user to enter a single input
+	// If the user enters a single input, will return the input regardless of white space.
+	// If EOF is entered will return EOF_COMMAND string
+	// Otherwise will return an empty string
+	std::string getSingleInput();
 	
 	/* Requests the user to enter a command during the game and validates the commands arguments
 	 *
 	 * Returns a vector of the arguments entered by the user ONLY IF the command is valid.
-	 * If user enters EOF, will return vector containing quit string
+	 * If user enters EOF, will return vector containing the EOF_COMMAND string
 	 * If the command was NOT valid in any way, returns an empty vector
 	 *
 	 * Example inputs:
