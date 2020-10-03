@@ -272,7 +272,7 @@ void GameManager::exportGame(GameState* gameState, std::string fileName) {
 bool GameManager::validateMove(GameState* gameState) {
 	std::vector<std::string> commands = {};
 	bool moveSuccess = false;
-
+	
 	while (!moveSuccess) {
 		this->output->requestInput();
 		commands = this->input->getGameplayInput(std::cin);

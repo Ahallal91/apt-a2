@@ -13,6 +13,8 @@ public:
 
     unsigned int size() const;
     char get(const unsigned int i) const;
+    char front();
+    char back();
 
     void addFront(char data);
     void addBack(char data);

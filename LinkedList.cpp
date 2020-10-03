@@ -54,6 +54,22 @@ char LinkedList::get(const unsigned int index) const {
 	return retValue;
 }
 
+char LinkedList::front() {
+    char retValue = '\0';
+    if(head != nullptr) {
+        retValue = head->data;
+    }
+    return retValue;
+}
+
+char LinkedList::back() {
+    char retValue = '\0';
+    if(tail != nullptr) {
+        retValue = tail->data;
+    }
+    return retValue;
+}
+
 void LinkedList::addFront(char data) {
     Node* toAdd = new Node(data, nullptr, head); 
     if(head == nullptr) {
