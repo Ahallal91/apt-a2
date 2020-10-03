@@ -1,0 +1,28 @@
+=== Round 2 ===
+
+Factories:
+0: F 
+1: R B L Y 
+2: L U U R 
+3: B U U Y 
+4: B Y R R 
+5: R U B U 
+
+Score for P1: 3
+Mosaic for P1:
+1:         . || . Y . . .
+2:       . . || . B . . .
+3:     . Y Y || . . . . .
+4:   . . . . || R . . . .
+5: . . . B B || . . . . .
+6: broken |
+
+Score for P2: 4
+Mosaic for P2:
+1:         . || B . . . .
+2:       . . || L . . . .
+3:     . . . || . . B . .
+4:   . . U U || . . . . .
+5: . . . . L || . . . . .
+6: broken |
+

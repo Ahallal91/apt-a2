@@ -1,0 +1,28 @@
+=== Round 5 ===
+
+Factories:
+0: Y Y 
+1: 
+2: 
+3: 
+4: U L B U 
+5: 
+
+Score for Test Player 1: 24
+Mosaic for Test Player 1:
+1:         . || B Y R U .
+2:       L L || . B . R U
+3:     . . . || U L B Y .
+4:   L L L L || . . . B .
+5: . . . B B || . R . . .
+6: broken | L F L L
+
+Score for Test Player 2: 24
+Mosaic for Test Player 2:
+1:         . || . Y R U L
+2:       L L || . B . R U
+3:     Y Y Y || U L B . R
+4:   . . U U || . . . . Y
+5: . . . R R || Y . . . .
+6: broken |
+

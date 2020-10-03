@@ -1,0 +1,28 @@
+=== Game is Finished ===
+
+Factories:
+0: 
+1: 
+2: 
+3: 
+4: 
+5: 
+
+Score for player1 : 25
+Mosaic for player1 :
+1:         . || B . R . L
+2:       . . || L B . R U
+3:     . . . || U L . Y R
+4:   . . R R || . . . B Y
+5: . . . . . || . . U L .
+6: broken |
+
+Score for player2: 48
+Mosaic for player2:
+1:         . || B Y R U L
+2:       . . || . B Y R U
+3:     . . . || . L B Y R
+4:   . . B B || . U L . .
+5: . . . . . || Y R . . .
+6: broken |
+
