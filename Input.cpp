@@ -177,7 +177,7 @@ bool Input::validateSaveCommand(std::vector<std::string>& arguments) {
 	// Characters not allowed in filenames
 	const char invalidCharacters[] = {'<', '>', ':', '"', '/', '\\', '|', '?', '*'};
 
-	for (char c : invalidCharacters) {
+	for (const char& c : invalidCharacters) {
 		if (filename.find(c) != std::string::npos) {
 			filenameValid = false;
 		}
@@ -192,7 +192,7 @@ std::vector<std::string> Input::explode(std::string str) {
 	std::vector<std::string> arguments;
 
 	std::string word = "";
-	for (char c : str) {
+	for (char& c : str) {
 		if (c == ' ') {
 			if (word.find_first_not_of(' ') != std::string::npos) {
 				arguments.push_back(word);
@@ -212,7 +212,7 @@ std::vector<std::string> Input::explode(std::string str) {
 void Input::toUpper(std::string& str) {
 	std::string newStr;
 	
-	for(char c : str) {
+	for(char& c : str) {
 		newStr += std::toupper(c);
 	}
 
@@ -222,7 +222,7 @@ void Input::toUpper(std::string& str) {
 void Input::toLower(std::string& str) {
 	std::string newStr;
 	
-	for(char c : str) {
+	for(char& c : str) {
 		newStr += std::tolower(c);
 	}
 

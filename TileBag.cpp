@@ -1,5 +1,4 @@
 #include "TileBag.h"
-#include "Types.h"
 #include "FileHandler.h"
 
 TileBag::TileBag() {

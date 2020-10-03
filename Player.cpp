@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "Types.h"
 
 Player::Player():
 	Player(DEFAULT_NAME) {}

@@ -352,7 +352,7 @@ bool GameManager::validateTileBag(std::string& tileString, bool& validGame, Tile
 	int totalTileCount = 0;
 	
 	// check that 100 tiles are in the string
-	for (char tile : tileString) {
+	for (char& tile : tileString) {
 
 		// check each individual tile is a valid one. if valid, 
 		// increase the tileCount for the respective tile

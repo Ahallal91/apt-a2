@@ -3,7 +3,6 @@
 #include "TileBag.h"
 #include "Player.h"
 #include "Types.h"
-#include <iostream>
 
 #define POSITIVE 		'+'
 #define NEGATIVE 		'-'
