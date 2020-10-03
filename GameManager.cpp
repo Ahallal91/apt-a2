@@ -45,7 +45,8 @@ bool GameManager::newGame() {
 		Player* player2 = new Player(name2);
 
 		// Create a default GameState
-		GameState* gameState = new GameState(STARTING_ROUND, player1, player2, tileBag, factories, player1);
+		GameState* gameState = new GameState(STARTING_ROUND, player1, player2, 
+											tileBag, factories, player1);
 		
 		// Play the game
 		playing = playGame(gameState);

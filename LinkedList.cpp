@@ -9,13 +9,15 @@ LinkedList::LinkedList() {
 }
 
 LinkedList::LinkedList(LinkedList& other) {
-    Node* current = other.head;
+    Node* current = other.head->next;
+    Node* tempCurrent = nullptr;
+    this->head = new Node(*other.head);
+    this->tail = new Node(*other.tail);
     while(current != nullptr) {
-        addBack(current->data);
+        tempCurrent = new Node(*current);
+        tempCurrent = tempCurrent->next;
         current = current->next;
     }
-    this->head  = other.head;
-    this->tail = other.tail;
 }
 
 LinkedList::~LinkedList() {
