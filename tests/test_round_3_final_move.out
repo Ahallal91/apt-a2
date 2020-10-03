@@ -1,0 +1,28 @@
+=== Round 3 ===
+
+Factories:
+0: R R 
+1: 
+2: 
+3: 
+4: 
+5: 
+
+Score for Test Player 1: 2
+Mosaic for Test Player 1:
+1:         Y || . . R . L
+2:       R R || . B . . U
+3:     U U U || . L . . .
+4:   . . . L || . . . . Y
+5: B B B B B || . . . . .
+6: broken | F U
+
+Score for Test Player 2: 3
+Mosaic for Test Player 2:
+1:         R || . . . U .
+2:       B B || . . . R U
+3:     U U U || . . B . .
+4:   . . Y Y || R . . . .
+5: B B B B B || . . . . .
+6: broken | U
+

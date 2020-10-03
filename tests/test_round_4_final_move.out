@@ -1,0 +1,28 @@
+=== Round 4 ===
+
+Factories:
+0: U U 
+1: 
+2: 
+3: 
+4: 
+5: 
+
+Score for Test Player 1: 11
+Mosaic for Test Player 1:
+1:         U || . Y R . L
+2:       L L || . B . R U
+3:     Y Y Y || U L . . .
+4:   . . . L || . . . . Y
+5: . . . R R || . . . . B
+6: broken | U B
+
+Score for Test Player 2: 5
+Mosaic for Test Player 2:
+1:         . || . . R U .
+2:       . . || . B . R U
+3:     L L L || U . B . .
+4:   Y Y Y Y || R . . . .
+5: . . . R R || . . . . B
+6: broken | F Y
+
