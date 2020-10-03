@@ -12,7 +12,6 @@
 #include "FileHandler.h"
 
 #define NUM_TILES			5
-#define LOG(x) std::cout << x << std::endl
 
 GameManager::GameManager() {
 	this->gameLogic = new GameLogic();
@@ -46,7 +45,7 @@ bool GameManager::newGame() {
 		Player* player2 = new Player(name2);
 
 		// Create a default GameState
-		GameState* gameState = new GameState(1, player1, player2, tileBag, factories, player1);
+		GameState* gameState = new GameState(STARTING_ROUND, player1, player2, tileBag, factories, player1);
 		
 		// Play the game
 		playing = playGame(gameState);
@@ -178,8 +177,8 @@ GameState* GameManager::importGame(std::string fileName) {
 	std::string tileString;
 	std::getline(file, tileString);
 
-	// validates game
-	validGame = validateGame(tileString, validGame, bag);
+	// validates the tile bag
+	validGame = validateTileBag(tileString, validGame, bag);
 
 	// Import Players
 	std::string name1;
@@ -191,10 +190,15 @@ GameState* GameManager::importGame(std::string fileName) {
 	Player* player1 = new Player(name1);
 	Player* player2 = new Player(name2);
 
-	//Create GameState
-	gameState = new GameState(1, player1, player2, bag, factories, player1);
+	// check that names are not empty
+	if(name1.empty() || name2.empty()) {
+		validGame = false;
+	}
 
-	// play the game from a file
+	// Create GameState
+	gameState = new GameState(STARTING_ROUND, player1, player2, bag, factories, player1);
+
+	// play the game from a file if the game is valid so far
 	bool eof = false;
 	while (!eof && validGame) {
 		// start of round
@@ -338,7 +342,7 @@ void GameManager::gameRoundEnd(GameState* gameState, GameLogic* gameLogic) {
 	gameLogic->resetBoard(gameState->getPlayer2(), gameState->getTileBag());
 }
 
-bool GameManager::validateGame(std::string& tileString, bool& validGame, TileBag* bag) {
+bool GameManager::validateTileBag(std::string& tileString, bool& validGame, TileBag* bag) {
 	// an array to represent how many of each valid tile has been read in
 	// the goal is to read in 20 of each tile
 	int tileCounts[NUM_TILES] = {};
@@ -354,10 +358,12 @@ bool GameManager::validateGame(std::string& tileString, bool& validGame, TileBag
 		for (int i = 0; i < NUM_TILES; i++) { // FIX MAGIC NUMBER
 			if (tile == validTile[i]) {
 				tileCounts[i]++;
-				totalTileCount++;
 			}
 		}
+
+		totalTileCount++;
 	}
+
 	if (totalTileCount != TILE_BAG_SIZE) {
 		validGame = false;
 	}

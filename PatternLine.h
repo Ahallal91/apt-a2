@@ -6,6 +6,7 @@ public:
 	PatternLine(int size);
 	~PatternLine();
 
+	// set the tile type of this pattern line
 	void setTileType(char tile);
 	char getTileType();
 

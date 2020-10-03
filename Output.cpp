@@ -103,8 +103,7 @@ void Output::outputFactory(Factories* factory) {
 
 
 
-// TODO could maybe tell the user what the valid commands are, 
-// but for now, just say invalid
+// outputs invalid input line
 void Output::invalidInput() {
 	std::cout << "Invalid input. Please enter a valid move" << std::endl;
 }

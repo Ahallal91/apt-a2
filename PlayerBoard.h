@@ -4,7 +4,8 @@
 #include <vector>
 #include "PatternLine.h"
 
-//class PatternLine;
+// Broken Line config
+#define NUM_BROKEN_TILES	7 
 
 class PlayerBoard {
 public:

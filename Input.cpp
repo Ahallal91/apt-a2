@@ -6,9 +6,6 @@
 #include "Player.h"
 #include "Types.h"
 
-#define TURN_ARGUMENTS 		4
-#define SAVE_ARGUMENTS		2
-
 Input::Input() {}
 
 Input::~Input() {}
@@ -49,6 +46,27 @@ std::string Input::enterPlayerName(int playerNum) {
 	}
 	
 	return name;
+}
+
+std::string Input::getSingleInput() {
+	std::string retVal = "";
+	
+	std::string input;
+	std::cout << "> ";
+	std::getline(std::cin, input);
+
+	if(std::cin.eof()) {
+		retVal = EOF_COMMAND;
+	} else {
+		std::vector<std::string> inputVec = explode(input);
+
+		if(inputVec.size() == 1) {
+			retVal = inputVec[0];
+		}
+	}
+
+	return retVal;
+
 }
 
 std::vector<std::string> Input::getGameplayInput(std::istream& stream) {
@@ -132,7 +150,7 @@ bool Input::validateTurnCommand(std::vector<std::string>& arguments) {
 	// Validate the factory (2nd parameter) is a number 0 - 5
 	try {
 		int factory = std::stoi(factoryStr);
-		factoryValid = (factory >= 0 && factory <= WALL_DIM);
+		factoryValid = (factory >= 0 && factory <= WALL_DIM && factoryStr.length() == 1);
 	} catch (const std::exception& e) {}
 
 	// Validate that the tile (3rd parameter) is a tile char
@@ -145,7 +163,7 @@ bool Input::validateTurnCommand(std::vector<std::string>& arguments) {
 	// Validate the row / pattern line (4th parameter) is a number 1 - 6
 	try {
 		int row = std::stoi(rowStr);
-		rowValid = (row > 0 && row <= WALL_DIM + 1);
+		rowValid = (row > 0 && row <= WALL_DIM + 1 && rowStr.length() == 1);
 	} catch (const std::exception& e) {}
 
 	return (factoryValid && tileValid && rowValid);

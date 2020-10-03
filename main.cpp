@@ -1,7 +1,7 @@
 #include <iostream>
-#include <limits>
 
 #include "GameManager.h"
+#include "Input.h"
 
 #define TESTING_MODE_ARGUMENT	"-t"
 
@@ -45,14 +45,15 @@ void runMenu(GameManager* gameManager) {
 	std::cout << "-------------------" << std::endl;
 	std::cout << "" << std::endl;
 
+	Input input;
+	std::string choice;
+	
 	bool exitMenu = false;
 	while (!exitMenu) {
 		menuText();
-		std::string choice;
-		std::cin >> choice;
-
-		//ignore any characters after whitespace until \n to not intefere with input later in the program
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << std::endl;
+		
+		choice = input.getSingleInput();
 
 		if (choice == choice1) {
 			exitMenu = gameManager->newGame();
@@ -60,10 +61,10 @@ void runMenu(GameManager* gameManager) {
 			exitMenu = gameManager->loadGame();
 		} else if (choice == choice3) {
 			credits();
-		} else if (std::cin.eof() || choice == choice4) {
+		} else if (choice == EOF_COMMAND || choice == choice4) {
 			exitMenu = true;
 		} else {
-			std::cout << "Please select a valid option" << std::endl;
+			std::cout << "Please select a valid option" << std::endl << std::endl;
 		}
 	}
 
@@ -77,7 +78,6 @@ void menuText() {
 	std::cout << "2. Load Game"  << std::endl;
 	std::cout << "3. Credits (Show student information)"  << std::endl;
 	std::cout << "4. Quit" << std::endl;
-	std::cout << "> ";
 }
 
 void credits() {
@@ -86,4 +86,5 @@ void credits() {
 	std::cout << "John   Patrikios (S3780973)  S3780973@student.rmit.edu.au" << std::endl;
 	std::cout << "Alicia Hallal    (S3811836)  S3811836@student.rmit.edu.au" << std::endl;
 	std::cout << "---------------------------------------------------------" << std::endl;
+	std::cout << std::endl;
 }

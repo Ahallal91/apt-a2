@@ -1,9 +1,6 @@
 #include "PlayerBoard.h"
 #include "Types.h"
 
-// Broken Line config
-#define NUM_BROKEN_TILES	7 
-
 PlayerBoard::PlayerBoard() {
 	// Create a 5x5 char array for the wall and patternline
 	this->patternLines = new PatternLine * [WALL_DIM];

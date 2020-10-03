@@ -9,9 +9,6 @@
 
 class GameState {
 public:
-	GameState();
-
-	// TODO some of these constructor fields can be moved to setters to make it smaller
 	GameState(int round, Player* player1, Player* player2, TileBag* tileBag, 
 				Factories* factories, Player* currentPlayer);
 	~GameState();
@@ -19,13 +16,15 @@ public:
 	int getRound();
 	void incrementRound();
 
+	// Returns the initial tile bag for this GameState
 	std::string getInitialTileBag();
 
+	// Returns the current TileBag for this GameState
 	TileBag* getTileBag();
 
+	// Returns the current Factory states for this GameState
 	Factories* getFactories();
 
-	// TODO could make these methods less redundant and use 1 that takes in player number
 	Player* getPlayer1();
 	Player* getPlayer2();
 
@@ -33,6 +32,8 @@ public:
 	void setCurrentPlayer(Player* player);
 
 	void setFinished(bool gameFinished);
+	
+	// Returns whether this game is finished (all rounds are over)
 	bool isFinished();
 
 	// Add a turn (the command inputted by the player) to the history of turns

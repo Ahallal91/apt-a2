@@ -11,21 +11,9 @@ void testGameplayInput();
 void printGameplayVector(std::vector<std::string> arguments);
 
 int main() {
-    //testPlayerNameInput();
     testGameplayInput();
     
     return EXIT_SUCCESS;
-}
-
-void testPlayerNameInput() {
-    Input* input = new Input();
-
-    Player* player = input->enterPlayerName(0);
-
-    std::cout << player->getPlayerName() << std::endl;
-
-    delete player;
-    delete input;
 }
 
 void testGameplayInput() {
@@ -36,7 +24,7 @@ void testGameplayInput() {
     bool done = false;
     while(!done) {
         std::cout << "> ";
-        arguments = input->getGameplayInput();
+        arguments = input->getGameplayInput(std::cin);
         printGameplayVector(arguments);
 
         if(arguments[0] == "quit") {

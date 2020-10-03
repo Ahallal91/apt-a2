@@ -6,10 +6,10 @@
 
 class TileBag {
 public:
-	// default constructor
+	// default constructor to create an empty tile bag
 	TileBag();
 
-	// reads tilebag string into tilebag
+	// constructor to create a tile bag from a file
 	TileBag(std::string fileName);
 
 	// copyConstructor
