@@ -10,7 +10,7 @@ public:
 	~FileHandler();
 
 	// adds each line of file to the linked list; used for reading in tile bag
-	bool readTileBag(LinkedList& list, std::string fileName);
+	bool readTileBag(LinkedList& list, std::string& listString, std::string fileName);
 
 	// Checks if a file exists
 	bool fileExists(std::string fileName);

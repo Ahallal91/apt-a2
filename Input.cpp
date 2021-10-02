@@ -6,7 +6,15 @@
 #include "Player.h"
 #include "Types.h"
 
-Input::Input() {}
+Input::Input() {
+	this->advancedMode = false;
+	this->greyBoard = false;
+}
+
+Input::Input(bool advancedMode, bool greyBoard) {
+	this->advancedMode = advancedMode;
+	this->greyBoard = greyBoard;
+}
 
 Input::~Input() {}
 
@@ -69,8 +77,8 @@ std::string Input::getSingleInput() {
 
 }
 
-std::vector<std::string> Input::getGameplayInput(std::istream& stream) {
-
+std::vector<std::string> Input::getGameplayInput(std::istream& stream, std::string aiCommand) {
+	
 	// A string containing the full line a user inputted
 	std::string input;
 
@@ -79,7 +87,7 @@ std::vector<std::string> Input::getGameplayInput(std::istream& stream) {
 
 	// Gets the input of the user one char at a time while checking for EOF
 	bool entered = false;
-	while (!entered) {
+	while (!entered && aiCommand.empty()) {
 		if (stream.eof()) {
 			entered = true;
 			eof = true;
@@ -93,6 +101,10 @@ std::vector<std::string> Input::getGameplayInput(std::istream& stream) {
 		}
 	}
 
+	if(!aiCommand.empty()) {
+		input = aiCommand;
+	}
+	
 	// The arguments entered in the users command
 	std::vector<std::string> arguments = explode(input);
 	
@@ -120,6 +132,10 @@ std::vector<std::string> Input::getGameplayInput(std::istream& stream) {
 		if (arguments.size() == SAVE_ARGUMENTS) {
 			valid = validateSaveCommand(arguments);
 		}
+	} else if (command == GREYBOARD_COMMAND && greyBoard) {
+		if (arguments.size() == MOVE_ARGUMENTS) {
+			valid = validateMoveCommand(arguments);
+		}
 	}
 
 	// If the input is not valid in any way, return an empty vector
@@ -139,7 +155,12 @@ bool Input::validateTurnCommand(std::vector<std::string>& arguments) {
 	bool factoryValid = false;
 	bool tileValid = false;
 	bool rowValid = false;
-
+	int wallSize = 0;
+	if (advancedMode) {
+		wallSize = ADV_WALL_DIM;
+	} else {
+		wallSize = WALL_DIM;
+	}
 	// Convert the tile input to uppercase to allow non case sensitive input
 	toUpper(arguments[2]);
 
@@ -150,23 +171,53 @@ bool Input::validateTurnCommand(std::vector<std::string>& arguments) {
 	// Validate the factory (2nd parameter) is a number 0 - 5
 	try {
 		int factory = std::stoi(factoryStr);
-		factoryValid = (factory >= 0 && factory <= WALL_DIM && factoryStr.length() == 1);
+		factoryValid = (factory >= 0 && factory <= wallSize && factoryStr.length() == 1);
 	} catch (const std::exception& e) {}
 
 	// Validate that the tile (3rd parameter) is a tile char
 	if (tileStr.length() == 1) {
 		char tile = tileStr[0];
 		tileValid = (tile == RED || tile == YELLOW || tile == DARK_BLUE 
-					|| tile == LIGHT_BLUE || tile == BLACK);
+					|| tile == LIGHT_BLUE || tile == BLACK || 
+					(advancedMode && tile == ORANGE));
 	}
 
 	// Validate the row / pattern line (4th parameter) is a number 1 - 6
 	try {
 		int row = std::stoi(rowStr);
-		rowValid = (row > 0 && row <= WALL_DIM + 1 && rowStr.length() == 1);
+		rowValid = (row > 0 && row <= wallSize + 1 && rowStr.length() == 1);
 	} catch (const std::exception& e) {}
 
 	return (factoryValid && tileValid && rowValid);
+}
+
+bool Input::validateMoveCommand(std::vector<std::string>& arguments) {
+	bool wallColValid = false;
+	bool patValid = false;
+	int wallSize = 0;
+
+	if (advancedMode) {
+		wallSize = ADV_WALL_DIM;
+	} else {
+		wallSize = WALL_DIM;
+	}
+
+	std::string patternStr = arguments[1];
+	std::string wallCol = arguments[2];
+
+	// Validate the row / pattern line (4th parameter) is a number 1 - 6 (or 7 in adv mode)
+	try {
+		int row = std::stoi(patternStr);
+		patValid = (row > 0 && row <= wallSize + 1 && patternStr.length() == 1);
+	} catch (const std::exception& e) {}
+
+	// Validate the wall col
+	try {
+		int row = std::stoi(wallCol);
+		wallColValid = (row > 0 && row <= wallSize + 1 && wallCol.length() == 1);
+	} catch (const std::exception& e) {}
+
+	return (wallColValid && patValid);
 }
 
 bool Input::validateSaveCommand(std::vector<std::string>& arguments) {

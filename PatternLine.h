@@ -4,6 +4,8 @@
 class PatternLine {
 public:
 	PatternLine(int size);
+	PatternLine(PatternLine& other);
+	PatternLine(PatternLine&& other);
 	~PatternLine();
 
 	// set the tile type of this pattern line
@@ -18,6 +20,11 @@ public:
 
 	// gets the actual size of the pattern line
 	int getCurrentSize();
+
+	// returns the difference in size between current and expected size.
+	// 0 means currentSize = size, higher numbers mean patternLine is smaller then
+	// its real size.
+	int sizeDifference();
 
 	// Checks if the pattern line is full
 	bool isFull();

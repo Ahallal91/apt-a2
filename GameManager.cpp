@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "GameManager.h"
 #include "Output.h"
 #include "Types.h"
@@ -8,16 +9,48 @@
 #include "Factories.h"
 #include "TileBag.h"
 #include "GameState.h"
-#include <fstream>
+#include "AI.h"
 #include "FileHandler.h"
 
-#define NUM_TILES			5
+#define DEFAULT_NUM_TILES	5
+#define ADV_NUM_TILES		6
 
 GameManager::GameManager() {
 	this->gameLogic = new GameLogic();
 	this->input = new Input();
 	this->output = new Output();
 	this->fileHandler = new FileHandler();
+	this->advancedMode = false;
+	this->greyBoard = false;
+	this->aiMode = false;
+	this->ai = nullptr;
+}
+
+GameManager::GameManager(bool advancedMode, bool greyBoard) {
+	this->advancedMode = advancedMode;
+	this->greyBoard = greyBoard;
+	this->gameLogic = new GameLogic(advancedMode, greyBoard);
+	this->output = new Output(advancedMode);
+	this->input = new Input(advancedMode, greyBoard);		
+	this->fileHandler = new FileHandler();
+	this->aiMode = false;
+	this->ai = nullptr;
+}
+
+GameManager::GameManager(bool advancedMode, bool greyBoard, bool aiMode) {
+	this->advancedMode = advancedMode;
+	this->greyBoard = greyBoard;
+	this->gameLogic = new GameLogic(advancedMode, greyBoard);
+	this->output = new Output(advancedMode);
+	this->input = new Input(advancedMode, greyBoard);		
+	this->fileHandler = new FileHandler();
+	this->aiMode = aiMode;
+	if(aiMode) {
+		this->ai = new AI();
+		this->ai2 = new AI();
+	} else {
+		ai = nullptr;
+	}
 }
 
 GameManager::~GameManager() {
@@ -25,6 +58,7 @@ GameManager::~GameManager() {
 	delete this->input;
 	delete this->output;
 	delete this->fileHandler;
+	delete this->ai;
 }
 
 bool GameManager::newGame() {
@@ -32,24 +66,50 @@ bool GameManager::newGame() {
 	
 	std::string name1;
 	std::string name2;
-	
-	name1 = input->enterPlayerName(1);
-	if(!name1.empty()) name2 = input->enterPlayerName(2);
+	if(aiMode) {
+		name2 = "Computer AI";
+	}
+	while(name1.empty()) {
+		name1 = input->enterPlayerName(1);
+	}
+	while(name2.empty()) {
+		name2 = input->enterPlayerName(2);
+	}
 
 	// check that eof was not entered (indicated by empty player name)
 	if(!name2.empty()) {
-		TileBag* tileBag = new TileBag(DEFAULT_TILE_BAG_FILE);
+		TileBag* tileBag = nullptr;
 		Factories* factories = new Factories();
+		Player* player1 = nullptr;
+		Player* player2 = nullptr;
 
-		Player* player1 = new Player(name1);
-		Player* player2 = new Player(name2);
+		if (advancedMode) {
+			tileBag = new TileBag(ADV6TILE_TILE_BAG_FILE);
+			player1 = new Player(name1, advancedMode, greyBoard);
+			player2 = new Player(name2, advancedMode, greyBoard);
+		} else if (greyBoard) {
+			tileBag = new TileBag(DEFAULT_TILE_BAG_FILE);
+			player1 = new Player(name1, false, greyBoard);
+			player2 = new Player(name2, false, greyBoard);
+		} else if (aiMode) {
+			tileBag = new TileBag(DEFAULT_TILE_BAG_FILE);
+			player1 = new Player(name1);
+			player2 = new Player(name2);
+			ai->setPlayer(player2);
+			ai2->setPlayer(player1);
+		} else {
+			tileBag = new TileBag(DEFAULT_TILE_BAG_FILE);
+			player1 = new Player(name1);
+			player2 = new Player(name2);
+		}
+
 
 		// Create a default GameState
 		GameState* gameState = new GameState(STARTING_ROUND, player1, player2, 
 											tileBag, factories, player1);
 		
 		// Play the game
-		playing = playGame(gameState);
+		playing = playGame(gameState, std::cin);
 
 		// Delete the gameState after playing has stopped
 		delete gameState;
@@ -89,7 +149,7 @@ bool GameManager::loadGame(std::string testFile) {
 		// If gameState is not null (AKA a valid game) and EOF was not entered, resume the game
 		if(!std::cin.eof()) {
 			std::cout << "Azul game successfully loaded" << std::endl << std::endl;
-			playing = playGame(gameState);
+			playing = playGame(gameState, std::cin);
 		}
 
 	// If launched in testing mode
@@ -114,7 +174,7 @@ bool GameManager::loadGame(std::string testFile) {
 	return !playing;
 }
 
-bool GameManager::playGame(GameState* gameState) {
+bool GameManager::playGame(GameState* gameState, std::istream& file) {
 	bool playing = true;
 
 	while (gameState->getRound() <= NUM_ROUNDS && !gameState->isFinished() && playing) {
@@ -128,7 +188,14 @@ bool GameManager::playGame(GameState* gameState) {
 		output->outputCurrentGameState(gameState->getCurrentPlayer(),
 									   gameState->getFactories());
 
-		playing = this->validateMove(gameState);
+		if (aiMode && gameState->getCurrentPlayer() == gameState->getPlayer2()) {
+
+			ai->calculateTurn(gameState->getFactories());
+			playing = this->validateMove(gameState, file, ai->makeMove());
+		} else if (aiMode && gameState->getCurrentPlayer() == gameState->getPlayer1()) {
+			ai2->calculateTurn(gameState->getFactories());
+			playing = this->validateMove(gameState, file, ai2->makeMove());
+		}
 
 		if (playing) {
 			// output turn info
@@ -143,7 +210,7 @@ bool GameManager::playGame(GameState* gameState) {
 			// else output roundOver info
 			else if (this->gameLogic->roundOver(gameState->getFactories())) {
 				// the round is over
-				gameRoundEnd(gameState, gameLogic);				
+				gameRoundEnd(gameState, gameLogic, file);				
 				// output score
 				this->output->outputEndOfRound(gameState);
 
@@ -181,81 +248,44 @@ GameState* GameManager::importGame(std::string fileName) {
 	// validates the tile bag
 	validGame = validateTileBag(tileString, validGame, bag);
 
+
+
 	// Import Players
 	std::string name1;
 	std::string name2;
 
 	std::getline(file, name1);
 	std::getline(file, name2);
-
-	Player* player1 = new Player(name1);
-	Player* player2 = new Player(name2);
-
 	// check that names are not empty
 	if(name1.empty() || name2.empty()) {
 		validGame = false;
 	}
 
-	// Create GameState
+	Player* player1;
+	Player* player2;
+
+	if (advancedMode) {
+		player1 = new Player(name1, advancedMode, greyBoard);
+		player2 = new Player(name2, advancedMode, greyBoard);
+	} else if (greyBoard) {
+		player1 = new Player(name1, false, greyBoard);
+		player2 = new Player(name2, false, greyBoard);
+	} else if (ai) {
+		player1 = new Player(name1);
+		player2 = new Player(name2);
+		ai->setPlayer(player2);
+	} else {
+		player1 = new Player(name1);
+		player2 = new Player(name2);
+	}
+
+	// // Create GameState
 	gameState = new GameState(STARTING_ROUND, player1, player2, bag, factories, player1);
+	
+	// playTheGame
+	playGame(gameState, file);
 
-	// play the game from a file if the game is valid so far
-	bool eof = false;
-	while (!eof && validGame) {
-		// start of round
-		this->gameLogic->initFactoryTiles(factories, bag);
-
-		while (!this->gameLogic->roundOver(factories) && validGame && !eof) {
-			// get gameplay command from the file
-			std::vector<std::string> commands = input->getGameplayInput(file);
-
-			// check that command is valid (lazy operator)
-			bool validMove = false;
-			if (!commands.empty() && commands[0] == TURN_COMMAND) {
-
-				validMove = gameLogic
-							->takeTiles(factories, gameState->getCurrentPlayer(),
-							stoi(commands[1]),
-							commands[2].at(0),
-							stoi(commands[3]), bag);
-
-				if (!validMove) {
-					validGame = false;
-				} else {
-					logTurn(commands, gameState);
-				}
-			} else if (!commands.empty() && commands[0] == EOF_COMMAND) {
-				eof = true;
-			} else {
-				validGame = false;
-			}
-
-			// switch players
-			if (!eof) gameState->setCurrentPlayer(gameState->getCurrentPlayer()
-												  == gameState->getPlayer1()
-												  ? gameState->getPlayer2()
-												  : gameState->getPlayer1());
-		}
-
-		if (validGame && gameLogic->roundOver(factories)) {
-			// round has ended
-			gameRoundEnd(gameState, gameLogic);
-
-			if (gameState->getRound() < NUM_ROUNDS) {
-				gameState->incrementRound();
-			} else {
-				gameState->setFinished(true);
-				eof = true;
-			}
-		}
-	}
-
-	// if the game is not valid, return a nullptr
-	if (!validGame) {
-		delete gameState;
-		gameState = nullptr;
-	}
-
+	file.close();
 	return gameState;
 }
 
@@ -272,16 +302,24 @@ void GameManager::exportGame(GameState* gameState, std::string fileName) {
 	for (unsigned int i = 0; i < gameState->getTurns()->size(); i++) {
 		file << gameState->getTurns()->at(i) << std::endl;
 	}
+
+	file.close();
 }
 
-bool GameManager::validateMove(GameState* gameState) {
+bool GameManager::validateMove(GameState* gameState, std::istream& file, std::string aiMode) {
 	std::vector<std::string> commands = {};
 	bool moveSuccess = false;
 	
 	while (!moveSuccess) {
 		this->output->requestInput();
-		commands = this->input->getGameplayInput(std::cin);
-
+		if(!aiMode.empty()) {
+			commands = this->input->getGameplayInput(file, aiMode);
+		} else if (!file.eof()) {
+			commands = this->input->getGameplayInput(file, "");
+		} else {
+			commands = this->input->getGameplayInput(std::cin, "");
+		}
+		
 		if (!commands.empty()) {
 			if (commands[0] == TURN_COMMAND) {
 				moveSuccess = gameLogic->takeTiles(gameState->getFactories(),
@@ -291,6 +329,18 @@ bool GameManager::validateMove(GameState* gameState) {
 								stoi(commands[3]),
 								gameState->getTileBag());
 
+				// if succesfull move, add it to the game state turn history
+				if (moveSuccess) {
+					logTurn(commands, gameState);
+				}
+
+			} else if (commands[0] == GREYBOARD_COMMAND) {
+				
+				moveSuccess = gameLogic->playerMoveTileToWall(
+								gameState->getCurrentPlayer(),
+								stoi(commands[1]),
+								stoi(commands[2]));
+				
 				// if succesfull move, add it to the game state turn history
 				if (moveSuccess) {
 					logTurn(commands, gameState);
@@ -306,7 +356,8 @@ bool GameManager::validateMove(GameState* gameState) {
 
 		// display invalid input if they entered nothing or they entered invalid turn
 		// (lazy operator avoids exception)
-		if (commands.empty() || (commands[0] == TURN_COMMAND && !moveSuccess)) {
+		if (commands.empty() || (commands[0] == TURN_COMMAND && !moveSuccess) ||
+		(commands[0] == GREYBOARD_COMMAND && !moveSuccess)) {
 			this->output->invalidInput();
 		}
 	}
@@ -328,15 +379,23 @@ void GameManager::logTurn(std::vector<std::string> commands, GameState* gameStat
 	gameState->addTurn(turn);
 }
 
-void GameManager::gameRoundEnd(GameState* gameState, GameLogic* gameLogic) {
+void GameManager::gameRoundEnd(GameState* gameState, GameLogic* gameLogic, std::istream& file) {
+	if (greyBoard) {	
+		greyBoardMoveTiles(gameState, gameLogic, file);
+		gameState->setCurrentPlayer(gameState->getCurrentPlayer() 
+							== gameState->getPlayer1() 
+							? gameState->getPlayer2() 
+							: gameState->getPlayer1());
+		greyBoardMoveTiles(gameState, gameLogic, file);
+	} else {
+		// calculate player points and move to wall
+		gameLogic->addToWall(gameState->getPlayer1());
+		gameLogic->addToWall(gameState->getPlayer2());
+	}
 	// sets the player with the first tile to the starting player for next round
 	gameState->getPlayer2()->getPlayerBoard()->brokenLineHasFirst()
 	? gameState->setCurrentPlayer(gameState->getPlayer2())
 	: gameState->setCurrentPlayer(gameState->getPlayer1());
-
-	// calculate player points and move to wall
-	gameLogic->addToWall(gameState->getPlayer1());
-	gameLogic->addToWall(gameState->getPlayer2());
 
 	// reset board and add back to tile bag
 	gameLogic->resetBoard(gameState->getPlayer1(), gameState->getTileBag());
@@ -346,33 +405,49 @@ void GameManager::gameRoundEnd(GameState* gameState, GameLogic* gameLogic) {
 bool GameManager::validateTileBag(std::string& tileString, bool& validGame, TileBag* bag) {
 	// an array to represent how many of each valid tile has been read in
 	// the goal is to read in 20 of each tile
-	int tileCounts[NUM_TILES] = {};
+	int numTiles = 0;
+	int tileBagSize = 0;
+	if (advancedMode) {
+		numTiles = ADV_NUM_TILES;
+		tileBagSize = ADV_TILE_BAG_SIZE;
+	} else {
+		numTiles = DEFAULT_NUM_TILES;
+		tileBagSize = TILE_BAG_SIZE;
+	}
+	int tileCounts[numTiles] = {};
 	
 	// total number of tiles that should be in the bag, goal is 100
 	int totalTileCount = 0;
 	
-	// check that 100 tiles are in the string
+	// check that 100 tiles are in the string if default mode or
+	// check that 120 tiles are in a string if adv 6 tile mode.
 	for (char& tile : tileString) {
 
 		// check each individual tile is a valid one. if valid, 
 		// increase the tileCount for the respective tile
-		for (int i = 0; i < NUM_TILES; i++) { // FIX MAGIC NUMBER
-			if (tile == validTile[i]) {
-				tileCounts[i]++;
+		for (int i = 0; i < numTiles; i++) {
+			// if game is run in advanced mode 6 tile, checks orange tile array
+			if(advancedMode) {
+				if (tile == advValidTile[i]) {
+					tileCounts[i]++;
+				}
+			} else {
+				if (tile == validTile[i]) {
+					tileCounts[i]++;
+				}
 			}
 		}
-
 		totalTileCount++;
 	}
 
-	if (totalTileCount != TILE_BAG_SIZE) {
+	if (totalTileCount != tileBagSize) {
 		validGame = false;
 	}
 		
 	// check that 20 of each tile were read in
 	if (validGame) {
-		for (int i = 0; i < NUM_TILES; i++) {
-			if (tileCounts[i] != (TILE_BAG_SIZE / NUM_TILES)) {
+		for (int i = 0; i < numTiles; i++) {
+			if (tileCounts[i] != (tileBagSize / numTiles)) {
 				validGame = false;
 			}
 		}
@@ -386,4 +461,12 @@ bool GameManager::validateTileBag(std::string& tileString, bool& validGame, Tile
 	}
 
 	return validGame;
+}
+
+void GameManager::greyBoardMoveTiles(GameState* gameState, GameLogic* gameLogic, std::istream& file) {
+	this->output->outputPromptGreyBoard();
+	while (gameLogic->playerPatternLinesFull(gameState->getCurrentPlayer())) {
+		this->output->outputGreyBoardMode(gameState->getCurrentPlayer());
+		this->validateMove(gameState, file, "");
+	}
 }

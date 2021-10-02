@@ -3,15 +3,16 @@
 
 TileBag::TileBag() {
 	this->tileBag = new LinkedList();
+	this->tileBagString = "";
 }
 
 TileBag::TileBag(std::string fileName) {
  	this->tileBag = new LinkedList();
  	FileHandler reader;
- 	reader.readTileBag(*this->tileBag, fileName);
+ 	reader.readTileBag(*this->tileBag, tileBagString, fileName);
 }
 
-TileBag::TileBag(TileBag& other) {
+TileBag::TileBag(const TileBag& other) {
 	this->tileBag = new LinkedList(*other.tileBag);
 }
 
@@ -21,6 +22,7 @@ TileBag::~TileBag() {
 
 void TileBag::addToBag(char tile) {
 	tileBag->addBack(tile);
+	tileBagString.append(1, tile);
 }
 
 char TileBag::removeFrontTile() {
@@ -29,10 +31,6 @@ char TileBag::removeFrontTile() {
 	return retValue;
 }
 
-std::string TileBag::toString() {
-	std::string retValue = "";
-	for(unsigned int i = 0; i < tileBag->size(); ++i) {
-		retValue += tileBag->get(i);
-	}
-	return retValue;
+std::string TileBag::initialTileBagString() {
+	return tileBagString;
 }

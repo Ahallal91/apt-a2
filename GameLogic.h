@@ -11,6 +11,9 @@ class PlayerBoard;
 class GameLogic {
 public:
 	GameLogic();
+	// use this to instantiate advanced 6 tile mode, set to true.
+	// use this to instantiate greyboard mode, set to true
+	GameLogic(bool advancedMode, bool greyBoard);
 	~GameLogic();
 
 	// Resets factories and fills them from the tilebag 
@@ -42,10 +45,36 @@ public:
 	/*
 	* Moves wall tiles and calculates points
 	* Also subtracts points based on number of broken tiles
+	* if the game is in 6 Tile advanced mode, set advanced to true to
+	* use length 8 broken line with -4 points.
 	*/
 	void addToWall(Player* player);
+	/*
+	* Moves patternLine tiles to wall in greyBoard mode only.
+	*/
+	bool playerMoveTileToWall(Player* player, int patternLine, int wallColumn);
 
+	// returns true if the player has any full pattern lines, used in greyboard mode only.
+	bool playerPatternLinesFull(Player* player);
+	
 private:
+	// calculate the points of the player
+	void calculatePoints(Player* player, int x, int y);
+
+		/*
+	 * Calculates the points for 1 tile location,
+	 * parameters: {start} is the start location where you want to iterate, (x or y)
+	 * 			{tileLoc} is the opposite axis for the start location, (x or y)
+	 * 			{sign} pass POSITIVE to iterate right or down, NEGATIVE to iterate
+	 * 				left or up.
+	 * 			{pointsToAdd} is where the players points are added
+	 * 			{combo} checks whether the player gets combo points for row or column
+	 * 			{playerboard} is the players board
+	 * 			{horizontal} pass true here if you are iterating left or right. False
+	 * 				for iterating up or down.
+	 */
+	void countTiles(int start, int tileLoc, char sign, int& pointsToAdd,
+					bool& combo, PlayerBoard* playerBoard, bool horizontal);
 	/* Takes tiles from the center factory and places them in the players
  	 * patternLine or brokenLine, tiles not added to brokenline go back to tilebag
  	 * returns true if the amount of tiles added is greater than zero.
@@ -66,10 +95,6 @@ private:
  	 * if the destination is the brokenLine it will also return true.
  	 */
 	bool playerTileCheck(Player* player, char tile, int destPatternLine);
-
-	// calculate the points of the player
-	void calculatePoints(Player* player, int x, int y);
-
 	
 	/* Checks if the location on the players wall has already been filled by
 	 * the tile before. Returns false if the tile location is filled.
@@ -82,20 +107,18 @@ private:
  	 */
 	int tileLocation(int destPatternLine, char tile);
 
-	/*
-	 * Calculates the points for 1 tile location,
-	 * parameters: {start} is the start location where you want to iterate, (x or y)
-	 * 			{tileLoc} is the opposite axis for the start location, (x or y)
-	 * 			{sign} pass POSITIVE to iterate right or down, NEGATIVE to iterate
-	 * 				left or up.
-	 * 			{pointsToAdd} is where the players points are added
-	 * 			{combo} checks whether the player gets combo points for row or column
-	 * 			{playerboard} is the players board
-	 * 			{horizontal} pass true here if you are iterating left or right. False
-	 * 				for iterating up or down.
-	 */
-	void countTiles(int start, int tileLoc, char sign, int& pointsToAdd,
-					bool& combo, PlayerBoard* playerBoard, bool horizontal);
+	// set to true for advanced mode {toggle}
+	bool advancedMode;
+	
+	// set to true for grey board mode {toggle}
+	bool greyBoard;
+
+	// controls wall size for advanced and default mode
+	// 5x5 default, 6x6 advanced mode
+	int wallSize;
+	// controls which integer represents the broken line for input, 5 for default
+	// 6 for advanced mode.
+	int brokenLineNumber;
 };
 
 #endif // GAME_LOGIC_H

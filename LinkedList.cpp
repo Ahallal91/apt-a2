@@ -1,6 +1,6 @@
 #include <stdexcept>
-
-#include "Node.h"
+#include <iostream>
+#include "NodeList.h"
 #include "LinkedList.h"
 
 LinkedList::LinkedList() {
@@ -8,16 +8,13 @@ LinkedList::LinkedList() {
     this->tail = nullptr;
 }
 
-LinkedList::LinkedList(LinkedList& other) {
-    Node* current = other.head->next;
-    Node* tempCurrent = nullptr;
-    this->head = new Node(*other.head);
-    this->tail = new Node(*other.tail);
-    while(current != nullptr) {
-        tempCurrent = new Node(*current);
-        tempCurrent = tempCurrent->next;
-        current = current->next;
+LinkedList::LinkedList(const LinkedList& other) {
+    NodeList* toAdd = new NodeList(*other.head);
+    while(toAdd != nullptr) {
+      addBack(toAdd->data);
+      toAdd = toAdd->next;
     }
+    delete toAdd;
 }
 
 LinkedList::~LinkedList() {
@@ -26,7 +23,7 @@ LinkedList::~LinkedList() {
 
 unsigned int LinkedList::size() const {
 	unsigned int count = 0;
-    Node* current = head;
+    NodeList* current = head;
     while(current != nullptr) {
         current = current->next;
         count++;
@@ -44,7 +41,7 @@ char LinkedList::get(const unsigned int index) const {
 	char retValue = '\0';
 	if(index < size()) {
         unsigned int count = 0;
-        Node* current = head;
+        NodeList* current = head;
         while(count < index) {
             current = current->next;
             count++;
@@ -73,7 +70,7 @@ char LinkedList::back() {
 }
 
 void LinkedList::addFront(char data) {
-    Node* toAdd = new Node(data, nullptr, head); 
+    NodeList* toAdd = new NodeList(data, nullptr, head); 
     if(head == nullptr) {
         head = toAdd;
         tail = toAdd;
@@ -84,7 +81,7 @@ void LinkedList::addFront(char data) {
 }
 
 void LinkedList::addBack(char data) {
-	Node* toAdd = new Node(data, tail, nullptr);
+	NodeList* toAdd = new NodeList(data, tail, nullptr);
     if(tail == nullptr) {
         head = toAdd;
         tail = toAdd;
@@ -96,7 +93,7 @@ void LinkedList::addBack(char data) {
 
 void LinkedList::removeFront() {
     if (tail != nullptr) {
-        Node* toDelete = head;
+        NodeList* toDelete = head;
         head = head->next;
  
         if(head == nullptr) {
@@ -110,7 +107,7 @@ void LinkedList::removeFront() {
 
 void LinkedList::removeBack() {
     if (tail != nullptr) {
-        Node* toDelete = tail;
+        NodeList* toDelete = tail;
         tail = tail->prev;
  
         if(tail == nullptr) {

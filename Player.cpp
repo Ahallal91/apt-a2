@@ -3,11 +3,28 @@
 Player::Player():
 	Player(DEFAULT_NAME) {}
 
+Player::Player(Player& other) {
+	this->name = other.name;
+	this->points = other.points;
+	this->playerBoard = other.playerBoard;
+}
+
+Player::Player(Player&& other) {
+	this->name = other.name;
+	this->points = other.points;
+	this->playerBoard = other.playerBoard;
+}
 
 Player::Player(std::string name) :
 	name(name),
 	points(INITIAL_POINTS) {
 	this->playerBoard = new PlayerBoard();
+}
+
+Player::Player(std::string name, bool advancedMode, bool greyBoard) :
+	name(name),
+	points(INITIAL_POINTS) {
+	this->playerBoard = new PlayerBoard(advancedMode, greyBoard);
 }
 
 Player::~Player() {

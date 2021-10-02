@@ -10,6 +10,9 @@ class GameState;
 class Output {
 public:
 	Output();
+	// use this to launch advanced 6-tile mode.
+	Output(bool advancedMode);
+	
 	~Output();
 
 	// outputs the round number info, if game is finished it output end of game.
@@ -20,6 +23,11 @@ public:
 
 	// output both players current boards and scores
 	void outputEndOfRound(GameState* gameState);
+
+	// output for greyboard mode, moving tiles to wall
+	void outputGreyBoardMode(Player* currentPlayer);
+
+	void outputPromptGreyBoard();
 
 	// outputs the current player turn and their board
 	void turnSuccess(Player* currentPlayer);
@@ -51,6 +59,10 @@ private:
 
 	// output for a players score.
 	void outputScore(Player* player);
+
+	bool advancedMode;
+
+	int wallSize;
 };
 
 #endif // OUTPUT_H

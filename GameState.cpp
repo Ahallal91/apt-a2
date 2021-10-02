@@ -13,7 +13,7 @@ GameState::GameState(int round, Player* player1, Player* player2,
 	turns = new std::vector<std::string>;
 
 	// get initial tile bag order
-	initialTileBag = tileBag->toString();
+	initialTileBag = tileBag->initialTileBagString();
 }
 
 GameState::~GameState() {

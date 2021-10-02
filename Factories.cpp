@@ -1,11 +1,12 @@
 #include "Factories.h"
 #include "Types.h"
+#include "SingleFactory.h"
 
 Factories::Factories() {
 	// creates 5 factories of size 4
-	this->factories = new char* [NUM_FACTORIES];
+	this->factories = new SingleFactory*[NUM_FACTORIES];
 	for (int i = 0; i < NUM_FACTORIES; ++i) {
-		factories[i] = new char[FACTORY_SIZE];
+		factories[i] = new SingleFactory();
 	}
 	// creates centre factory
 	this->centerFactory = new std::vector<char>;
@@ -16,8 +17,8 @@ Factories::~Factories() {
 	clearFactories();
 }
 
-char* Factories::getFactory(int factoryNumber) {
-	char* retValue = nullptr;
+SingleFactory* Factories::getFactory(int factoryNumber) {
+	SingleFactory* retValue = nullptr;
 	if (factoryNumber >= 0 && factoryNumber < NUM_FACTORIES) {
 		retValue = factories[factoryNumber];
 	}
@@ -25,7 +26,7 @@ char* Factories::getFactory(int factoryNumber) {
 }
 
 char Factories::getCenterFactoryTile(unsigned int index) {
-	char tile = EMPTY;
+	char tile = '\0';
 
 	if (index >= 0 && index < centerFactory->size()) {
 		tile = centerFactory->at(index);
@@ -41,12 +42,7 @@ unsigned int Factories::getCenterFactorySize() {
 bool Factories::addToFactory(int factoryNumber, char tile) {
 	bool retValue = false;
 	if (factoryNumber >= 0 && factoryNumber < NUM_FACTORIES) {
-		for (int i = 0; i < FACTORY_SIZE; ++i) {
-			if (factories[factoryNumber][i] == '\0' && !retValue) {
-				factories[factoryNumber][i] = tile;
-				retValue = true;
-			}
-		}
+		retValue = factories[factoryNumber]->add(tile);
 	}
 	return retValue;
 }
@@ -56,9 +52,7 @@ bool Factories::isTileInFactories(int factoryNumber, char tile) {
 	// checks normal factories
 	if (factoryNumber > 0 && factoryNumber <= NUM_FACTORIES) {
 		for (int i = 0; i < FACTORY_SIZE; ++i) {
-			if (factories[factoryNumber - 1][i] == tile) {
-				retValue = true;
-			}
+			retValue = factories[factoryNumber - 1]->contains(tile);
 		}
 	} else if (factoryNumber == 0) {
 		// checks center factory
@@ -86,15 +80,20 @@ char* Factories::takeTilesFactory(int factoryNumber, char tile) {
 	if (factoryNumber >= 0 && factoryNumber < NUM_FACTORIES) {
 		int tilesAdded = 0;
 		for (int i = 0; i < FACTORY_SIZE; ++i) {
-			if (factories[factoryNumber][i] == tile) {
-				retValue[tilesAdded] = factories[factoryNumber][i];
-				factories[factoryNumber][i] = '\0';
+			if (factories[factoryNumber]->contains(tile)) {
+				retValue[tilesAdded] = factories[factoryNumber]->get(tile);
+				factories[factoryNumber]->remove(tile);
 				tilesAdded++;
-			} else if (factories[factoryNumber][i] != '\0'){
-				centerFactory->push_back(factories[factoryNumber][i]);
+			} else {
+				// add left over tiles to center factory
+				if(factories[factoryNumber]->getRemaining() != '\0') {
+					char toRemove = factories[factoryNumber]->getRemaining();
+					factories[factoryNumber]->remove(toRemove);
+					centerFactory->push_back(toRemove);
+				}
 			}
 		}
-		// adds left over tiles to center factory and resets factory.
+		// resets factory.
 		resetSingleFactory(factoryNumber);
 
 	}
@@ -123,7 +122,7 @@ std::vector<char>* Factories::takeTilesCenterFactory(char tile) {
 void Factories::clearFactories() {
 	// Delete the 5 factories of size 4
 	for (int i = 0; i < NUM_FACTORIES; i++) {
-		delete[] factories[i];
+		delete factories[i];
 	}
 	delete[] factories;
 	factories = nullptr;
@@ -146,21 +145,18 @@ void Factories::resetFactories() {
 }
 
 void Factories::resetSingleFactory(int factoryNumber) {
-	for (int i = 0; i < FACTORY_SIZE; ++i) {
-		factories[factoryNumber][i] = '\0';
-	}
+	factories[factoryNumber]->clear();
 }
 
 bool Factories::areFactoriesEmpty() {
 	bool retValue = false;
 	bool factoryEmpty = true;
 	for (int i = 0; i < NUM_FACTORIES && factoryEmpty; i++) {
-		for (int j = 0; j < FACTORY_SIZE && factoryEmpty; j++) {
-			if (factories[i][j] != '\0') {
-				factoryEmpty = false;
-			}
+		if(!factories[i]->empty() && factoryEmpty) {
+			factoryEmpty = false;
 		}
 	}
+
 	if (centerFactory->empty() && factoryEmpty) {
 		retValue = true;
 	
@@ -171,3 +167,40 @@ bool Factories::areFactoriesEmpty() {
 	}
 	return retValue;
 }
+
+std::map<int, int> Factories::getMatchingFactories(char matchingTile) {
+	std::map<int, int> retValue;
+	for(int i = 0; i < NUM_FACTORIES; ++i) {
+		if(!factories[i]->empty()) {
+			if(factories[i]->contains(matchingTile)) {
+				retValue.insert(std::pair<int, int>(i+1, 
+					factories[i]->getTileCount(matchingTile)));
+			}
+		}
+	}
+	int matchingTileNumber = 0;
+	if(!centerFactory->empty()) {
+		for(unsigned int i = 0; i < centerFactory->size(); ++i) {
+			if(centerFactory->at(i) == matchingTile) {
+				matchingTileNumber++;
+			}
+		}
+		retValue.insert(std::pair<int, int>(0, matchingTileNumber));
+	}
+	return retValue;
+}
+
+std::pair<int, char> Factories::getAnyMatching() {
+	std::pair<int, char> retValue;
+	bool picked = false;
+	for(int i = 0; i < NUM_FACTORIES; ++i) {
+		if(!factories[i]->empty()) {
+			retValue = std::make_pair(i+1, factories[i]->getRemaining());
+			picked = true;
+		}
+	}
+	if (!centerFactory->empty() && !picked) {
+		retValue = std::make_pair(0, centerFactory->front());
+	}
+	return retValue;
+}	

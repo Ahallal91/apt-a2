@@ -10,6 +10,26 @@ PatternLine::PatternLine(int size):
 	this->clear();
 }
 
+PatternLine::PatternLine(PatternLine& other) {
+	this->tile = other.tile;
+	this->size = other.size;
+	this->currentSize = other.currentSize;
+	this->tiles = new char[size];
+	for(int i = 0; i < size; ++i) {
+		tiles[i] = other.tiles[i];
+	}
+}
+
+PatternLine::PatternLine(PatternLine&& other) {
+	this->tile = other.tile;
+	this->size = other.size;
+	this->currentSize = other.currentSize;
+	this->tiles = new char[size];
+	for(int i = 0; i < size; ++i) {
+		tiles[i] = other.tiles[i];
+	}
+}
+
 PatternLine::~PatternLine() {
 	delete[] this->tiles;
 }
@@ -40,6 +60,10 @@ bool PatternLine::addTile(char tile) {
 
 int PatternLine::getSize() {
 	return this->size;
+}
+
+int PatternLine::sizeDifference() {
+	return size - (currentSize);
 }
 
 int PatternLine::getCurrentSize() {

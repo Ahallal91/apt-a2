@@ -13,7 +13,7 @@ public:
 	TileBag(std::string fileName);
 
 	// copyConstructor
-	TileBag(TileBag& other);
+	TileBag(const TileBag& other);
 
 	// delete constructor
 	~TileBag();
@@ -24,12 +24,13 @@ public:
 	// removes the tile at the front of the queue and returns the tile removed
 	char removeFrontTile();
 
-	// returns the current tilebag as a string;
-	std::string toString();
+	// returns the initial tilebag as a string;
+	std::string initialTileBagString();
 
 private:
 	// Where the tiles are stored
 	LinkedList* tileBag;
+	std::string tileBagString;
 };
 
 #endif // TILE_BAG_H

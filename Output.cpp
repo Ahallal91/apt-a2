@@ -5,8 +5,21 @@
 #include "Types.h"
 #include "Factories.h"
 #include "GameState.h"
+#include "SingleFactory.h"
 
-Output::Output() {}
+Output::Output() {
+	this->advancedMode = false;
+	this->wallSize = WALL_DIM;
+}
+
+Output::Output(bool advancedMode) {
+	this->advancedMode = advancedMode;
+	if (advancedMode) {
+		this->wallSize = ADV_WALL_DIM;
+	} else {
+		this->wallSize = WALL_DIM;
+	}
+}
 
 Output::~Output() {}
 
@@ -17,12 +30,23 @@ void Output::outputCurrentGameState(Player* currentPlayer,
 	outputBoard(currentPlayer);
 }
 
+void Output::outputGreyBoardMode(Player* currentPlayer) {
+	outputTurn(currentPlayer);
+	outputBoard(currentPlayer);
+}
+
 void Output::outputEndOfRound(GameState* gamestate) {
 	outputScore(gamestate->getPlayer1());
 	outputScore(gamestate->getPlayer2());
 	std::cout << std::endl;
 	outputBoard(gamestate->getPlayer1());
 	outputBoard(gamestate->getPlayer2());
+}
+
+void Output::outputPromptGreyBoard() {
+	std::cout << 
+	"Use command 'move' <patternline> <wallcolumn> to move tiles." 
+	<< std::endl;
 }
 
 void Output::outputTestingGameState(GameState* gameState) {
@@ -91,12 +115,7 @@ void Output::outputFactory(Factories* factory) {
 	// output the factories
 	for (int i = 0; i < NUM_FACTORIES; i++) {
 		std::cout << std::endl << (i + 1) << ": ";
-		char* tiles = factory->getFactory(i);
-		for (int j = 0; j < FACTORY_SIZE; j++) {
-			if (tiles[j] != '\0') {
-				std::cout << tiles[j] << " ";
-			}
-		}
+		std::cout << factory->getFactory(i)->toString() << " ";
 	}
 	std::cout << std::endl << std::endl;
 }
@@ -113,12 +132,12 @@ void Output::outputBoard(Player* player) {
 	std::cout << "Mosaic for " << player->getPlayerName() << ":" << std::endl;
 
 	// Output pattern lines and wall
-	for (int y = 0; y < WALL_DIM; y++) {
+	for (int y = 0; y < wallSize; y++) {
 
 		// Pattern line
 		std::cout << (y + 1) << ":";
 		// Blank spaces
-		for (int i = 0; i < WALL_DIM - player->getPlayerBoard()->getPatternLine(y)->getSize(); i++) {
+		for (int i = 0; i < wallSize - player->getPlayerBoard()->getPatternLine(y)->getSize(); i++) {
 			std::cout << " " << " ";
 		}
 		// Tiles
@@ -134,14 +153,18 @@ void Output::outputBoard(Player* player) {
 		std::cout << " " << "||";
 
 		// Wall row
-		for (int x = 0; x < WALL_DIM; x++) {
+		for (int x = 0; x < wallSize; x++) {
 			std::cout << " " << player->getPlayerBoard()->getWallTile(x, y);
 		}
 		std::cout << std::endl;
 	}
 
 	// Output broken tiles
-	std::cout << "6: broken |";
+	if (advancedMode) {
+		std::cout << "7: broken |";
+	} else {
+		std::cout << "6: broken |";
+	}
 	for (int i = 0; i < player->getPlayerBoard()->getBrokenSize(); i++) {
 		std::cout << " " << player->getPlayerBoard()->getBrokenTile(i);
 	}

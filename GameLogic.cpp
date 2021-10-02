@@ -3,15 +3,36 @@
 #include "TileBag.h"
 #include "Player.h"
 #include "Types.h"
+#include "PlayerBoard.h"
 
 #define POSITIVE 		'+'
 #define NEGATIVE 		'-'
-#define BROKEN_LINE			 5
+#define DEFAULT_BROKEN_LINE 5
+#define ADV_BROKEN_LINE 6
 
 // amount of points lost where the index is the amount of broken line tiles
 constexpr int brokenLinePoints[] = {0, -1, -2, -4, -6, -8, -11, -14};
+// amount of points lost where the index is the amount of broken line tiles
+constexpr int advBrokenLinePoints[] = {0, -1, -2, -4, -6, -8, -11, -14, -18};
 
-GameLogic::GameLogic() {}
+GameLogic::GameLogic() {
+	this->advancedMode = false;
+	this->greyBoard = false;
+	this->wallSize = WALL_DIM;
+	this->brokenLineNumber = DEFAULT_BROKEN_LINE;
+}
+
+GameLogic::GameLogic(bool advancedMode, bool greyBoard) {
+	this->advancedMode = advancedMode;
+	this->greyBoard = greyBoard;
+	if (advancedMode) {
+		this->wallSize = ADV_WALL_DIM;
+		this->brokenLineNumber = ADV_BROKEN_LINE;
+	} else {
+		this->wallSize = WALL_DIM;
+		this->brokenLineNumber = DEFAULT_BROKEN_LINE;
+	}
+}
 
 GameLogic::~GameLogic() {}
 
@@ -27,30 +48,36 @@ void GameLogic::initFactoryTiles(Factories* factories, TileBag* tileBag) {
 }
 
 void GameLogic::addToWall(Player* player) {
-	PlayerBoard* playerBoard = player->getPlayerBoard();
-
 	// for all patterns
-	for (int row = 0; row < WALL_DIM; row++) {
-		if (playerBoard->getPatternLine(row)->isFull()) {
+	for (int row = 0; row < wallSize; row++) {
+		if (player->getPlayerBoard()->getPatternLine(row)->isFull()) {
 			bool found = false;
+			
 			// find where to place on the wall
-			for (int col = 0; col < WALL_DIM && !found; col++) {
-				if (playerBoard->getPatternLine(row)->getTileType()
-					== pattern[row][col]) {
-					playerBoard->setWallTile(col, row);
+			for (int col = 0; col < wallSize && !found; col++) {
+				if (player->getPlayerBoard()->getPatternLine(row)->getTileType() 
+					== pattern[row][col] || 
+					(player->getPlayerBoard()->getPatternLine(row)->getTileType() 
+					== advPattern[row][col] && advancedMode)) {
+					player->getPlayerBoard()->setWallTile(col, row, EMPTY);
 					calculatePoints(player, col, row);
 					found = true;
 				}
 			}
 		}
 	}
-	player->setPoints(player->getPoints()
-					  + brokenLinePoints[playerBoard->getBrokenSize()]);
+	
+	// minus points from broken line.
+	if(advancedMode) {
+		player->setPoints(player->getPoints()
+			+ advBrokenLinePoints[player->getPlayerBoard()->getBrokenSize()]);
+	} else {
+		player->setPoints(player->getPoints()
+			+ brokenLinePoints[player->getPlayerBoard()->getBrokenSize()]);
+	}
 }
 
 void GameLogic::calculatePoints(Player* player, int x, int y) {
-	PlayerBoard* playerBoard = player->getPlayerBoard();
-
 	int playerPoints = player->getPoints();
 	// 1 point for adding a new tile
 	int pointsToAdd = 1;
@@ -58,16 +85,16 @@ void GameLogic::calculatePoints(Player* player, int x, int y) {
 	bool comboRow = false;
 
 	// counts tiles above
-	countTiles(y, x, NEGATIVE, pointsToAdd, comboCol, playerBoard, false);
+	countTiles(y, x, NEGATIVE, pointsToAdd, comboCol, player->getPlayerBoard(), false);
 
 	// count tiles below
-	countTiles(y, x, POSITIVE, pointsToAdd, comboCol, playerBoard, false);
+	countTiles(y, x, POSITIVE, pointsToAdd, comboCol, player->getPlayerBoard(), false);
 
 	// count tiles left
-	countTiles(x, y, NEGATIVE, pointsToAdd, comboRow, playerBoard, true);
+	countTiles(x, y, NEGATIVE, pointsToAdd, comboRow, player->getPlayerBoard(), true);
 
 	// count tiles right
-	countTiles(x, y, POSITIVE, pointsToAdd, comboRow, playerBoard, true);
+	countTiles(x, y, POSITIVE, pointsToAdd, comboRow, player->getPlayerBoard(), true);
 
 	// additional point for connecting both row and col
 	if (comboCol && comboRow) {
@@ -99,7 +126,7 @@ void GameLogic::countTiles(int start, int tileLoc, char sign, int& pointsToAdd,
 			}
 		}
 	} else if (sign == POSITIVE) {
-		for (int row = start + 1; row < WALL_DIM && !finished; row++) {
+		for (int row = start + 1; row < wallSize && !finished; row++) {
 			char compareTile = '\0';
 			if (horizontal) {
 				compareTile = playerBoard->getWallTile(row, tileLoc);
@@ -118,7 +145,7 @@ void GameLogic::countTiles(int start, int tileLoc, char sign, int& pointsToAdd,
 
 void GameLogic::resetBoard(Player* player, TileBag* tileBag) {
 	// traverse all pattern lines
-	for (int i = 0; i < WALL_DIM; i++) {
+	for (int i = 0; i < wallSize; i++) {
 		PatternLine* patternLine = player->getPlayerBoard()->getPatternLine(i);
 
 		// add tiles back to bag. -1 if it's full since it will be moved to the wall
@@ -151,7 +178,7 @@ bool GameLogic::roundOver(Factories* factories) {
 }
 
 bool GameLogic::takeTiles(Factories* factories, Player* player,
-						  int factoryNumber, char tile, int destPatternLine, 
+						  int factoryNumber, char tile, int destPatternLine,
 						  TileBag* tileBag) {
 	bool retValue = false;
 	// reduces input patternLine by 1 to fit array
@@ -178,14 +205,14 @@ bool GameLogic::addTilesFromCenterFact(Factories* factories, Player* player,
 	bool retValue = false;
 	std::vector<char>* tempTiles = factories->takeTilesCenterFactory(tile);
 	for (unsigned int i = 0; i < tempTiles->size(); ++i) {
-		if (destPatternLine != BROKEN_LINE) {
+		if (destPatternLine != brokenLineNumber) {
 			if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)
 				  ->addTile(tempTiles->at(i)))) {
 				if (!(player->getPlayerBoard()->addBrokenTile(tempTiles->at(i)))) {
 					tileBag->addToBag(tempTiles->at(i));
 				}
 			}
-		} else if (destPatternLine == BROKEN_LINE) {
+		} else if (destPatternLine == brokenLineNumber) {
 			if (!(player->getPlayerBoard()->addBrokenTile(tempTiles->at(i)))) {
 				tileBag->addToBag(tempTiles->at(i));
 			}
@@ -205,14 +232,14 @@ bool GameLogic::addTilesFromFact(Factories* factories, Player* player,
 	bool retValue = false;
 	char* tempTiles = factories->takeTilesFactory(factoryNumber - 1, tile);
 	for (unsigned int i = 0; i < FACTORY_SIZE; ++i) {
-		if (destPatternLine != BROKEN_LINE) {
+		if (destPatternLine != brokenLineNumber) {
 			if (!(player->getPlayerBoard()->getPatternLine(destPatternLine)->
 				  addTile(tempTiles[i]))) {
 				if (!(player->getPlayerBoard()->addBrokenTile(tempTiles[i]))) {
 					tileBag->addToBag(tempTiles[i]);
 				}
 			}
-		} else if (destPatternLine == BROKEN_LINE) {
+		} else if (destPatternLine == brokenLineNumber) {
 			if (!(player->getPlayerBoard()->addBrokenTile(tempTiles[i]))) {
 				tileBag->addToBag(tempTiles[i]);
 			}
@@ -228,7 +255,7 @@ bool GameLogic::addTilesFromFact(Factories* factories, Player* player,
 
 bool GameLogic::playerTileCheck(Player* player, char tile, int destPatternLine) {
 	bool retValue = false;
-	if (destPatternLine != BROKEN_LINE) {
+	if (destPatternLine != brokenLineNumber) {
 		char tileType = player->
 			getPlayerBoard()->
 			getPatternLine(destPatternLine)->
@@ -236,36 +263,69 @@ bool GameLogic::playerTileCheck(Player* player, char tile, int destPatternLine) 
 		if (tileType == EMPTY || tileType == tile) {
 			retValue = true;
 		}
-	} else if (destPatternLine == BROKEN_LINE) {
+	} else if (destPatternLine == brokenLineNumber) {
 		retValue = true;
 	}
+
 	return retValue;
 }
 
 bool GameLogic::playerWallCheck(Player* player, char tile, int destPatternLine) {
 	bool retValue = true;
-	if (destPatternLine != BROKEN_LINE) {
-		if (player->getPlayerBoard()->getWallTile(
-			tileLocation(destPatternLine, tile), destPatternLine) == tile) {
-			retValue = false;
+	if (destPatternLine != brokenLineNumber) {
+		for (int i = 0; i < wallSize; ++i) {
+			if (player->getPlayerBoard()->getWallTile(i, destPatternLine) == tile) {
+				retValue = false;
+			}
 		}
-	} else if (destPatternLine == BROKEN_LINE) {
+	} else if (destPatternLine == brokenLineNumber) {
 		retValue = true;
 	}
+
 	return retValue;
 }
 
-int GameLogic::tileLocation(int destPatternLine, char tile) {
-	int tileCount = 0;
-	for (int i = 0; i < WALL_DIM; ++i) {
-		if (validTile[i] == tile) {
-			tileCount = i;
+bool GameLogic::playerMoveTileToWall(Player* player, int patternLine, int wallColumn) {
+	bool retValue = false;
+	// reduces input to fit real-pattern line array.
+	patternLine--;
+	wallColumn--;
+	// gets the tile type of the patternline
+	char tileType = player->getPlayerBoard()->getPatternLine(patternLine)->getTileType();
+
+	if (patternLine >= 0 && patternLine < wallSize && wallColumn >= 0 && wallColumn
+		< wallSize) {
+		if(player->getPlayerBoard()->getPatternLine(patternLine)->isFull()) {
+			if (player->getPlayerBoard()->checkWallCol(wallColumn, tileType) ||
+				!(playerWallCheck(player, tileType, patternLine))) {
+				retValue = false;
+			} else {
+				player->getPlayerBoard()->setWallTile(wallColumn, patternLine, tileType);
+				player->getPlayerBoard()->getPatternLine(patternLine)->clear();
+				calculatePoints(player, wallColumn, patternLine);
+				retValue = true;
+			}
 		}
 	}
-
-	tileCount = tileCount + destPatternLine;
-	if (tileCount >= WALL_DIM) {
-		tileCount = tileCount - WALL_DIM;
+	
+	// minus points from broken line.
+	if(advancedMode && retValue) {
+		player->setPoints(player->getPoints()
+			+ advBrokenLinePoints[player->getPlayerBoard()->getBrokenSize()]);
+	} else if (retValue) {
+		player->setPoints(player->getPoints()
+			+ brokenLinePoints[player->getPlayerBoard()->getBrokenSize()]);
 	}
-	return tileCount;
+
+	return retValue;
+}
+
+bool GameLogic::playerPatternLinesFull(Player* player) {
+	bool retValue = false;
+	for(int i = 0; i < wallSize && !retValue; ++i) {
+		if(player->getPlayerBoard()->getPatternLine(i)->isFull()) {
+			retValue = true;
+		}
+	}
+	return retValue;
 }

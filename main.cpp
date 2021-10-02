@@ -3,29 +3,68 @@
 #include "GameManager.h"
 #include "Input.h"
 
-#define TESTING_MODE_ARGUMENT	"-t"
+#define TESTING_MODE_ARGUMENT			"-t"
+#define ADV_6_TILE_MODE_ARGUMENT		"--6tile"
+#define ADV_GREY_BOARD_MODE_ARGUMENT	"--gadv"
+#define AI_MODE_ARGUMENT				"--ai"
+
+/*
+* Welcome to Azul M3 <Commands below>
+* To launch 6 tile advanced mode "--6tile"
+* To launch greyboard advanced mode "--gadv"
+* To launch duel advanced mode type any order "--6tile" "--gadv"
+* To launch testing mode with any advanced mode type commands in any order with file name at end
+* 		"--6tile" or "--gadv" with "-t" <filename>
+* To launch ai mode "--ai"
+*/
 
 void runMenu(GameManager* gameManager);
 void credits();
 void menuText();
+void testing(int argc, char** argv,  bool sixTileMode, bool greyBoardMode, GameManager* gameManager);
+void gameTypePrint(bool sixTileMode, bool greyBoardMode, bool ai);
 
 int main(int argc, char** argv) {
-	GameManager* gameManager = new GameManager();
+	GameManager* gameManager = nullptr;
+	bool testingMode = false;
+	bool sixTileMode = false;
+	bool greyBoardMode = false;
+	bool ai = false;
 
-	if (argc >= 2 && std::string(argv[1]) == TESTING_MODE_ARGUMENT) {
-		if (argc == 3) {
-			gameManager->loadGame(std::string(argv[2]));
-		} else {
-			std::cout << "Unrecognised arguments for testing mode\n\nUSAGE:\n\t" 
-			<< TESTING_MODE_ARGUMENT << " <filename>" << std::endl;
+	// iterates over arguements and sets modes
+	for(int i = 0; i < argc; ++i) {
+		std::string arguement = argv[i];
+		if(arguement == TESTING_MODE_ARGUMENT) {
+			testingMode = true;
 		}
+		if (arguement == ADV_6_TILE_MODE_ARGUMENT) {
+			sixTileMode = true;
+		}
+		if (arguement == ADV_GREY_BOARD_MODE_ARGUMENT) {
+			greyBoardMode = true;
+		}
+		if (arguement == AI_MODE_ARGUMENT) {
+			ai = true;
+		}
+	}
+
+	if (testingMode) {
+		testing(argc, argv, sixTileMode, greyBoardMode, gameManager);
+	} else if ((sixTileMode || greyBoardMode) && !ai) {
+		gameTypePrint(sixTileMode, greyBoardMode, ai);
+		gameManager = new GameManager(sixTileMode, greyBoardMode, ai);
+		runMenu(gameManager);
+	} else if (ai && !sixTileMode && !greyBoardMode) {
+		gameTypePrint(sixTileMode, greyBoardMode, ai);
+		gameManager = new GameManager(sixTileMode, greyBoardMode, ai);
+		runMenu(gameManager);
 	} else {
 		if (argc > 1) {
 			std::cout << 
 			"Unknown command line arguments specified, starting game normally..." 
 			<< std::endl << std::endl;
 		}
-
+		gameManager = new GameManager();
 		// Run the main menu
 		runMenu(gameManager);
 	}
@@ -87,4 +126,39 @@ void credits() {
 	std::cout << "Alicia Hallal    (S3811836)  S3811836@student.rmit.edu.au" << std::endl;
 	std::cout << "---------------------------------------------------------" << std::endl;
 	std::cout << std::endl;
+}
+
+void testing(int argc, char** argv, bool sixTileMode, bool greyBoardMode, 
+				GameManager* gameManager) 
+{
+	if (argc == 3 && !sixTileMode && !greyBoardMode) {
+		gameManager = new GameManager();
+		gameManager->loadGame(std::string(argv[2]));
+ 	} else if (((argc == 4) && (sixTileMode && !greyBoardMode)) ||
+		  ((argc == 4) && (!sixTileMode && greyBoardMode))) {
+		gameManager = new GameManager(sixTileMode, greyBoardMode, false); 
+		gameManager->loadGame(std::string(argv[3]));
+	} else if (argc == 5 &&  sixTileMode && greyBoardMode) {
+		gameManager = new GameManager(sixTileMode, greyBoardMode, false);  
+		gameManager->loadGame(std::string(argv[4]));
+	} else {
+		std::cout << "Unrecognised arguments for testing mode\n\nUSAGE:\n\t" 
+		<< TESTING_MODE_ARGUMENT << " <filename>" << std::endl;
+	}
+}
+
+void gameTypePrint(bool sixTileMode, bool greyBoardMode, bool ai) {
+	if (ai) {
+		std::cout << "**Launching AI mode**" << std::endl;
+		std::cout << std::endl;
+	} else if (sixTileMode && !greyBoardMode) {
+		std::cout << "**Launching 6 tile mode**" << std::endl;
+		std::cout << std::endl;
+	} else if (greyBoardMode && !sixTileMode) {
+		std::cout << "**Launching GreyBoard mode**" << std::endl;
+		std::cout << std::endl;
+	} else if (sixTileMode && greyBoardMode) {
+		std::cout << "**Launching GreyBoard mode with 6 Tiles**" << std::endl;
+		std::cout << std::endl;
+	}
 }

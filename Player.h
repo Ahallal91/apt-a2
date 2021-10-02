@@ -12,8 +12,12 @@
 class Player {
 public:
 	Player();
+	Player(Player& other);
+	Player(Player&& other);
 	Player(std::string name);
-	~Player();
+	// used for advanced modes.
+	Player(std::string name, bool advancedMode, bool greyBoard);
+	virtual ~Player();
 
 	// Returns the Player's name
 	std::string getPlayerName();
@@ -25,7 +29,7 @@ public:
 	int getPoints();
 
 	// Returns the Player's playing board
-	PlayerBoard* getPlayerBoard();
+	virtual PlayerBoard* getPlayerBoard();
 
 private:
 
@@ -34,7 +38,7 @@ private:
 
 	// The Player's points
 	int points;
-
+	
 	// The Player's playing board object
 	PlayerBoard* playerBoard;
 };

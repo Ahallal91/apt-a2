@@ -7,7 +7,7 @@ FileHandler::FileHandler() {}
 FileHandler::~FileHandler() {}
 
 // reads tiles from a text file and adds to the list
-bool FileHandler::readTileBag(LinkedList& list, std::string fileName) {
+bool FileHandler::readTileBag(LinkedList& list, std::string& listString, std::string fileName) {
 	bool success = false;
 	std::ifstream file;
 	file.open(fileName);
@@ -18,6 +18,7 @@ bool FileHandler::readTileBag(LinkedList& list, std::string fileName) {
 		// ensures last character isn't read twice
 		while (file >> c) {
 			list.addBack(c);
+			listString.append(1, c);
 		}
 		file.close();
 	}

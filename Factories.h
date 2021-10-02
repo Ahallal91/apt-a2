@@ -2,14 +2,15 @@
 #define FACTORIES_H
 
 #include <vector>
-
+#include <map>
+class SingleFactory;
 class Factories {
 public:
 	Factories();
 	~Factories();
 
 	// returns a single factory by factory number. Does not return center factory
-	char* getFactory(int factoryNumber);
+	SingleFactory* getFactory(int factoryNumber);
 
 	// returns a tile from the center factory by index
 	char getCenterFactoryTile(unsigned int index);
@@ -34,6 +35,18 @@ public:
 	// clears all factories then re-initialises them 
 	void resetFactories();
 
+	/* returns a map<int - factory number, int - amount of tile matching>
+	 * This method iterates over all the factories and calculates how many
+	 * tiles match the one passed in. It adds the matching factory number
+	 * and amount of matching tiles to the map.
+	*/
+	std::map<int, int> getMatchingFactories(char matchingTile);
+
+	/* This method returns any factory that is available, and the tile type
+	 * that will be returned. It is used if the AI cannot find any matching
+	 * tiles in
+	*/
+	std::pair<int, char> getAnyMatching();
 private:
 	// deletes / clears all factories
 	void clearFactories();
@@ -42,7 +55,7 @@ private:
 	void resetSingleFactory(int factoryNumber);
 
 	// set of 5 factories of size 4
-	char** factories;
+	SingleFactory** factories;
 	
 	// vector for center factory
 	std::vector<char>* centerFactory;

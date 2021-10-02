@@ -1,12 +1,11 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 
-class Node;
+class NodeList;
 class LinkedList {
 public:
     LinkedList();
-    LinkedList(LinkedList& other);
-    LinkedList(LinkedList&& other);
+    LinkedList(const LinkedList& other);
     ~LinkedList();
 
     void clear();
@@ -23,8 +22,8 @@ public:
     void removeBack();
 
 private:
-    Node* head;
-    Node* tail;
+    NodeList* head;
+    NodeList* tail;
 };
 
 #endif // LINKED_LIST_H
